@@ -1,20 +1,24 @@
 - header
 
-%table.table
-  %thead
-    %tr
-      %th Page
-      %th Viewed
-      %th Updated
-      %th Created
-      %th Versions
-  %tbody
+- tree Wiki::Page::Tree.new(pages).root
 
-    - pages.each do |page|
+
+-#
+  %table.table
+    %thead
       %tr
-        %td= link_to page.path, wiki_page_path(page)
-        %td= time_ago_in_words(page.last_viewed_at)
-        %td= time_ago_in_words(page.updated_at)
-        %td= time_ago_in_words(page.created_at)
-        %td= page.versions.count + 1
-        %td= link_to 'X', wiki_page_path(page), method: 'DELETE', confirm: 'Are you sure?'
+        %th Page
+        %th Viewed
+        %th Updated
+        %th Created
+        %th Versions
+    %tbody
+
+      - pages.each do |page|
+        %tr
+          %td= link_to page.path, wiki_page_path(page)
+          %td #{time_ago_in_words(page.last_viewed_at)} ago
+          %td #{time_ago_in_words(page.updated_at)} ago
+          %td #{time_ago_in_words(page.created_at)} ago
+          %td= page.versions.count + 1
+          %td= link_to 'X', wiki_page_path(page), method: 'DELETE', confirm: 'Are you sure?'

@@ -17,4 +17,16 @@ module WikiHelper
     end
   end
 
+  # - tree Wiki::Page::Tree.new.root
+  def tree(parent)
+    haml_tag('ul.wiki-pages-tree') do
+      parent.each do |name, child|
+        haml_tag('li') do
+          concat link_to name, wiki_page_path(child.path)
+          tree(child)
+        end
+      end
+    end
+  end
+
 end

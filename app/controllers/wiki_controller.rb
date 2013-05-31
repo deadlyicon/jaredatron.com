@@ -4,25 +4,24 @@ class WikiController < ApplicationController
     pages = Wiki::Page.all.sort_by{|page|
       [page.last_viewed_at, page.updated_at, page.created_at, page.path]
     }
+    @title = "Wiki Pages"
     render :index, locals: {pages:pages}
   end
 
   def show
     page = find_page
-    case
-    when params[:edit].present?
-      view  = :edit
-      @title = "editing: #{path}"
-    when page.new_record?
-      view  = :not_found
-      @title = "not found: #{path}"
+    if page.new_record?
+      redirect_to wiki_page_path(page, edit:1)
     else
-      view  = :show
-      @title = path
-      page.viewed!
+      page.viewed! unless page.new_record?
+      render :show, locals: {page:page}
     end
-    @page_name = "wiki/#{view}"
-    render view, locals: {page:page}
+  end
+
+  def edit
+    page = find_page
+    @title = "editing: #{path}"
+    render :edit, locals: {page:page}
   end
 
   def update

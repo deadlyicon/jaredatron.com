@@ -28,5 +28,3 @@ module Jaredatron
 
   end
 end
-
-require 'jaredatron/url_helpers'

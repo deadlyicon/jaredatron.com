@@ -1,3 +1,3 @@
 - header page do
-  = link_to 'edit', edit_wiki_page_path(page), class: 'edit'
+  = link_to 'edit', wiki_page_path(page, edit:1), class: 'edit'
 .content= markdown page.content
