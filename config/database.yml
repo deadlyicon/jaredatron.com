@@ -5,12 +5,12 @@ postgres: &postgres
 
 development:
   <<: *postgres
-  database: focus_dev
+  database: jaredatron_dev
 
 test:
   <<: *postgres
-  database: focus_test
+  database: jaredatron_test
 
 production:
   <<: *postgres
-  database: focus
+  database: jaredatron
