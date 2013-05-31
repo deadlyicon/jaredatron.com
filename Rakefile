@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Focus::Application.load_tasks
+Jaredatron::Application.load_tasks

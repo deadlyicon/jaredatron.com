@@ -1,4 +1,4 @@
-# Focus
+# Jaredatron
 
 This app is intended to help me stay focused on what I want out of life.
 My google sites wiki is helpful but it is not engaging enough to keep me using it.
@@ -15,7 +15,7 @@ Much like Lyft but simpler and with charts
 
 ### Top level view of what I should be focusing on
 
-This isn't project management. I'll still have these efforts as projects in OmniFocus. This is more of a place for documentation around the projects as apposed to a list of tasks I need to complete for said projects.
+This isn't project management. I'll still have these efforts as projects in OmniJaredatron. This is more of a place for documentation around the projects as apposed to a list of tasks I need to complete for said projects.
 
 For example my focus right now should be on:
 
