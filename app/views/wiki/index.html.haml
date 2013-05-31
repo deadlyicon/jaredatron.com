@@ -21,4 +21,4 @@
           %td #{time_ago_in_words(page.updated_at)} ago
           %td #{time_ago_in_words(page.created_at)} ago
           %td= page.versions.count + 1
-          %td= link_to 'X', wiki_page_path(page), method: 'DELETE', confirm: 'Are you sure?'
+          %td= link_to_delete_wiki_page('X', page)

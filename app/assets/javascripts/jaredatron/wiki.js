@@ -20,6 +20,11 @@ Jaredatron.onPage('wiki/show', function(){
     if (event.metaKey && event.keyCode === 69) Jaredatron.Wiki.edit();
   });
 
+  $(document).on('dblclick', function(event){
+    event.preventDefault();
+    Jaredatron.Wiki.edit();
+  });
+
 })
 
 Jaredatron.onPage('wiki/edit', function(){

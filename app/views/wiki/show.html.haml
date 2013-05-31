@@ -1,3 +1,4 @@
 - header page do
+  = link_to_delete_wiki_page('delete', page)
   = link_to 'edit', wiki_page_path(page, edit:1), class: 'edit'
 .content= markdown page.content

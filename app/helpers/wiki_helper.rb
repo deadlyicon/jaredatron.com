@@ -29,4 +29,8 @@ module WikiHelper
     end
   end
 
+  def link_to_delete_wiki_page(content, page)
+    link_to content, wiki_page_path(page), method: 'DELETE', confirm: 'Are you sure?'
+  end
+
 end
