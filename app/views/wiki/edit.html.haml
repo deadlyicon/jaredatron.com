@@ -1,0 +1,12 @@
+.editor
+  = form_for page, method: 'put', url: wiki_page_path(page) do |f|
+    - header page do
+      = link_to 'Markdown', '', class: 'markdown'
+      = link_to page.new_record? ? 'Create' : 'Save', '', class: 'submit'
+
+    .textarea{autofocus: true}
+      .padding
+        = f.text_area :content
+
+
+= render 'markdown_cheatsheet'

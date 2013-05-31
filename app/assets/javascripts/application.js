@@ -13,4 +13,15 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require_self
 //= require_tree .
+
+$(document).on('click', '.submit', function(event){
+  event.preventDefault();
+  $(this).closest('form').submit();
+});
+
+
+$(function(){
+  $('[autofocus]:first').focus();
+});

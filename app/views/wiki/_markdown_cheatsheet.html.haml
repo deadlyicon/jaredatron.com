@@ -1,0 +1,92 @@
+.markdown-cheatsheet
+  .row
+    .col
+      %h3 Format Text
+      %h4 Headers
+      %pre
+        :preserve
+          # This is an &lt;h1&gt; tag
+          ## This is an &lt;h2&gt; tag
+          ###### This is an &lt;h6&gt; tag      %p Text styles
+      %pre
+        :preserve
+          *This text will be italic*
+          _This will also be italic_
+
+          **This text will be bold**
+          __This will also be bold__
+
+          *You **can** combine them*
+    .col
+      %h3 Lists
+      %h4 Unordered
+      %pre
+        :preserve
+          * Item 1
+          * Item 2
+            * Item 2a
+            * Item 2b      %p Ordered
+      %pre
+        :preserve
+          1. Item 1
+          2. Item 2
+          3. Item 3
+             * Item 3a
+             * Item 3b    .col
+      %h3 Miscellaneous
+      %h4 Images
+      %pre
+        :preserve
+          ![GitHub Logo](/images/logo.png)
+          Format: ![Alt Text](url)
+      %h4 Links
+      %pre
+        :preserve
+          http://github.com - automatic!
+          [GitHub](http://github.com)      %p Blockquotes
+      %pre
+        :preserve
+          As Kanye West said:
+
+          &gt; We're living the future so
+          &gt; the present is our past.
+  %hr/
+
+-#
+  %h3 GitHub Flavored Markdown
+  .row
+    .col
+      %p
+        Syntax highlighting with
+        %a{:href => "http://github.github.com/github-flavored-markdown/", :target => "_blank", :title => "GitHub Flavored Markdown"} GFM
+      %pre
+        :preserve
+          ```javascript
+          function fancyAlert(arg) {
+            if(arg) {
+              $.facebox({div:'#foo'})
+            }
+          }
+          ```    .col
+      %p Or, indent your code 4 spaces
+      %pre
+        :preserve
+          Here is a Python code example
+          without syntax highlighting:
+
+              def foo:
+                if not bar:
+                  return true      %p Inline code for comments
+      %pre
+        :preserve
+          I think you should use an
+          `&lt;addr&gt;` element here instead.    .col
+      %p Task Lists
+      %pre
+        :preserve
+          - [ ] a task list item
+          - [ ] list syntax required
+          - [ ] normal **formatting**,
+                @mentions, #1234 refs
+          - [ ] incomplete
+          - [x] completed
