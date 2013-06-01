@@ -20,8 +20,3 @@ $(document).on('click', '.submit', function(event){
   event.preventDefault();
   $(this).closest('form').submit();
 });
-
-
-$(function(){
-  $('[autofocus]:first').focus();
-});

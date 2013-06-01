@@ -4,9 +4,9 @@
       = link_to 'Markdown', '', class: 'markdown'
       = link_to page.new_record? ? 'Create' : 'Save', '', class: 'submit'
 
-    .textarea{autofocus: true}
+    .textarea
       .padding
-        = f.text_area :content
+        = f.text_area :content, autofocus: true
 
 
 = render 'markdown_cheatsheet'
