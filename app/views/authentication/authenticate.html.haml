@@ -1,0 +1,7 @@
+%h1 Please Authenticate
+
+= form_tag authentication_path do
+  %input{name:'r', type: 'hidden', value: params[:r]}
+  %input{name:'secret', type: 'text'}
+  %input{type:'submit'}
+

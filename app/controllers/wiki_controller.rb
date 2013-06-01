@@ -1,5 +1,6 @@
 class WikiController < ApplicationController
 
+  before_filter :require_authentication!
   before_filter :correct_url, only: [:show, :edit]
 
   def index
