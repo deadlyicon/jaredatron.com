@@ -1,9 +1,9 @@
 class WikiController < ApplicationController
 
+  before_filter :correct_url, only: [:show, :edit]
+
   def index
-    pages = Wiki::Page.all.sort_by{|page|
-      [page.last_viewed_at, page.updated_at, page.created_at, page.path]
-    }
+    pages = Wiki::Page.all
     @title = "Wiki Pages"
     render :index, locals: {pages:pages}
   end
@@ -13,7 +13,7 @@ class WikiController < ApplicationController
     if page.new_record?
       redirect_to wiki_page_path(page, edit:1)
     else
-      page.viewed! unless page.new_record?
+      page.viewed!
       render :show, locals: {page:page}
     end
   end
@@ -45,6 +45,15 @@ class WikiController < ApplicationController
 
   def find_page
     Wiki::Page.find_or_initialize_by_path(path)
+  end
+
+  def correct_url
+    currected_path = path.downcase.gsub(/\s+/,'-')
+    if path != currected_path
+      url = URI.parse(request.url)
+      url.path = wiki_page_path(currected_path)
+      redirect_to url.to_s
+    end
   end
 
 end
