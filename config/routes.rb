@@ -10,4 +10,6 @@ Jaredatron::Application.routes.draw do
     delete '(*path)' => 'wiki#destroy'
   end
 
+  root to: 'homepage#show'
+
 end
