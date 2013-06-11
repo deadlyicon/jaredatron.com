@@ -1,6 +1,10 @@
 class Tracking::Cbt < Tracking
 
-  key :depression_level, :inclusion => { :in => [nil, "", *0..10] }
+  def self.in_range(range)
+    { :in => [nil, "", *range.map(&:to_s)] }
+  end
+
+  key :depression_level, :inclusion => in_range(0..10)
 
   key :doing_right_now
 
@@ -8,6 +12,6 @@ class Tracking::Cbt < Tracking
 
   key :fell_asleep_last_night
 
-  key :intoxication_level, :inclusion => { :in =>[nil, "", *0..5] }
+  key :intoxication_level, :inclusion => in_range(0..5)
 
 end
