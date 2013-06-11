@@ -13,9 +13,6 @@ class ApplicationController < ActionController::Base
   def authenticated?
     session[:authenticated] == true
   end
-
-  def authenticate!
-    session[:authenticated] = true
-  end
+  helper_method :authenticated?
 
 end

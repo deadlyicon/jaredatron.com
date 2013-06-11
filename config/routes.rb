@@ -7,6 +7,7 @@ Jaredatron::Application.routes.draw do
   post 'tracking/:type' => 'tracking#create'
 
   match 'authenticate' => 'authentication#authenticate', via: [:get, :post], as: 'authentication'
+  get   'unauthenticate' => 'authentication#unauthenticate', as: 'unauthentication'
 
   scope :wiki do
     get    ''        => 'wiki#index', as: 'wiki'

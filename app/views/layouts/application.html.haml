@@ -10,9 +10,17 @@
     %link{rel: "apple-touch-icon", href:  asset_path("ios-icon.png")}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
 
-
     = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
 
-  %body= yield
+  %body
+    - if authenticated?
+      %header
+        .link-list
+          = link_to 'wiki', wiki_path
+          = link_to 'tracking', tracking_root_path
+        .link-list.pull-right
+          = link_to 'logout', unauthentication_path
+
+    .page= yield

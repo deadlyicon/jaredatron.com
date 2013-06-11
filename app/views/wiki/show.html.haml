@@ -1,4 +1,7 @@
-- header page do
-  = link_to_delete_wiki_page('delete', page)
-  = link_to 'edit', wiki_page_path(page, edit:1), class: 'edit'
-.content= markdown page.content
+.content
+  .actions.link-list.pull-right
+    = link_to_delete_wiki_page('delete', page)
+    = link_to 'edit', wiki_page_path(page, edit:1)
+
+  - wiki_page_breadcrums(page)
+  = markdown page.content

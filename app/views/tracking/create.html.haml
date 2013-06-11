@@ -1,5 +1,6 @@
 .container-fluid
   .well
-    %h1 Tracked!
-    %p= link_to 'Tracking Index', tracking_root_path
-    %p= link_to 'Submit Another', tracking_path(@type)
+    %h1 Tracked #{@type.humanize}!
+    .link-list
+      = link_to "#{@type.humanize} form", tracking_path(@type)
+      = link_to 'index', tracking_root_path

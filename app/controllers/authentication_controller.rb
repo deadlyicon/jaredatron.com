@@ -2,7 +2,7 @@ class AuthenticationController < ApplicationController
 
   def authenticate
     if params[:secret].present? && params[:secret] == ENV['JAREDATRON_SECRET']
-      authenticate!
+      session[:authenticated] = true
     end
 
     if authenticated?
@@ -10,6 +10,10 @@ class AuthenticationController < ApplicationController
     else
       render :authenticate
     end
+  end
+
+  def unauthenticate
+    session.clear
   end
 
 end

@@ -8,8 +8,8 @@ Jaredatron.Wiki = {
     $('.editor form').submit();
   },
 
-  markdown_cheatsheet: function() {
-    return $('.markdown-cheatsheet');
+  toggleMarkdownCheatsheet: function() {
+    $('body').toggleClass('showing-markdown-cheatsheet');
   }
 
 };
@@ -43,9 +43,9 @@ Jaredatron.onPage('wiki/edit', function(){
     }
   });
 
-  $(document).on('click', 'a.markdown', function(event){
+  $(document).on('click', 'a.show-markdown-cheatsheet', function(event){
     event.preventDefault();
-    Jaredatron.Wiki.markdown_cheatsheet().toggle();
+    Jaredatron.Wiki.toggleMarkdownCheatsheet()
   });
 
 });
