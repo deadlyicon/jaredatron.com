@@ -1,5 +1,6 @@
 class TrackingController < ApplicationController
 
+  before_filter :require_authentication!
   before_filter :get_type_and_class, except: [:index]
 
   def index
