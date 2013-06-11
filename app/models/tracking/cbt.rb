@@ -1,9 +1,13 @@
 class Tracking::Cbt < Tracking
 
-  attr_accessor :depression_level
-  attr_accessor :doing_right_now
-  attr_accessor :woke_up_today_at
-  attr_accessor :fell_asleep_last_night
-  attr_accessor :intoxication_level
+  key :depression_level, :inclusion => { :in => [nil, "", *0..10] }
+
+  key :doing_right_now
+
+  key :woke_up_today_at
+
+  key :fell_asleep_last_night
+
+  key :intoxication_level, :inclusion => { :in =>[nil, "", *0..5] }
 
 end

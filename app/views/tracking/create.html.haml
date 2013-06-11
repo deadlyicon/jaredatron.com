@@ -1,1 +1,5 @@
-%h1 Tracked!
+.container-fluid
+  .well
+    %h1 Tracked!
+    %p= link_to 'Tracking Index', tracking_root_path
+    %p= link_to 'Submit Another', tracking_path(@type)

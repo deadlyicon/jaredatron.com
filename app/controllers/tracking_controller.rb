@@ -6,12 +6,11 @@ class TrackingController < ApplicationController
   end
 
   def new
-    render "tracking/#{@type}"
   end
 
   def create
     @record.data = params["tracking_#{@type}"]
-    render "tracking/#{@type}" unless @record.save
+    render :new unless @record.save
   end
 
   private
