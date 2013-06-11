@@ -20,6 +20,8 @@ class TrackingController < ApplicationController
     @type = params[:type]
     @klass = "Tracking::#{@type.classify}".constantize
     @record = @klass.new
+  rescue
+    raise ActionController::RoutingError.new('Not Found')
   end
 
 end
