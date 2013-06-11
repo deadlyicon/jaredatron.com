@@ -1,5 +1,6 @@
 Jaredatron::Application.routes.draw do
 
+  get  'tracking'       => 'tracking#index', as: 'tracking_root'
   get  'tracking/:type' => 'tracking#new', as: 'tracking'
   post 'tracking/:type' => 'tracking#create'
 

@@ -1,6 +1,9 @@
 class TrackingController < ApplicationController
 
-  before_filter :get_type_and_class
+  before_filter :get_type_and_class, except: [:index]
+
+  def index
+  end
 
   def new
     render "tracking/#{@type}"
