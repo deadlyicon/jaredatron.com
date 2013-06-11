@@ -21,6 +21,7 @@ class WikiController < ApplicationController
 
   def edit
     page = find_page
+    page.content ||= "# #{page.path.split('/').last.gsub(/[-_]/,' ').humanize}\n\n"
     @title = "editing: #{path}"
     render :edit, locals: {page:page}
   end
