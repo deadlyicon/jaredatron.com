@@ -1,6 +1,6 @@
 Jaredatron::Application.routes.draw do
 
-  get 'focus' => redirect('/wiki/focus')
+  get 'focus' => redirect('/wiki/focus'), as: 'focus'
 
   get  'tracking'       => 'tracking#index', as: 'tracking_root'
   get  'tracking/:type' => 'tracking#new', as: 'tracking'
