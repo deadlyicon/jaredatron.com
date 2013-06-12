@@ -15,4 +15,12 @@ class ApplicationController < ActionController::Base
   end
   helper_method :authenticated?
 
+  def view_env
+    @env ||= {
+      controller: controller_name,
+      action: action_name,
+    }
+  end
+
+
 end

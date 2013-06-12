@@ -1,10 +1,12 @@
+- env[:wiki_page] = page
 .editor
   = form_for page, method: 'put', url: wiki_page_path(page) do |f|
 
-    = f.text_area :content, autofocus: true
+    = f.text_area :content
     = render 'markdown_cheatsheet'
 
     .link-list
-      = link_to 'Markdown Cheatsheet', '', class: 'show-markdown-cheatsheet'
-      = link_to 'Editor', '', class: 'show-editor'
+      = link_to 'markdown Cheatsheet', '', class: 'show-markdown-cheatsheet'
+      = link_to 'editor', '', class: 'show-editor'
+      = link_to 'cancel', wiki_page_path(page), class: 'cancel-edit'
       = link_to page.new_record? ? 'Create' : 'Save', '', class: 'submit'

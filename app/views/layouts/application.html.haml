@@ -25,3 +25,6 @@
           = link_to 'logout', unauthentication_path
 
     .page= yield
+
+
+    .page-data{'data-data' => env.to_json}

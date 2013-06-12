@@ -12,10 +12,15 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-keypress
 //= require turbolinks
 //= require page
 //= require_self
 //= require_tree .
+
+$(document).on('click', 'a[href=""],a[href="#"]', function(event){
+  event.preventDefault();
+});
 
 $(document).on('click', '.submit', function(event){
   event.preventDefault();

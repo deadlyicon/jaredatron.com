@@ -1,5 +1,7 @@
 class Wiki::Page < ActiveRecord::Base
 
+  validates :path, :uniqueness => true
+
   has_paper_trail
 
   def to_param
