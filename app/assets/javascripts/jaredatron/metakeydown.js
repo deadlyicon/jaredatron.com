@@ -1,6 +1,4 @@
-Jaredatron.Metakeydown = {
-
-};
+Jaredatron.Metakeydown = {};
 
 !function(){
   var lastKeyCode;

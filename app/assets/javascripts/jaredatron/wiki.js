@@ -15,16 +15,19 @@ Jaredatron.Wiki = {
 };
 
 
-Jaredatron.onPage('wiki/show', function(){
+Page.change('wiki/show', function(){
+  console.log('setup wiki/show');
 
-  Jaredatron.Metakeydown[69] = function(){ Jaredatron.Wiki.edit(); };
+  Jaredatron.Metakeydown[69] = function(){
+    Jaredatron.Wiki.edit();
+  };
 
-  $(document).on('dblclick', function(event){
+  Page.body.on('dblclick', function(event){
     event.preventDefault();
     Jaredatron.Wiki.edit();
   });
 
-  $(document).on('click', '.move-wiki-page', function(event){
+  Page.body.on('click', '.move-wiki-page', function(event){
     event.preventDefault();
     var current_path = $(this).data('current_path');
     var new_path = prompt('Move '+current_path, current_path);
@@ -32,12 +35,14 @@ Jaredatron.onPage('wiki/show', function(){
       Turbolinks.visit(data.new_path_path);
     });
   });
+});
 
-})
+Page.change('wiki/edit', function(){
+  console.log('setup wiki/edit');
 
-Jaredatron.onPage('wiki/edit', function(){
-
-  Jaredatron.Metakeydown[83] = function(){ Jaredatron.Wiki.save(); };
+  Jaredatron.Metakeydown[83] = function(){
+    Jaredatron.Wiki.save();
+  };
 
   $(document).on('click', 'a.show-markdown-cheatsheet', function(event){
     event.preventDefault();

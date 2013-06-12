@@ -1,5 +1,5 @@
 !!!
-%html{page_name: page_name, controller: controller_name, action: action_name}
+%html
   %head
     %meta{:charset => "utf-8"}/
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
@@ -14,7 +14,7 @@
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
 
-  %body
+  %body{page_name: page_name, controller: controller_name, action: action_name}
     - if authenticated?
       %header
         .link-list
