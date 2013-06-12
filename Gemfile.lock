@@ -171,7 +171,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  coffee-rails (~> 4.0.0)
   compass-rails!
   haml-rails
   html2haml
