@@ -33,6 +33,24 @@ class WikiController < ApplicationController
     redirect_to wiki_page_path(page)
   end
 
+  def move
+    page = find_page
+    new_path = params[:new_path]
+    if page.new_record? || new_path.blank?
+      render nothing: true, status: :bad_request
+      return
+    end
+
+    page.path = new_path
+    page.save!
+
+    if request.xhr?
+      render json: {new_path_path: wiki_page_path(page)}
+    else
+      redirect_to page
+    end
+  end
+
   def destroy
     page = find_page
     page.destroy

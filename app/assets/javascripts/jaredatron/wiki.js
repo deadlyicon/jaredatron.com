@@ -24,6 +24,15 @@ Jaredatron.onPage('wiki/show', function(){
     Jaredatron.Wiki.edit();
   });
 
+  $(document).on('click', '.move-wiki-page', function(event){
+    event.preventDefault();
+    var current_path = $(this).data('current_path');
+    var new_path = prompt('Move '+current_path, current_path);
+    $.post(location.pathname, {new_path:new_path}, function(data){
+      Turbolinks.visit(data.new_path_path);
+    });
+  });
+
 })
 
 Jaredatron.onPage('wiki/edit', function(){

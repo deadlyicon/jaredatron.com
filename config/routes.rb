@@ -11,8 +11,9 @@ Jaredatron::Application.routes.draw do
 
   scope :wiki do
     get    ''        => 'wiki#index', as: 'wiki'
-    get    '(*path)' => 'wiki#edit', as: 'edit_wiki_page', :constraints => lambda{ |req| req.params[:edit].present? }
-    get    '(*path)' => 'wiki#show', as: 'wiki_page'
+    get    '(*path)' => 'wiki#edit',  as: 'edit_wiki_page', :constraints => lambda{ |req| req.params[:edit].present? }
+    get    '(*path)' => 'wiki#show',  as: 'wiki_page'
+    post   '(*path)' => 'wiki#move',                        :constraints => lambda{ |req| req.params[:new_path].present? }
     put    '(*path)' => 'wiki#update'
     delete '(*path)' => 'wiki#destroy'
   end
