@@ -40,7 +40,7 @@ Page.change('wiki/edit', function(){
     Jaredatron.Wiki.save();
   };
 
-  $(document).on('click', 'a.show-markdown-cheatsheet', function(event){
+  Page.body.on('click', 'a.show-markdown-cheatsheet', function(event){
     event.preventDefault();
     Jaredatron.Wiki.toggleMarkdownCheatsheet();
   });
