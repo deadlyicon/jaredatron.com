@@ -16,8 +16,6 @@ Jaredatron.Wiki = {
 
 
 Page.change('wiki/show', function(){
-  console.log('setup wiki/show');
-
   Jaredatron.Metakeydown[69] = function(){
     Jaredatron.Wiki.edit();
   };
@@ -38,8 +36,6 @@ Page.change('wiki/show', function(){
 });
 
 Page.change('wiki/edit', function(){
-  console.log('setup wiki/edit');
-
   Jaredatron.Metakeydown[83] = function(){
     Jaredatron.Wiki.save();
   };
