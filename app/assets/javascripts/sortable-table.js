@@ -2,20 +2,20 @@ SortableTable = {};
 
 SortableTable.comparators = {
   string: function(a,b){
-    a = $.trim($(a).text());
-    b = $.trim($(b).text());
+    a = $.trim($(a).text()).toLowerCase();
+    b = $.trim($(b).text()).toLowerCase();
     if (a > b) return 1;
-    if (a > b) return -1;
+    if (a < b) return -1;
     return 0;
   },
   date: function(a,b){
     a = $(a).data('date');
     b = $(b).data('date');
     if (a > b) return 1;
-    if (a > b) return -1;
+    if (a < b) return -1;
     return 0;
   },
-}
+};
 
 SortableTable.sort = function(th){
   th = $(th);

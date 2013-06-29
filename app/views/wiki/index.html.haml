@@ -14,7 +14,7 @@
     - pages.each do |page|
       %tr
         %td= link_to page.path.gsub('/', ' / '), wiki_page_path(page)
-        %td{'data-date' => page.last_viewed_at.to_i}
+        %td{'data-date' => page.last_viewed_at.to_i, title: page.last_viewed_at}
           %div{'data-livestamp' => page.last_viewed_at.to_i}
-        %td{'data-date' => page.updated_at.to_i}
+        %td{'data-date' => page.updated_at.to_i, title: page.updated_at}
           %div{'data-livestamp' => page.updated_at.to_i}
