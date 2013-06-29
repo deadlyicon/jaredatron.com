@@ -14,18 +14,6 @@ module WikiHelper
     end
   end
 
-  # - tree Wiki::Page::Tree.new.root
-  def tree(parent)
-    haml_tag('ul.wiki-pages-tree') do
-      parent.each do |name, child|
-        haml_tag('li') do
-          concat link_to name, wiki_page_path(child.path)
-          tree(child)
-        end
-      end
-    end
-  end
-
   def link_to_delete_wiki_page(content, page)
     link_to content, wiki_page_path(page), method: 'DELETE', confirm: 'Are you sure?'
   end

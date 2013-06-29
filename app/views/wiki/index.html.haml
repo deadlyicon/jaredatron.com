@@ -1,10 +1,7 @@
--# tree Wiki::Page::Tree.new(pages).root
-
-
 %p
   %input(type="text" class="search-query" placeholder="filter" data-filter-table="table.wiki-pages" autofocus)
 
-%table.wiki-pages.table.sortable
+%table.wiki-pages.table.table-condensed.sortable
   %thead
     %tr
       %th{'data-sort_type' => 'string'} Path
