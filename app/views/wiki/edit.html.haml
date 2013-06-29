@@ -6,7 +6,7 @@
     = render 'markdown_cheatsheet'
 
     .link-list
-      = link_to 'markdown Cheatsheet', '', class: 'show-markdown-cheatsheet'
+      = link_to 'cheatsheet', '', class: 'show-markdown-cheatsheet'
       = link_to 'editor', '', class: 'show-editor'
       = link_to 'cancel', wiki_page_path(page), class: 'cancel-edit'
       = link_to page.new_record? ? 'Create' : 'Save', '', class: 'submit'

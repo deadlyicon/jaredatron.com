@@ -57,9 +57,9 @@ Page.initializer('wiki/edit', function(page){
     }
   });
 
-  page.body.find('a.show-markdown-cheatsheet').on('click', function(event){
+  page.body.find('a.show-editor, a.show-markdown-cheatsheet').on('click', function(event){
     event.preventDefault();
-    page.toggleMarkdownCheatsheet();
+    page.editor.toggleMarkdownCheatsheet();
   });
 
   page.body.find('a.cancel-edit').on('click', function(event){
