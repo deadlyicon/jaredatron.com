@@ -4,7 +4,6 @@ SortableTable.comparators = {
   string: function(a,b){
     a = $.trim($(a).text());
     b = $.trim($(b).text());
-    console.log([a,b]);
     if (a > b) return 1;
     if (a > b) return -1;
     return 0;
@@ -12,7 +11,6 @@ SortableTable.comparators = {
   date: function(a,b){
     a = $(a).data('date');
     b = $(b).data('date');
-    console.log([a,b]);
     if (a > b) return 1;
     if (a > b) return -1;
     return 0;
@@ -36,7 +34,6 @@ SortableTable.sort = function(th){
   trs.sort(function(a,b){
     a = $(a).find('> td:eq('+index+')');
     b = $(b).find('> td:eq('+index+')');
-
     return compare(a,b);
   });
 
@@ -48,5 +45,17 @@ SortableTable.sort = function(th){
 
 $(document).on('click', 'table.sortable > thead > tr > th', function(event){
   event.preventDefault();
+  $(this).trigger('sort');
+});
+
+$(document).on('sort', 'table.sortable > thead > tr > th', function(){
   SortableTable.sort(this);
 });
+
+
+
+$(document).bind('ready page:change', function(){
+  $('table.sortable > thead > tr > th[data-default_sort]:first').trigger('sort');
+});
+
+
