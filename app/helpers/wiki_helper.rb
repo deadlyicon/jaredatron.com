@@ -6,7 +6,7 @@ module WikiHelper
       links = []
       page.path.split('/').inject(nil) do |path, part|
         path = path ? "#{path}/#{part}" : part
-        links << link_to(part, wiki_page_path(path))
+        links << link_to(humanize_wiki_page_path_part(part), wiki_page_path(path))
         path
       end if page
       concat slash
@@ -28,6 +28,14 @@ module WikiHelper
 
   def link_to_delete_wiki_page(content, page)
     link_to content, wiki_page_path(page), method: 'DELETE', confirm: 'Are you sure?'
+  end
+
+  def wiki_page_title(page)
+    page.path.split('/').map{|s| humanize_wiki_page_path_part(s) }.join(' / ')
+  end
+
+  def humanize_wiki_page_path_part part
+    part.gsub('-', ' ').humanize
   end
 
 end
