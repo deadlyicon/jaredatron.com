@@ -9,7 +9,10 @@ class Wiki::Page < ActiveRecord::Base
   end
 
   def viewed!
+    ActiveRecord::Base.record_timestamps = false
     update_attribute(:last_viewed_at, Time.now)
+  ensure
+    ActiveRecord::Base.record_timestamps = true
   end
 
 end

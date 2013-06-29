@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require jquery-keypress
 //= require turbolinks
+//= require moment
+//= require livestamp
 //= require page
 //= require_self
 //= require_tree .
