@@ -1,5 +1,7 @@
 Jaredatron::Application.routes.draw do
 
+  resources :journal, as: 'journal_entries', except: [:destroy]
+
   get 'focus' => redirect('/wiki/focus'), as: 'focus'
 
   get  'tracking'       => 'tracking#index', as: 'tracking_root'

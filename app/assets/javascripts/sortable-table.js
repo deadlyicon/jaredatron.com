@@ -43,12 +43,14 @@ SortableTable.sort = function(th){
 
 };
 
-$(document).on('click', 'table.sortable > thead > tr > th', function(event){
+SortableTable.selector = 'table.sortable > thead > tr > th:not([data-not-sortable])'
+
+$(document).on('click', SortableTable.selector, function(event){
   event.preventDefault();
   $(this).trigger('sort');
 });
 
-$(document).on('sort', 'table.sortable > thead > tr > th', function(){
+$(document).on('sort', SortableTable.selector, function(){
   SortableTable.sort(this);
 });
 
