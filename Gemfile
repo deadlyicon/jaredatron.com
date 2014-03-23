@@ -3,15 +3,15 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0.rc1'
+gem 'rails', '~> 4.0.0'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
 
-gem 'haml-rails'
+gem 'haml-rails', '0.4'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0.rc1'
+gem 'sass-rails', '4.0.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -30,16 +30,11 @@ gem 'jbuilder', '~> 1.0.1'
 
 gem 'redcarpet'
 
-gem 'compass-rails', github: "milgner/compass-rails", branch: "rails4"
+gem 'compass-rails', '1.1.2'
 
-gem 'paper_trail', github: "airblade/paper_trail", branch: "rails4"
+gem 'paper_trail'
 
 gem 'simple_form'
-
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
 
 group :development, :test do
   gem 'pry-rails'

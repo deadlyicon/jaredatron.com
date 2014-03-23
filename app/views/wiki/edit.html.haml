@@ -2,7 +2,7 @@
 .editor
   = form_for page, method: 'put', url: wiki_page_path(page) do |f|
 
-    = f.text_area :content
+    .textarea= f.text_area :content
     = render 'markdown_cheatsheet'
 
     .link-list
