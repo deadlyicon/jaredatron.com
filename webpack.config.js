@@ -2,6 +2,11 @@
 var Webpack = require('webpack');
 var path = require('path');
 
+
+var processEnv = {};
+for (var key in process.env){
+  processEnv[key] = JSON.stringify(process.env[key]);
+}
 module.exports = {
   // Makes sure errors in console map to the correct file
   // and line number
@@ -29,7 +34,7 @@ module.exports = {
 
   plugins: [
     new Webpack.DefinePlugin({
-      "process.env": process.env
+      "process.env": processEnv
     }),
   ]
 };
