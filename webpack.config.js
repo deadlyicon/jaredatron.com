@@ -1,22 +1,21 @@
 // require('./environment');
 var Webpack = require('webpack');
 var path = require('path');
-var publicPath = path.resolve(__dirname, 'public');
 var clientPath = path.resolve(__dirname, 'client');
-var sharedPath = path.resolve(__dirname, 'shared');
 
 module.exports = {
   // Makes sure errors in console map to the correct file
   // and line number
   // devtool: 'eval',
 
+  context: __dirname,
+
   entry: [
     clientPath,
-    sharedPath
   ],
 
   output: {
-    path: publicPath,
+    path: 'public',
     filename: 'client.js',
     publicPath: '/'
   },
@@ -28,7 +27,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: [".coffee", ".js"]
+    extensions: ["", ".coffee", ".js"]
   },
 
   plugins: [
