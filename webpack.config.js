@@ -1,7 +1,6 @@
 // require('./environment');
 var Webpack = require('webpack');
 var path = require('path');
-var clientPath = path.resolve(__dirname, 'client');
 
 module.exports = {
   // Makes sure errors in console map to the correct file
@@ -10,9 +9,7 @@ module.exports = {
 
   context: __dirname,
 
-  entry: [
-    clientPath,
-  ],
+  entry: './client',
 
   output: {
     path: 'public',
