@@ -1,0 +1,20 @@
+{
+  "name": "jaredatron.com",
+  "version": "0.0.1",
+  "description": "jaredatron.com",
+  "main": "index.js",
+  "scripts": {
+    "start": "coffee index.coffee",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deadlyicon/jaredatron.com.git"
+  },
+  "author": "Jared Grippe <jared@jaredatron.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deadlyicon/jaredatron.com/issues"
+  },
+  "homepage": "https://github.com/deadlyicon/jaredatron.com#readme"
+}
