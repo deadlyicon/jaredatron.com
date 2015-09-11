@@ -1,9 +1,9 @@
-require '../environment'
+require './environment'
 
 fs         = require('fs')
 express    = require('express')
 app        = express()
-publicDir  = process.env.ROOT_PATH + '/public'
+publicDir  = __dirname+'/public'
 
 if 'development' == process.env.NODE_ENV
   Webpack = require('webpack')
