@@ -19,6 +19,7 @@
   "homepage": "https://github.com/deadlyicon/jaredatron.com#readme",
   "dependencies": {
     "dotenv": "^1.2.0",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "webpack": "^1.12.1"
   }
 }
