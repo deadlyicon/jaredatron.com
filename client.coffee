@@ -1,12 +1,13 @@
-console.log('client.js')
-
-global.React = require 'reactatron/React'
-component = require 'reactatron/component'
-
+app = require './client/app'
 
 require('domready') ->
+  app.start()
 
-  React.render(
-    React.createElement('div', {}, 'hello world'),
-    document.body
-  )
+
+
+
+# DEBUG
+
+global.D = {}
+
+D.app = app
