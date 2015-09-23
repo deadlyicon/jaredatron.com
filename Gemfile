@@ -22,6 +22,10 @@ group :development, :test do
   gem 'html2haml', require: false
 end
 
+group :test do
+  gem 'rspec-activemodel-mocks'
+end
+
 
 
 

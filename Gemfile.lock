@@ -147,6 +147,10 @@ GEM
       ffi (>= 0.5.0)
     redcarpet (3.3.2)
     request_store (1.2.0)
+    rspec-activemodel-mocks (1.0.2)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      rspec-mocks (>= 2.99, < 4.0)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.1)
@@ -212,6 +216,7 @@ DEPENDENCIES
   pry-rails
   rails
   redcarpet
+  rspec-activemodel-mocks
   rspec-rails
   sass-rails
   simple_form
