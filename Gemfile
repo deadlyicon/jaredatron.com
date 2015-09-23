@@ -2,17 +2,17 @@ source 'https://rubygems.org'
 
 ruby '2.2.2'
 
-gem 'rails', '~> 4.0.0'
+gem 'rails'
 gem 'pg'
-gem 'haml-rails', '0.4'
-gem 'sass-rails', '4.0.0'
-gem 'uglifier', '>= 1.3.0'
+gem 'haml-rails'
+gem 'sass-rails'
+gem 'uglifier'
 
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'jbuilder', '~> 1.0.1'
+gem 'jbuilder'
 gem 'redcarpet'
-gem 'compass-rails', '1.1.2'
+gem 'compass-rails'
 gem 'paper_trail'
 gem 'simple_form'
 

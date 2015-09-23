@@ -16,13 +16,13 @@ ActiveRecord::Schema.define(version: 20130701042019) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "journal_entries", force: true do |t|
+  create_table "journal_entries", force: :cascade do |t|
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "trackings", force: true do |t|
+  create_table "trackings", force: :cascade do |t|
     t.string   "type"
     t.text     "data"
     t.datetime "created_at"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20130701042019) do
 
   add_index "trackings", ["type"], name: "index_trackings_on_type", using: :btree
 
-  create_table "versions", force: true do |t|
+  create_table "versions", force: :cascade do |t|
     t.string   "item_type",  null: false
     t.integer  "item_id",    null: false
     t.string   "event",      null: false
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20130701042019) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
-  create_table "wiki_pages", force: true do |t|
+  create_table "wiki_pages", force: :cascade do |t|
     t.string   "path",           limit: 256
     t.text     "content"
     t.datetime "last_viewed_at"
