@@ -7,6 +7,7 @@ gem 'pg'
 gem 'haml-rails'
 gem 'sass-rails'
 gem 'uglifier'
+gem 'thin'
 
 gem 'jquery-rails'
 gem 'turbolinks'
@@ -26,6 +27,6 @@ group :test do
   gem 'rspec-activemodel-mocks'
 end
 
-
-
-
+group :production do
+  gem 'rails_12factor'
+end
