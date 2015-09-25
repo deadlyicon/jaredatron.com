@@ -64,7 +64,7 @@ class WikiController < ApplicationController
   end
 
   def find_page
-    Wiki::Page.find_or_initialize_by_path(path)
+    Wiki::Page.where(path: path).first_or_initialize
   end
 
   def correct_url
