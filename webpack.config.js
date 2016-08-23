@@ -153,6 +153,10 @@ var server = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel',
         query: babelConfig
+      },
+      {
+        test: /.pug$/,
+        loader: 'pug',
       }
     ]
   },
@@ -176,7 +180,7 @@ var browser = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         include: paths.src,
         loader: 'babel',
         query: babelConfig,
