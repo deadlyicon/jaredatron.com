@@ -1,16 +1,9 @@
+import WikiPage from './models/WikiPage'
+
 export default {
   getWikiPage: function(path){
-    return Promise.resolve({
-      path: path,
-      markdown: `
-# ${path}
-
-[one](/wiki/one)
-
-[two](/wiki/two)
-
-[three](/wiki/three)
-      `
+    return WikiPage.findOne({
+      where: {path: path}
     })
   },
 
