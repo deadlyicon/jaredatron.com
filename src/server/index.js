@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import procedures from './procedures'
 import indexHTML from 'index.pug'
+import database from './database'
 const PUBLIC_DIR = __dirname + '/public';
 const server = express()
 
@@ -44,6 +45,14 @@ server.get('/*', (request, response) => {
   response.send(indexHTML({}));
 });
 
-server.listen(server.get('port'), () => {
-  console.log('starting server at http://localhost:'+server.get('port'))
-});
+database.connect()
+  .then( () => {
+    console.log('database connection established')
+    server.listen(server.get('port'), () => {
+      console.log('starting server at http://localhost:'+server.get('port'))
+    });
+  })
+  .catch( error => {
+    console.error(error)
+    process.exit()
+  })

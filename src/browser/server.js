@@ -23,6 +23,7 @@ const rpc = function(proc, args){
 const PROCS = [
   'getWikiPage',
   'updateWikiPage',
+  'createWikiPage',
 ]
 
 const server = {}

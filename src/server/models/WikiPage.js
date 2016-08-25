@@ -1,5 +1,4 @@
-import Sequelize from 'sequelize'
-import { sequelize } from '../database'
+import {sequelize, Sequelize} from '../sequelize'
 
 const WikiPage = sequelize.define('wiki_pages',
   {
@@ -21,17 +20,5 @@ const WikiPage = sequelize.define('wiki_pages',
     ]
   }
 );
-
-sequelize.sync()
-  .then(x => {
-    console.log('SYNC TRUE')
-
-    // WikiPage.create({
-    //   path: '/focus',
-    //   markdown: '# Focus\n\nits important'
-    // })
-
-  })
-  .catch(x => console.log('SYNC FALSE', x))
 
 export default WikiPage

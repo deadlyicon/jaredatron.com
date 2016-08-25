@@ -90,19 +90,9 @@ Wiki.Page = class WikiPage extends Component {
       />
     }
     return <div>
-      <Controls pathname={this.pathname()} {...this.props} />,
+      <Controls pathname={this.pathname()} {...this.props} />
       <Markdown source={this.state.markdown} />
     </div>
-    // const content = this.state.markdown === null ?
-    //   <div>Loading…</div> :
-    //   this.props.location.query.edit ?
-    //   <textarea value={this.state.markdown}/> :
-    //   [
-    //     <Controls key="controls" path={path} {...this.props} />,
-    //     <Markdown key="contents" source={this.state.markdown} />
-    //   ]
-
-    // return <div>{content}</div>
   }
 }
 
