@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import R from 'request'
-import Request from 'request-promise'
+import server from '../server'
 
 export default class Wiki extends Component {
   render(){
@@ -23,17 +22,14 @@ Wiki.Page = class WikiPage extends Component {
   }
 
   componentWillMount(){
-    console.log('loading wiki page: '+this.path())
-    Request({
-      url: '/api',
-      qs: {
-        proc: 'getWikiPage'
-      }
-    }).then(response => {
-      console.log('response', response)
-    }).catch(error => {
-      console.log('request error', error)
-    })
+    server.getWikiPage(this.path())
+      .then(xhr => {
+        console.log('xhr', xhr)
+        this.setState({ content: xhr.response.content })
+      }).catch(error => {
+        this.setState({ error: error })
+        console.log('request error', error)
+      })
   }
 
   render(){
@@ -41,7 +37,8 @@ Wiki.Page = class WikiPage extends Component {
     const path = this.path()
     const content = this.state.content === null ?
       <div>Loading…</div> :
-      <div>CONTENT LOADED</div>
+      <div dangerouslySetInnerHTML={{__html:this.state.content}} />
+
     return <div>
       <h1>Page: {path}</h1>
       {content}

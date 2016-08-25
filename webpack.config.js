@@ -173,11 +173,25 @@ var browser = {
     chunkFilename: "[id].js",
     publicPath: '/'
   },
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  },
   devtool: 'sourcemap',
   plugins: [
     new ExtractTextPlugin('[name].css')
   ],
   module: {
+    // preLoaders: [
+    //   {
+    //     test: /\.json$/,
+    //     include: [paths.src, paths.nodeModules],
+    //     // exclude: /(node_modules|bower_components)/,
+    //     loader: 'json'
+    //   },
+    // ],
     loaders: [
       {
         test: /\.jsx?$/,
@@ -197,6 +211,7 @@ var browser = {
       {
         test: /\.json$/,
         include: [paths.src, paths.nodeModules],
+        // exclude: /(node_modules|bower_components)/,
         loader: 'json'
       },
       {
