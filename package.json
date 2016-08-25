@@ -48,6 +48,7 @@
     "qwest": "^4.4.5",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
+    "react-markdown": "^2.4.2",
     "react-router": "^2.7.0",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
