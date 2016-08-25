@@ -38,14 +38,19 @@ export default class Navbar extends Component {
         open={this.state.sidebarOpen}
         onRequestChange={(sidebarOpen) => this.setState({sidebarOpen})}
       >
-        <LinkMenuItem to="/journal">Journal</LinkMenuItem>
-        <LinkMenuItem to="/tracking">Tracking</LinkMenuItem>
-        <LinkMenuItem to="/wiki">Wiki</LinkMenuItem>
+        <LinkMenuItem to="/journal" onTouchTap={this.closeSidebar}>Journal</LinkMenuItem>
+        <LinkMenuItem to="/tracking" onTouchTap={this.closeSidebar}>Tracking</LinkMenuItem>
+        <LinkMenuItem to="/wiki" onTouchTap={this.closeSidebar}>Wiki</LinkMenuItem>
       </Drawer>
     </div>
   }
 }
 
 const LinkMenuItem = function(props){
-  return <MenuItem containerElement={<Link to={props.to} />}>{props.children}</MenuItem>
+  return <MenuItem
+      containerElement={<Link to={props.to} />}
+      onTouchTap={props.onTouchTap}
+    >
+    {props.children}
+    </MenuItem>
 }
