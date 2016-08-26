@@ -156,6 +156,7 @@ class MarkdownEditor extends React.Component {
         <Link to="" onClick={this.preview}>Preview</Link>
       </div>
       <textarea
+        className="full-page-textarea"
         ref="input"
         value={this.state.value}
         onChange={this.onChange}

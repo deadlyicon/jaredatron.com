@@ -1,4 +1,4 @@
-import { WikiPage } from './database'
+import { WikiPage, JournalEntry } from './models'
 
 const createWikiPage = function(path){
   return WikiPage.create({
@@ -22,7 +22,18 @@ const updateWikiPage = function(path, newValue){
     })
 }
 
+const getJournalEntries = function(){
+  return JournalEntry.findAll()
+}
+
+const getJournalEntry = function(journalEntryId){
+  return JournalEntry.findById(journalEntryId)
+}
+
 export default {
+  createWikiPage,
   getWikiPage,
   updateWikiPage,
+  getJournalEntries,
+  getJournalEntry,
 }

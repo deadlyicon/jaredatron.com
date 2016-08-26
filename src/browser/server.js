@@ -24,6 +24,8 @@ const PROCS = [
   'getWikiPage',
   'updateWikiPage',
   'createWikiPage',
+  'getJournalEntries',
+  'getJournalEntry',
 ]
 
 const server = {}

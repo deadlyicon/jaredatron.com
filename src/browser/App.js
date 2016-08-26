@@ -7,7 +7,7 @@ import { Router, browserHistory } from 'react-router'
 import routes from './routes'
 
 export default () => (
-  <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+  <MuiThemeProvider>
     <Router history={browserHistory} routes={routes} />
   </MuiThemeProvider>
 );
