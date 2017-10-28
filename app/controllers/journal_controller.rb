@@ -1,4 +1,6 @@
 class JournalController < ApplicationController
+
+  before_filter :require_authentication!
   before_action :set_journal_entry, only: [:show, :edit, :update, :destroy]
 
   # GET /journal
