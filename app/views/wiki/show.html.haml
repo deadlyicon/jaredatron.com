@@ -1,9 +1,0 @@
-- env[:wiki_page] = page
-.content
-  .actions.link-list.pull-right
-    = link_to_delete_wiki_page('delete', page)
-    = link_to 'move', '#', class: 'move-wiki-page', 'data-current_path' => page.path
-    = link_to 'edit', wiki_page_path(page, edit:1)
-
-  - wiki_page_breadcrums(page)
-  = markdown page.content
