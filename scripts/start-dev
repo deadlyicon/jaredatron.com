@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+nodemon \
+  --watch ./server \
+  --watch ./database \
+  --watch ./environment.js \
+  --watch ./package-lock.json \
+  --watch ./package.json \
+  --watch ./.babelrc \
+  --watch ./webpack.config.js \
+  ./scripts/start

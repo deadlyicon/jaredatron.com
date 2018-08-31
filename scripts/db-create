@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+/* eslint no-console: 0 */
+'use strict';
+
+const pgtools = require('pgtools');
+const { database, ...config } = require('../database').config;
+
+pgtools.createdb(config, database, function (error) {
+  if (error) {
+    if (error.message.includes(`database "${database}" already exists`)){
+      console.log(`database "${database}" already exists`);
+      process.exit(0);
+    }
+    console.error(error.message);
+    process.exit(1);
+  }
+  console.log(`created database "${database}"`);
+  process.exit(0);
+});

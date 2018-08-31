@@ -15,12 +15,22 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 module.exports = {
   mode: NODE_ENV,
   context: BROWSER_PATH,
-  entry: './index.js',
+  entry: [
+    './polyfills.js',
+    './index.js',
+  ],
   output: {
     path: BROWSER_BUILD_PATH,
     filename: 'bundle.js'
   },
-
+  resolve: {
+    alias: {
+      lib: `${BROWSER_PATH}/lib`,
+      components: `${BROWSER_PATH}/components`,
+      // style: `${srcPath}/style`,
+      // actions: `${srcPath}/${packageName}/actions`,
+    }
+  },
   devtool: NODE_ENV === 'development' ? 'sourcemap' : undefined,
   module: {
     rules: [
