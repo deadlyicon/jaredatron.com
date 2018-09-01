@@ -18,6 +18,8 @@
   "author": "Jared Grippe",
   "homepage": "https://github.com/deadlyicon/jaredatron.com#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "knex": "^0.15.2",
     "pg": "^7.4.3",
@@ -27,6 +29,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-transform-async-to-generator": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",

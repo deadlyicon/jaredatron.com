@@ -2,14 +2,25 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Page from 'components/Page'
 import Link from 'components/Link'
+import LoginForm from 'components/LoginForm'
 import InspectObject from 'components/InspectObject'
 // import './index.sass'
 
 export default class LoginPage extends Page {
 
   render(){
+    const {
+      loginError,
+    } = this.getAppState()
+
     return <div className="LoginPage">
       <h1>login page</h1>
+
+      <LoginForm
+        error={loginError}
+        onLogin={this.appAction('login')}
+      />
+
       <InspectObject object={this.getAppState()} />
 
       <div>

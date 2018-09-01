@@ -44,8 +44,8 @@ const createContext = actor => {
     resetState(...args){
       return resetState(actor, ...args)
     },
-    takeAction(...args){
-      return takeAction(actor, ...args)
+    async takeAction(...args){
+      return await takeAction(actor, ...args)
     },
   }
 }
@@ -83,13 +83,18 @@ const defineAction = function(actionName, action){
   appActions[actionName] = action.bind(createContext(`actions.${actionName}`))
 }
 
-const takeAction = function(actor, actionName, ...args){
-  logger.debug(`[appState][${actor}].takeAction`, actionName, args)
-  const action = appActions[actionName]
-  if (!action) throw new Error(
-    `[appState] ${actor} called undefined action "${actionName}"`
-  )
-  return appActions[actionName](...args)
+const takeAction = async function(actor, actionName, ...args){
+  try{
+    logger.debug(`[appState][${actor}].takeAction`, actionName, args)
+    const action = appActions[actionName]
+    if (!action) throw new Error(
+      `[appState] ${actor} called undefined action "${actionName}"`
+    )
+    return await appActions[actionName](...args)
+  }catch(error){
+    logger.debug(`[appState][${actor}].takeAction`, actionName, args, 'FAILED!')
+    logger.error(error)
+  }
 }
 
 const defineActions = function(actions){
