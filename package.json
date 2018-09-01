@@ -22,9 +22,12 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "knex": "^0.15.2",
+    "morgan": "^1.9.0",
     "pg": "^7.4.3",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "require-all": "^3.0.0",
+    "winston": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
