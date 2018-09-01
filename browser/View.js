@@ -1,27 +1,28 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+
+import { StatefulComponent } from 'lib/appState'
+import LoginPage from './pages/LoginPage'
 import InspectObject from 'components/InspectObject'
 
-export default class View extends Component {
+export default class View extends StatefulComponent {
 
-  componentDidCatch(error, info) {
-    console.error(error, info);
+  static appState = {
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      params: PropTypes.object.isRequired,
+    }).isRequired,
+    currentUser: PropTypes.func.isRequired,
   }
-
-  componentDidMount(){
-    this.props.app.subscribe(this.onStateChange)
-  }
-
-  componentWillUnmount(){
-    this.props.app.unsubscribe(this.onStateChange)
-  }
-
-  onStateChange = () => {
-    this.forceUpdate()
-  }
-
   render(){
-    const { app } = this.props
-    const appState = app.getState()
+    const {
+      location,
+      currentUser,
+    } = this.getAppState()
+
+    const props = { location }
+
+    if (!currentUser) return <LoginPage {...props} />
 
     return <div>
       <h1>hello from react</h1>

@@ -1,16 +1,16 @@
 const {
   NODE_ENV,
+  ROOT_PATH,
   BROWSER_PATH,
-  BROWSER_BUILD_PATH,
-  // ROOT_PATH,
-  // PUBLIC_PATH,
-  INDEX_HTML_PATH,
+  PUBLIC_PATH,
 } = require('./environment')
 
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+
+const outputPath = PUBLIC_PATH
 
 module.exports = {
   mode: NODE_ENV,
@@ -20,8 +20,9 @@ module.exports = {
     './index.js',
   ],
   output: {
-    path: BROWSER_BUILD_PATH,
-    filename: 'bundle.js'
+    path: outputPath,
+    filename: 'assets/[name].[hash].js',
+    publicPath: '/',
   },
   resolve: {
     alias: {
@@ -34,11 +35,34 @@ module.exports = {
   devtool: NODE_ENV === 'development' ? 'sourcemap' : undefined,
   module: {
     rules: [
+      // {
+      //   test: /\.js$/,
+      //   exclude: /node_modules/,
+      //   use: {
+      //     loader: 'babel-loader'
+      //   }
+      // },
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: `${ROOT_PATH}/tmp/webpack_cache`
+        }
+      },
+      {
+        test: /\.txt$/,
+        use: 'raw-loader'
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
+        test: /\.(ico|jpg|jpeg|png|gif|otf|webp)(\?.*)?$/,
+        loader: 'file-loader',
+        query: {
+          name: 'assets/[name].[hash].[ext]'
         }
       },
       {
@@ -70,10 +94,10 @@ module.exports = {
   // },
   plugins: [
     new webpack.NamedModulesPlugin(),
-    new CleanWebpackPlugin([BROWSER_BUILD_PATH]),
+    new CleanWebpackPlugin([outputPath]),
     new HtmlWebpackPlugin({
       inject: true,
-      template: INDEX_HTML_PATH,
+      template: `${BROWSER_PATH}/index.html`,
       // template: './public/index.html',
       // favicon: './public/favicon.ico'
       minify: {

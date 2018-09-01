@@ -74,4 +74,6 @@ typings/
 
 # Dotnev
 .env
-browser-build
+
+# webpack build pack
+public

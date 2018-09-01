@@ -1,2 +1,56 @@
-html, body
-  color: red
+// @import "~normalize.css/normalize.css"
+@import "./variables"
+
+// http://www.paulirish.com/2012/box-sizing-border-box-ftw/
+html
+  box-sizing: border-box
+  overflow-y: scroll
+
+*, *:before, *:after
+  // box-sizing: inherit
+  box-sizing: border-box
+  -webkit-font-smoothing: antialiased
+  font-smoothing: antialiased
+  text-rendering: optimizeLegibility
+
+
+body
+  font: $default-font
+  font-family: $default-font-family
+  -moz-osx-font-smoothing: grayscale
+  color: $default-font-color
+  margin: 0
+  height: 100%
+  min-height: 100%
+
+a
+  color: $dark-navy-blue
+
+// removes chrome yellow autofill background
+@-webkit-keyframes autofill
+  to
+    background: transparent
+
+input:-webkit-autofill
+  -webkit-animation-name: autofill
+  -webkit-animation-fill-mode: both
+
+textarea:-webkit-autofill
+  -webkit-animation-name: autofill
+  -webkit-animation-fill-mode: both
+
+
+// @import "./grid"
+// @import "classes/fullpage"
+
+
+// this class is designed to prevent scrolling ow the window
+// when we are currently displaying a modal
+html.with-modal > body
+  position: fixed
+  overflow: hidden
+  touch-action: none
+  top: 0
+  right: 0
+  left: 0
+  bottom: 0

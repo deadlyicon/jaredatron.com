@@ -5,6 +5,8 @@ const webpackConfig = require('../webpack.config')
 
 module.exports = server => {
   server.use(webpackDevMiddleware(webpack(webpackConfig),{
+    publicPath: webpackConfig.output.publicPath,
+    writeToDisk: true,
 
   }))
 }
