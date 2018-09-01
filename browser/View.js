@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { StatefulComponent } from 'lib/appState'
+import {
+  StatefulComponent,
+  subscribeToStateChange,
+  unsubscribeFromStateChange,
+} from 'lib/appState'
 import LoginPage from './pages/LoginPage'
 import InspectObject from 'components/InspectObject'
 
@@ -14,6 +18,17 @@ export default class View extends StatefulComponent {
     }).isRequired,
     currentUser: PropTypes.func.isRequired,
   }
+
+  componentDidMount(){
+    subscribeToStateChange(this.onStateChange)
+  }
+  componentWillUnmount(){
+    unsubscribeFromStateChange(this.onStateChange)
+  }
+  onStateChange = () => {
+    this.forceUpdate()
+  }
+
   render(){
     const {
       location,
@@ -29,4 +44,5 @@ export default class View extends StatefulComponent {
       <InspectObject object={appState} />
     </div>
   }
+
 }

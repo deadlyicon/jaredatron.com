@@ -6,7 +6,7 @@ import './style/index.sass'
 import View from './View'
 import app from './app'
 
-global.DEBUG = {}
+window.DEBUG = window.DEBUG || {}
 global.DEBUG.app = app
 
 render(<View />, document.querySelector('main'))

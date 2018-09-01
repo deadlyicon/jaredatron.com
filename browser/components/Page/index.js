@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import AppStateContext from '../../appState'
+import { StatefulComponent } from 'lib/appState'
 import InspectObject from 'components/InspectObject'
 import './index.sass'
 
-export default class Page extends Component {
+export default class Page extends StatefulComponent {
 
   static propTypes = {
     location: PropTypes.shape({

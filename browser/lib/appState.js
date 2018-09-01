@@ -6,18 +6,18 @@ let appState = {}
 const appActions = {}
 let subscribers = []
 
-const subscribeToStateChange = function(handler){
+export const subscribeToStateChange = function(handler){
   subscribers.push(handler)
 }
 
-const unsubscribeFromStateChange = function(handler){
+export const unsubscribeFromStateChange = function(handler){
   subscribers = subscribers.filter(h =>
     h !== handler
   )
 }
 
 const publish = function(){
-  logger.trace(`[appState].publish`)
+  logger.trace(`[appState].publish`, subscribers)
   subscribers.forEach(handler => {
     handler(appState)
   })

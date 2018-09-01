@@ -15,9 +15,9 @@ initializeAppState(function(){
   //   this.takeAction('logout', {post: false})
   // })
 
-  // window.addEventListener('popstate', () => {
-  //   this.takeAction('publishLocation')
-  // })
+  window.addEventListener('popstate', () => {
+    this.takeAction('publishLocation')
+  })
 
   // window.addEventListener('beforeunload', (event) => {
   //   const state = this.getState()
