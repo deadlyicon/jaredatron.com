@@ -3,11 +3,20 @@ import { executeCommand } from 'lib/server'
 
 export async function login({ password }){
   console.log({ password })
-  this.setState({[`login:error`]: undefined})
+  this.setState({ loggedIn: true })
+  return
+  this.setState({
+    loggingIn: true,
+    loginError: undefined,
+  })
   try{
     const response = await executeCommand('login', { password })
     console.log({ response })
-  }catch(error){
-    this.setState({[`login:error`]: error})
+  }catch(loginError){
+    this.setState({ loginError })
+  }finally{
+    this.setState({
+      loggingIn: undefined
+    })
   }
 }

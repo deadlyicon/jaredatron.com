@@ -21,8 +21,9 @@ const publish = function(){
     JSON.stringify(Array.from(changedKeys)),
   )
   if (changedKeys.size === 0) return
-  subscribers.forEach(handler => { handler(changedKeys, appState) })
+  const changedKeysCache = new Set(changedKeys)
   changedKeys.clear()
+  subscribers.forEach(handler => { handler(changedKeysCache, appState) })
 }
 
 let waitingForRequestAnimationFrame = false

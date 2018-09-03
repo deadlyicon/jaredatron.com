@@ -1,5 +1,6 @@
 module.exports = async function loginCommand({ password }){
-  throw new Error('FUUUCK')
+  // if (password === process.env.PASSWORD)
+  // throw new Error('FUUUCK')
 
   return {
     sessionId: 'asdsadsadsasadsad',

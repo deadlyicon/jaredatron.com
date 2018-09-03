@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Page from 'components/Page'
-import './index.sass'
+// import './index.sass'
 
 export default class HomePage extends Page {
 
@@ -10,7 +10,8 @@ export default class HomePage extends Page {
   // }
 
   render(){
-    return <div className="">
+    return <div className="HomePage">
+      <h1>HomePage</h1>
     </div>
   }
 }
