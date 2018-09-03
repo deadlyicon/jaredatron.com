@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import logger from 'lib/logger'
 
@@ -59,12 +59,23 @@ export const initializeAppState = function(initializer){
   initializer.call(context)
 }
 
-const getState = function(){
-  // logger.trace(`[appState][${actor}].getState`)
+const getState = function(actor){
+  logger.trace(`[appState][${actor}].getState`)
   return appState
 }
 
+const actorToString = actor => {
+  if (typeof actor === 'string') return actor
+  if (actor instanceof Component){
+    const name = actor.constructor.name ||
+      actor.constructor.toString().match(/^function ([^\( ]+)/)[1]
+    return `<${name} />`
+  }
+  return String(actor)
+}
+
 const setState = function(actor, changes){
+  actor = actorToString(actor)
   logger.debugWithObjectCollapsed(`[appState][${actor}].setState`, changes)
   Object.entries(changes).forEach(([key, value]) => {
     changedKeys.add(key)
@@ -78,6 +89,7 @@ const setState = function(actor, changes){
 }
 
 const resetState = function(actor) {
+  actor = actorToString(actor)
   logger.trace(`[appState][${actor}].resetState`)
   appState = {}
 }
@@ -86,10 +98,12 @@ const defineAction = function(actionName, action){
   if (actionName in appActions){
     throw new Error(`[appState] action "${actionName}" is already defined`)
   }
+  // TODO move createContext from defineActions to takeAction
   appActions[actionName] = action.bind(createContext(`actions.${actionName}`))
 }
 
-const takeAction = async function(actor, actionName, ...args){
+export const takeAction = async function(actor, actionName, ...args){
+  actor = actorToString(actor)
   try{
     logger.debug(`[appState][${actor}].takeAction`, actionName, args)
     const action = appActions[actionName]
@@ -103,91 +117,22 @@ const takeAction = async function(actor, actionName, ...args){
   }
 }
 
+export const appAction = (actor, actionName, ...boundArgs) => {
+  return (...args) => takeAction(actor, actionName, ...[...boundArgs, ...args])
+}
+
+
 const defineActions = function(actions){
   Object.entries(actions).forEach(([actionName, action]) => {
     defineAction(actionName, action)
   })
 }
 
-// export class AppStateProvider extends Component {
-//   static propTypes = {
-//     children: PropTypes.func.isRequired
-//   }
-//   componentDidMount(){
-//     subscribeToStateChange(this.onStateChange)
-//   }
-//   componentWillUnmount(){
-//     unsubscribeFromStateChange(this.onStateChange)
-//   }
-//   onStateChange = () => {
-//     this.forceUpdate()
-//   }
-//   render(){
-
-//     getAppState: PropTypes.func.isRequired,
-//     appAction: PropTypes.func.isRequired,
-//     takeAction: PropTypes.func.isRequired,
-//     return this.props.children({
-//       getAppState
-//       appAction
-//       takeAction
-//     })
-//   }
-// }
-
 const componentName = component => {
   const name = component.constructor.name ||
     component.constructor.toString().match(/^function ([^\( ]+)/)[1]
   return `<${name} />`
 }
-
-
-// export class StatefulComponent extends Component {
-//   getAppState(){
-//     return getState(componentName(this))
-//   }
-
-//   appAction(actionName, ...boundArgs){
-//     return (...args) => this.takeAction(actionName, ...[...boundArgs, ...args])
-//   }
-
-//   takeAction(actionName, ...args){
-//     return takeAction(componentName(this), actionName, ...args)
-//   }
-// }
-
-// let subscriptions = []
-// const createAppStateSubscription = function(component) {
-//   // // props.keys,
-//   // // () => { this.forceUpdate() },
-//   // const subscription = new Subscription
-//   // subscription.component = component
-//   // // subscription.publish = rerender
-//   // // subscription.setKeys(keys)
-//   subscriptions.push(component)
-//   console.log('[appState] new subscription', component)
-//   // return subscription
-// }
-// const cancelAppStateSubscription = function(component) {
-//   subscriptions = subscriptions.filter(c => c !== component)
-//   console.log('[appState] canceled subscription', component)
-// }
-
-// class Subscription {
-//   setKeys(keys){
-//     this.keys = Array.isArray(keys)
-//       ? keys.map(key => [key, key])
-//       : Object.entries(keys)
-//   }
-//   getKeys(){
-//     const appState = getState(componentName(this.component))
-//     return this.keys.reduce((state, [rightKey, leftKey]) => {
-//       state[leftKey] = appState[rightKey]
-//       return state
-//     }, {})
-//   }
-// }
-
 
 export class AppState extends PureComponent {
 
@@ -236,27 +181,22 @@ export class AppState extends PureComponent {
     }, {})
   }
 
-  takeAction = (actionName, ...args) => {
-    return takeAction(componentName(this), actionName, ...args)
-  }
-
-  appAction = (actionName, ...boundArgs) => {
-    return (...args) => this.takeAction(actionName, ...[...boundArgs, ...args])
-  }
-
   render(){
     const appState = this.getAppState()
     // console.log('AppState.render', this.props.keys, appState)
     // get keys from subsription
-    return this.props.children({
-      ...appState,
-      appAction: this.appAction,
-      takeAction: this.takeAction,
-    })
+    return this.props.children(appState)
   }
 
 }
 
+// export const takeAction = (actionName, ...args) => {
+//   return takeAction(componentName(this), actionName, ...args)
+// }
+
+// appAction = (actionName, ...boundArgs) => {
+//   return (...args) => this.takeAction(actionName, ...[...boundArgs, ...args])
+// }
 
 // DEBUG
 window.DEBUG = window.DEBUG || {}

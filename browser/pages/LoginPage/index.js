@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { AppState } from 'lib/appState'
+import { AppState, appAction } from 'lib/appState'
 import Page from 'components/Page'
 import Link from 'components/Link'
 import LoginForm from 'components/LoginForm'
@@ -10,12 +10,6 @@ import InspectObject from 'components/InspectObject'
 export default class LoginPage extends Page {
 
   render(){
-    // const {
-    //   loginError,
-    //   email,
-    //   password,
-    // } = this.getAppState()
-
     return <div className="LoginPage">
       <h1>login page</h1>
 
@@ -25,35 +19,32 @@ export default class LoginPage extends Page {
         }}
       >
         {state => {
-          const onLogin = state.appAction('login')
-
           return <LoginForm
             error={state.error}
-            onLogin={onLogin}
+            onLogin={appAction(this, 'login')}
           />
         }}
       </AppState>
-
-      <InspectObject object={this.props} />
-
-      <div>
-        <Link href="/one/two?three=four">doggies</Link>
-      </div>
-      <div>
-        <Link href="/five/six?seven=eight">kitties</Link>
-      </div>
-      <div>
-        <Link href="shoes">shoes</Link>
-      </div>
-      <div>
-        <Link href="cars">cars</Link>
-      </div>
-      <div>
-        <Link href="people">people</Link>
-      </div>
-      <div>
-        <Link href="whatever">whatever</Link>
-      </div>
     </div>
   }
 }
+
+// const Links = () =>
+//   <div>
+//     <Link href="/one/two?three=four">doggies</Link>
+//   </div>
+//   <div>
+//     <Link href="/five/six?seven=eight">kitties</Link>
+//   </div>
+//   <div>
+//     <Link href="shoes">shoes</Link>
+//   </div>
+//   <div>
+//     <Link href="cars">cars</Link>
+//   </div>
+//   <div>
+//     <Link href="people">people</Link>
+//   </div>
+//   <div>
+//     <Link href="whatever">whatever</Link>
+//   </div>
