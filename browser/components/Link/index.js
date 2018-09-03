@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { StatefulComponent } from 'lib/appState'
+import history from 'lib/history'
+// import { StatefulComponent } from 'lib/appState'
 import './index.sass'
 
-export default class Link extends StatefulComponent {
+export default class Link extends Component {
 
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -30,6 +31,7 @@ export default class Link extends StatefulComponent {
       this.props.onClick(event)
     }
 
+    // move to higher level component?
     if (event.defaultPrevented) return
 
     if (
@@ -39,7 +41,8 @@ export default class Link extends StatefulComponent {
       href.startsWith(window.location.origin)
     ){
       event.preventDefault()
-      this.takeAction('setLocation', href)
+      // this.takeAction('setLocation', href)
+      history.pushState(null, window.document.title, href)
     }
   }
 

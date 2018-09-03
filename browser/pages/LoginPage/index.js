@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { AppState } from 'lib/appState'
 import Page from 'components/Page'
 import Link from 'components/Link'
 import LoginForm from 'components/LoginForm'
@@ -9,19 +10,31 @@ import InspectObject from 'components/InspectObject'
 export default class LoginPage extends Page {
 
   render(){
-    const {
-      loginError,
-    } = this.getAppState()
+    // const {
+    //   loginError,
+    //   email,
+    //   password,
+    // } = this.getAppState()
 
     return <div className="LoginPage">
       <h1>login page</h1>
 
-      <LoginForm
-        error={loginError}
-        onLogin={this.appAction('login')}
-      />
+      <AppState
+        keys={{
+          [`login:error`]: 'error',
+        }}
+      >
+        {state => {
+          const onLogin = state.appAction('login')
 
-      <InspectObject object={this.getAppState()} />
+          return <LoginForm
+            error={state.error}
+            onLogin={onLogin}
+          />
+        }}
+      </AppState>
+
+      <InspectObject object={this.props} />
 
       <div>
         <Link href="/one/two?three=four">doggies</Link>

@@ -4,7 +4,7 @@ import { StatefulComponent } from 'lib/appState'
 import InspectObject from 'components/InspectObject'
 import './index.sass'
 
-export default class Page extends StatefulComponent {
+export default class Page extends Component {
 
   static propTypes = {
     location: PropTypes.shape({

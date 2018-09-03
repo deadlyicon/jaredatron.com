@@ -1,4 +1,5 @@
 import querystring from 'querystring'
+import history from './history'
 
 export const searchToObject = (search) => {
   return querystring.parse((search || '').replace(/^\?/, ''))
@@ -27,15 +28,22 @@ const locationToHref = location => {
 
 
 export const publishLocation = function(){
-  this.setState({
-    location: getLocation(),
-  })
+  const lastLocation = this.getState().location
+  const location = getLocation()
+  if (
+    lastLocation &&
+    location.pathname === lastLocation.pathname &&
+    JSON.stringify(location.params) === JSON.stringify(lastLocation.params)
+  ) return
+  this.setState({ location })
 }
+
+history.onChange
 
 export const setLocation = function(location){
   const href = locationToHref(location)
   if (href === window.location.href) return // noop
-  window.history.pushState(null, window.document.title, href)
+  history.pushState(null, window.document.title, href)
   this.setState({
     location: getLocation(),
   })
@@ -43,7 +51,7 @@ export const setLocation = function(location){
 
 export const replaceLocation = function(location){
   const href = locationToHref(location)
-  window.history.replaceState(null, window.document.title, href)
+  history.replaceState(null, window.document.title, href)
   this.setState({
     location: getLocation(),
   })

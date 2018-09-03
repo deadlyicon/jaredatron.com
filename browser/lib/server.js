@@ -7,7 +7,13 @@ async function request(method, path, body){
     },
     body: JSON.stringify(body)
   })
-  return await response.json()
+  const responseBody = await response.json()
+  if (responseBody.error){
+    const error = new Error(responseBody.error.message)
+    error.stack = responseBody.error.stack + error.stack
+    throw error
+  }
+  return responseBody
 }
 
 

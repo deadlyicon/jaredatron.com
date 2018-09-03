@@ -1,4 +1,5 @@
 // import App from 'lib/App'
+import history from 'lib/history'
 import { initializeAppState } from 'lib/appState'
 import * as actions from './actions'
 
@@ -10,14 +11,15 @@ initializeAppState(function(){
   // this.takeAction('restoreSession')
   this.takeAction('publishLocation')
 
+  // window.addEventListener('popstate', () => {
+  history.subscribe(() => {
+    this.takeAction('publishLocation')
+  })
+
   // api.on('unauthorized', () => {
   //   console.warn('logging out because of unauthorized error')
   //   this.takeAction('logout', {post: false})
   // })
-
-  window.addEventListener('popstate', () => {
-    this.takeAction('publishLocation')
-  })
 
   // window.addEventListener('beforeunload', (event) => {
   //   const state = this.getState()
