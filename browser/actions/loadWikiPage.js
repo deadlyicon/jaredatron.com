@@ -5,9 +5,7 @@ export async function loadWikiPage({ path }){
   const loadingKey = `wikiPage:${path}:loading`
   const errorLoadingKey = `wikiPage:${path}:loadingError`
 
-  const {
-    [key]: wikiPage,
-  } = this.getState()
+  const { [key]: wikiPage } = this.getState()
 
   if (wikiPage) return;
 
@@ -15,13 +13,10 @@ export async function loadWikiPage({ path }){
 
   try{
     const { wikiPage } = await executeCommand('getWikiPage', { path })
-    console.log('GOOD!', { [key]: wikiPage })
     this.setState({ [key]: wikiPage })
   }catch(error){
-    console.log('BAD!!')
     this.setState({ [errorLoadingKey]: error })
   }finally{
-    console.log('ALWAYS!!')
     this.setState({ [loadingKey]: undefined })
   }
 }

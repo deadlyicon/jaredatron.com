@@ -35,13 +35,6 @@ module.exports = {
   devtool: NODE_ENV === 'development' ? 'sourcemap' : undefined,
   module: {
     rules: [
-      // {
-      //   test: /\.js$/,
-      //   exclude: /node_modules/,
-      //   use: {
-      //     loader: 'babel-loader'
-      //   }
-      // },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -56,6 +49,7 @@ module.exports = {
       },
       {
         test: /\.json$/,
+        exclude: /node_modules/,
         loader: 'json-loader'
       },
       {

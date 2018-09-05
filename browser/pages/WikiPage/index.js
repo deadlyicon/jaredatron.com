@@ -1,53 +1,56 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { AppState, takeAction } from 'lib/appState'
 import Page from 'components/Page'
 import Link from 'components/Link'
 import Markdown from 'components/Markdown'
+import ErrorMessage from 'components/ErrorMessage'
 import InspectObject from 'components/InspectObject'
+
+import './index.sass'
 
 export default class WikiPage extends Page {
 
-  getPath(props){
-    return `/${props.location.params.path || ''}`
+  render(){
+    const { path, edit } = this.props.location.params
+    return path
+      ? <PagePage path={path} editing={!!edit} />
+      : <IndexPage />
   }
+}
+
+class PagePage extends PureComponent {
 
   loadWikiPage(path){
     takeAction(this, 'loadWikiPage', { path })
   }
 
   componentDidMount(){
-    this.loadWikiPage(this.getPath(this.props))
+    this.loadWikiPage(this.props.path)
   }
 
   componentWillReceiveProps(nextProps){
-    if (this.props.location.params.path !== nextProps.location.params.path){
-      this.loadWikiPage(this.getPath(nextProps))
+    if (this.props.path !== nextProps.path){
+      this.loadWikiPage(nextProps.path)
     }
   }
 
+
   render(){
-    const editing = !!this.props.location.params.edit
-    const path = this.getPath(this.props)
+    const { path } = this.props
     const keys = {
-      // page: `wikiPage:${path}`,
-      // loadingPage: `wikiPage:${path}:loading`,
-      // errorLoadingPage: `wikiPage:${path}:loadingError`,
       page: `wikiPage:${path}`,
       loadingPage: `wikiPage:${path}:loading`,
       errorLoadingPage: `wikiPage:${path}:loadingError`,
     }
-
     return <AppState keys={keys}>
-      {({ page, loadingPage, errorLoadingPage }) => {
+      {({ page, errorLoadingPage }) => {
         return <div className="WikiPage">
           <div>
             <Pathlinks path={path} />
           </div>
-          <InspectObject object={keys} />
-          <InspectObject object={{page, loadingPage, errorLoadingPage}} />
-          <InspectObject object={this.props} />
-          <Markdown document={page.content} />
+          <ErrorMessage error={errorLoadingPage} />
+          {page && <Markdown source={page.content} />}
         </div>
       }}
     </AppState>
