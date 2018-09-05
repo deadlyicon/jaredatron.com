@@ -5,7 +5,7 @@ import Link from 'components/Link'
 import './index.sass'
 
 const renderers = Object.freeze({
-  link: Link,
+  link: props => <Link type="link" {...props} />,
 })
 
 const linkTarget = (href) => {

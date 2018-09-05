@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import querystring from 'querystring'
 import history from 'lib/history'
 // import { StatefulComponent } from 'lib/appState'
 import './index.sass'
@@ -12,6 +13,7 @@ export default class Link extends Component {
     type: PropTypes.string,
     disabled: PropTypes.bool,
     newWindow: PropTypes.bool,
+    params: PropTypes.object,
   }
 
   static defaultProps = {
@@ -52,11 +54,19 @@ export default class Link extends Component {
       type,
       href,
       newWindow,
+      params,
       ...props
     } = this.props
     className = `Link ${className}`
     if (type) className += ` Link-${type}`
     delete props.onClick
+
+    if (params){
+      let search = querystring.parse((window.location.search || '').replace(/^\?/, ''))
+      search = querystring.stringify(withoutUndefineds({ ...search, ...params }))
+      console.log({ search })
+      href = `${window.location.origin}${window.location.pathname}?${search}`
+    }
 
     return <a
       ref={node => { this.link = node }}
@@ -70,3 +80,13 @@ export default class Link extends Component {
     </a>
   }
 }
+
+
+const withoutUndefineds = object =>
+  Object.entries(object).reduce(
+    (object, [key, value]) => {
+      if (typeof value !== 'undefined') object[key] = value
+      return object
+    },
+    {}
+  )
