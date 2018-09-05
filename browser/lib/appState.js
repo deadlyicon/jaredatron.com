@@ -20,6 +20,7 @@ const publish = function(){
     'changedKeys:',
     JSON.stringify(Array.from(changedKeys)),
   )
+  logger.debug('appState', appState)
   if (changedKeys.size === 0) return
   const changedKeysCache = new Set(changedKeys)
   changedKeys.clear()
@@ -158,14 +159,14 @@ export class AppState extends PureComponent {
     const keys = this.getKeys()
     const ourChangedKeys = keys.filter(key => changedKeys.has(key))
     if (ourChangedKeys.length > 0) {
-      console.log(`AppState rerendeing keys=${JSON.stringify(ourChangedKeys)}`)
+      logger.debug(`AppState rerendeing keys=${JSON.stringify(ourChangedKeys)}`)
       this.forceUpdate()
     }
   }
 
   getKeys(){
     const { keys } = this.props
-    return Array.isArray(keys) ? keys : Object.keys(keys)
+    return Array.isArray(keys) ? keys : Object.values(keys)
   }
 
   getKeyMap(){

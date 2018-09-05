@@ -2,6 +2,8 @@ import { executeCommand } from 'lib/server'
 
 export async function loadWikiPage({ path }){
   const key = `wikiPage:${path}`
+  const loadingKey = `wikiPage:${path}:loading`
+  const errorLoadingKey = `wikiPage:${path}:loadingError`
 
   const {
     [key]: wikiPage,
@@ -9,14 +11,17 @@ export async function loadWikiPage({ path }){
 
   if (wikiPage) return;
 
+  this.setState({ [loadingKey]: true })
+
   try{
-    const response = await executeCommand('getWikiPage', { path })
-    console.log({ response })
-  }catch(loginError){
-    this.setState({ loginError })
+    const { wikiPage } = await executeCommand('getWikiPage', { path })
+    console.log('GOOD!', { [key]: wikiPage })
+    this.setState({ [key]: wikiPage })
+  }catch(error){
+    console.log('BAD!!')
+    this.setState({ [errorLoadingKey]: error })
   }finally{
-    this.setState({
-      loggingIn: undefined
-    })
+    console.log('ALWAYS!!')
+    this.setState({ [loadingKey]: undefined })
   }
 }

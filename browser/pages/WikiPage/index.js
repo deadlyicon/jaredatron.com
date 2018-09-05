@@ -29,9 +29,12 @@ export default class WikiPage extends Page {
     const editing = !!this.props.location.params.edit
     const path = this.getPath(this.props)
     const keys = {
+      // page: `wikiPage:${path}`,
+      // loadingPage: `wikiPage:${path}:loading`,
+      // errorLoadingPage: `wikiPage:${path}:loadingError`,
       page: `wikiPage:${path}`,
-      loadingPage: `loadingWikiPage:${path}`,
-      errorLoadingPage: `errorLoadingWikiPage:${path}`,
+      loadingPage: `wikiPage:${path}:loading`,
+      errorLoadingPage: `wikiPage:${path}:loadingError`,
     }
 
     return <AppState keys={keys}>
@@ -40,6 +43,8 @@ export default class WikiPage extends Page {
           <div>
             <Pathlinks path={path} />
           </div>
+          <InspectObject object={keys} />
+          <InspectObject object={{page, loadingPage, errorLoadingPage}} />
           <InspectObject object={this.props} />
         </div>
       }}
