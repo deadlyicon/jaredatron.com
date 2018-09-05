@@ -8,12 +8,9 @@ const renderers = Object.freeze({
   link: props => <Link type="link" {...props} />,
 })
 
-const linkTarget = (href) => {
-  console.log("????", [href, window.location.origin])
-  return href.startsWith(window.location.origin)
-    ? undefined
-    : '_blank'
-}
+const linkTarget = (href) =>
+  href.startsWith(window.location.origin) ? undefined : '_blank'
+
 
 export default function Markdown({ source }){
   const props = {

@@ -64,7 +64,6 @@ export default class Link extends Component {
     if (params){
       let search = querystring.parse((window.location.search || '').replace(/^\?/, ''))
       search = querystring.stringify(withoutUndefineds({ ...search, ...params }))
-      console.log({ search })
       href = `${window.location.origin}${window.location.pathname}?${search}`
     }
 

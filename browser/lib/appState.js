@@ -20,22 +20,32 @@ const publish = function(){
     'changedKeys:',
     JSON.stringify(Array.from(changedKeys)),
   )
-  logger.debug('appState', appState)
+  // logger.debug('appState', appState)
   if (changedKeys.size === 0) return
   const changedKeysCache = new Set(changedKeys)
   changedKeys.clear()
   subscribers.forEach(handler => { handler(changedKeysCache, appState) })
 }
 
-let waitingForRequestAnimationFrame = false
-const publishOnNextAnimationFrame = function(){
-  if (waitingForRequestAnimationFrame) return
-  waitingForRequestAnimationFrame = true
-  window.requestAnimationFrame(() => {
-    waitingForRequestAnimationFrame = false
+let waitingForNextTick = false
+const publishOnNextTick = function(){
+  if (waitingForNextTick) return
+  waitingForNextTick = true
+  window.setTimeout(() => {
+    waitingForNextTick = false
     publish()
   })
 }
+
+// let waitingForRequestAnimationFrame = false
+// const publishOnNextAnimationFrame = function(){
+//   if (waitingForRequestAnimationFrame) return
+//   waitingForRequestAnimationFrame = true
+//   window.requestAnimationFrame(() => {
+//     waitingForRequestAnimationFrame = false
+//     publish()
+//   })
+// }
 
 const createContext = actor => {
   return {
@@ -87,7 +97,9 @@ const setState = function(actor, changes){
       appState[key] = value
     }
   })
-  publishOnNextAnimationFrame()
+  // publishOnNextAnimationFrame()
+  // publishOnNextTick()
+  publish()
 }
 
 const resetState = function(actor) {
@@ -148,6 +160,7 @@ export class AppState extends PureComponent {
 
   constructor(props){
     super()
+    this.renderCount = 0
     subscribe(this.onAppStateChange)
   }
 
@@ -159,7 +172,7 @@ export class AppState extends PureComponent {
     const keys = this.getKeys()
     const ourChangedKeys = keys.filter(key => changedKeys.has(key))
     if (ourChangedKeys.length > 0) {
-      logger.debug(`AppState rerendeing keys=${JSON.stringify(ourChangedKeys)}`)
+      // logger.debug(`AppState rerendeing keys=${JSON.stringify(ourChangedKeys)}`)
       this.forceUpdate()
     }
   }
@@ -184,8 +197,9 @@ export class AppState extends PureComponent {
   }
 
   render(){
+    this.renderCount++
+    console.log('AppState.render', this.props.keys, this.renderCount)
     const appState = this.getAppState()
-    // console.log('AppState.render', this.props.keys, appState)
     // get keys from subsription
     return this.props.children(appState)
   }

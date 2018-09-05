@@ -68,14 +68,22 @@ class IndexPage extends PureComponent {
   render(){
     const { sortBy, asc } = this.props
 
-    return <AppState keys={['wikiIndex', 'errorLoadingWikiIndex']}>
-      {({ wikiIndex, errorLoadingWikiIndex }) =>
+    return <AppState keys={['wikiIndex', 'errorLoadingWikiIndex', 'wikiIndexFilter']}>
+      {({ wikiIndex, errorLoadingWikiIndex, wikiIndexFilter = '' }) =>
         <div className="WikiIndexPage">
-          <div>
-            <Pathlinks path="/" />
-          </div>
+          <input
+            autofocus
+            value={wikiIndexFilter}
+            onInput={event => { takeAction(this, 'filterWikiIndex', { filter: event.target.value }) }}
+          />
           <ErrorMessage error={errorLoadingWikiIndex} />
-          {wikiIndex && <WikiPagesList pages={wikiIndex.pages} sortBy={sortBy} asc={asc}  />}
+          { wikiIndex && <WikiPagesList
+              pages={wikiIndex.pages}
+              sortBy={sortBy}
+              asc={asc}
+              filter={wikiIndexFilter}
+            />
+          }
         </div>
       }
     </AppState>
@@ -99,8 +107,13 @@ const Pathlinks = ({ path }) => {
 
 const WikiPagesList = function(props){
   const asc = props.asc === '1' ? undefined : '1'
+  const filter = props.filter
   const sortBy = props.sortBy || 'last_viewed_at'
-  const pages = props.pages
+  let pages = props.pages
+  if (filter) pages = pages.filter(page =>
+    page.path.toLowerCase().includes(filter)
+  )
+  pages = pages
     .sort((a, b) => {
       a = a[sortBy]
       b = b[sortBy]
@@ -113,9 +126,9 @@ const WikiPagesList = function(props){
     )
   return <div className="WikiPagesList">
     <div className="WikiPagesListMember">
-      <Link type="link" params={{asc, sortBy:'path'}}>Path</Link>
-      <Link type="link" params={{asc, sortBy:'last_viewed_at'}}>Last Viewed</Link>
-      <Link type="link" params={{asc, sortBy:'updated_at'}}>Last Updated</Link>
+      <Link type="link" tabIndex="-1" params={{asc, sortBy:'path'}}>Path</Link>
+      <Link type="link" tabIndex="-1" params={{asc, sortBy:'last_viewed_at'}}>Last Viewed</Link>
+      <Link type="link" tabIndex="-1" params={{asc, sortBy:'updated_at'}}>Last Updated</Link>
     </div>
     <div className="WikiPagesList-pages">{pages}</div>
   </div>
