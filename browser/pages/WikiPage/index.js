@@ -88,25 +88,25 @@ const Pathlinks = ({ path }) => {
   parts.forEach((part, index) => {
     if (index !== 0) links.push(<span key={`${index}-break`}>/</span>)
     links.push(
-      <Link key={`${index}-link`} href={'/wiki'+parts.slice(0,index+1).join('/')}>
+      <Link key={`${index}-link`} href={'/wiki/'+parts.slice(0,index+1).join('/')}>
         {part.replace(/[+-_]+/g, ' ')}
       </Link>
     )
   })
-  return <span className="">{links}</span>
+  return <span className="Pathlinks">{links}</span>
 }
 
 
 const WikiPagesList = function(props){
   const asc = props.asc === '1' ? undefined : '1'
-  const sortBy = props.sortBy
+  const sortBy = props.sortBy || 'last_viewed_at'
   const pages = props.pages
     .sort((a, b) => {
       a = a[sortBy]
       b = b[sortBy]
       if (typeof a === 'string') a = a.toLowerCase()
       if (typeof b === 'string') b = b.toLowerCase()
-      return (a < b ? -1 : b < a ? 1 : 0) * ( asc === '1' ? 1 : -1)
+      return (a < b ? -1 : b < a ? 1 : 0) * ( asc === '1' ? -1 : 1)
     })
     .map(page =>
       <WikiPagesListMember key={page.path} page={page} />

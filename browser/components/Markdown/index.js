@@ -19,6 +19,7 @@ export default function Markdown({ source }){
   const props = {
     source,
     className: 'Markdown',
+    escapeHtml: false,
     linkTarget,
     renderers,
   }
