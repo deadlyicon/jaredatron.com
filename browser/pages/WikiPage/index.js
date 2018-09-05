@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { AppState, takeAction } from 'lib/appState'
 import Page from 'components/Page'
 import Link from 'components/Link'
+import Markdown from 'components/Markdown'
 import InspectObject from 'components/InspectObject'
 
 export default class WikiPage extends Page {
@@ -46,6 +47,7 @@ export default class WikiPage extends Page {
           <InspectObject object={keys} />
           <InspectObject object={{page, loadingPage, errorLoadingPage}} />
           <InspectObject object={this.props} />
+          <Markdown document={page.content} />
         </div>
       }}
     </AppState>

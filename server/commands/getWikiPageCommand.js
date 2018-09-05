@@ -1,10 +1,12 @@
-module.exports = async function getWikiPageCommand({ path }){
-  // if (password === process.env.PASSWORD)
-  // throw new Error('FUUUCK')
+const { pg } = require('../../database')
 
-  return {
-    wikiPage: {
-      source: `source for page ${path} :D`,
-    },
-  }
+module.exports = async function getWikiPageCommand({ logger, path }){
+  logger.debug({ path })
+  path = path.replace(/^\/+/,'')
+
+  // await pg.query('SELECT * FROM wiki_pages WHERE path=$1')
+  const wikiPage = await pg.select('*').from('wiki_pages').where({path}).first()
+  logger.debug({ wikiPage })
+
+  return { wikiPage }
 }

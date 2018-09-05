@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+'use strict';
+/* eslint no-console: 0 */
+require('../database');
+
+console.log(process.env.DATABASE_URL.split('?')[0]);
+process.exit();
