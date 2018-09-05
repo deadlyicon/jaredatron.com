@@ -1,4 +1,7 @@
+import logger from 'lib/logger'
+
 async function request(method, path, body){
+  logger.debug(`[server][request]`, {method, path, body})
   const response = await fetch(path, {
     method,
     headers: {
@@ -11,8 +14,10 @@ async function request(method, path, body){
   if (responseBody.error){
     const error = new Error(responseBody.error.message)
     error.stack = responseBody.error.stack + error.stack
+    logger.error(`[server][request]`, error)
     throw error
   }
+  logger.debug(`[server][response]`, responseBody)
   return responseBody
 }
 

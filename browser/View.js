@@ -31,7 +31,7 @@ const pathnameRouter = new PathnameRouter(map => {
 })
 
 const Router = function({ location, loggedIn }) {
-  if (!loggedIn) return <LoginPage location={location} />
+  // if (!loggedIn) return <LoginPage location={location} />
   const { Component, params } = pathnameRouter.resolve(location)
   return <Layout>
     <Component location={{...location, params}} />

@@ -176,7 +176,7 @@ export class AppState extends PureComponent {
   }
 
   getAppState(){
-    return this.getKeyMap().reduce((state, [rightKey, leftKey]) => {
+    return this.getKeyMap().reduce((state, [leftKey, rightKey]) => {
       state[leftKey] = appState[rightKey]
       return state
     }, {})

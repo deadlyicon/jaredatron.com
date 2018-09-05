@@ -1,3 +1,5 @@
+import { inspect } from 'util'
+
 const logLevels = [
   'trace',
   'debug',
@@ -49,11 +51,14 @@ logLevels.forEach(level => {
   logger[`${level}WithObjectCollapsed`] = function(groupName, object){
     if (logLevel > logLevels.indexOf(level)) return
     console.groupCollapsed(groupName)
-    consoleMethod(JSON.stringify(
-      object,
-      replaceUndefinedWithUndefinedString,
-      2
-    ))
+    consoleMethod(
+      inspect(object, { showHidden: true, depth: null })
+    )
+    // consoleMethod(JSON.stringify(
+    //   object,
+    //   replaceUndefinedWithUndefinedString,
+    //   2
+    // ))
     console.groupEnd(groupName)
   }
 
