@@ -50,9 +50,17 @@ export const setLocation = function(location){
 }
 
 export const replaceLocation = function(location){
+  console.log('location location location location', location)
   const href = locationToHref(location)
+  console.log('href href href href', href)
   history.replaceState(null, window.document.title, href)
   this.setState({
     location: getLocation(),
   })
+}
+
+export const replaceParams = function(params) {
+  let { location } = this.getState()
+  params = { ...location.params, ...params }
+  replaceLocation.call(this, { ...location, params })
 }

@@ -46,7 +46,7 @@ class PagePage extends PureComponent {
       errorLoadingPage: `wikiPage:${path}:loadingError`,
     }
     return <AppState keys={keys}>
-      {({ page, errorLoadingPage }) =>
+      {({ page, loadingPage, errorLoadingPage }) =>
         <div className="WikiPagePage">
           <div>
             <Pathlinks path={path} />
@@ -72,9 +72,9 @@ class IndexPage extends PureComponent {
       {({ wikiIndex, errorLoadingWikiIndex, wikiIndexFilter = '' }) =>
         <div className="WikiIndexPage">
           <input
-            autofocus
+            autoFocus
             value={wikiIndexFilter}
-            onInput={event => { takeAction(this, 'filterWikiIndex', { filter: event.target.value }) }}
+            onInput={event => { takeAction(this, 'replaceParams', { f: event.target.value }) }}
           />
           <ErrorMessage error={errorLoadingWikiIndex} />
           { wikiIndex && <WikiPagesList
