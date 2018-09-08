@@ -18,7 +18,10 @@ export default class WikiPage extends Page {
     const { path, edit, sortBy, asc, f: filter } = this.props.location.params
     return <div className="WikiPage">
       { path
-        ? <WikiPageEditor path={path} />
+        ? <WikiPageEditor
+          path={path}
+          edit={!!edit}
+        />
         : <IndexPage
           sortBy={sortBy}
           asc={asc}

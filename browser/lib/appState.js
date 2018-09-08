@@ -72,7 +72,7 @@ export const initializeAppState = function(initializer){
 }
 
 const getState = function(actor){
-  logger.trace(`[appState][${actor}].getState`)
+  // logger.trace(`[appState][${actor}].getState`)
   return appState
 }
 
@@ -198,7 +198,7 @@ export class AppState extends PureComponent {
 
   render(){
     this.renderCount++
-    console.log('AppState.render', this.props.keys, this.renderCount)
+    // console.log('AppState.render', this.props.keys, this.renderCount)
     const appState = this.getAppState()
     // get keys from subsription
     return this.props.children(appState)

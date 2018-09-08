@@ -1,6 +1,10 @@
 .Layout
+  position: relative
+  min-height: 100vh
 
+  $topnav-height: 24px
   &-topnav
+    height: $topnav-height
     background: black
     color: white
     padding: 2px 1em
@@ -10,3 +14,7 @@
       margin-right: 1em
     &-spacer
       flex: 1 1
+
+  &-main
+    min-height: calc(100vh - #{$topnav-height})
+    height: 1px

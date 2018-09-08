@@ -24,12 +24,12 @@ async function request(method, path, body){
 
 export async function executeQuery(queryName, options){
   const response = await request('GET', '/query', { queryName, options })
-  console.log({response})
+  // console.log({response})
   return response
 }
 
 export async function executeCommand(commandName, options){
   const response = await request('POST', '/commands', { commandName, options })
-  console.log({response})
+  // console.log({response})
   return response
 }

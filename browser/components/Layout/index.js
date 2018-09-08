@@ -21,7 +21,7 @@ export default class Layout extends Component {
         <div className="Layout-topnav-spacer" />
         <Link onClick={this.logout}>logout</Link>
       </div>
-      <div>{this.props.children}</div>
+      <div className="Layout-main">{this.props.children}</div>
     </div>
   }
 }

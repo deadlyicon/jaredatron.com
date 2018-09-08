@@ -86,7 +86,7 @@ export default class Link extends Component {
 const withoutUndefineds = object =>
   Object.entries(object).reduce(
     (object, [key, value]) => {
-      if (typeof value !== 'undefined') object[key] = value
+      if (value !== undefined && value !== null) object[key] = value
       return object
     },
     {}
