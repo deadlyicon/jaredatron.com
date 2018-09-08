@@ -8,8 +8,9 @@ import './index.sass'
 export default class Link extends Component {
 
   static propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     href: PropTypes.string,
+    value: PropTypes.string,
     type: PropTypes.string,
     disabled: PropTypes.bool,
     newWindow: PropTypes.bool,
@@ -52,6 +53,7 @@ export default class Link extends Component {
     let {
       className = '',
       type,
+      value,
       href,
       newWindow,
       params,
@@ -75,7 +77,7 @@ export default class Link extends Component {
       {...(newWindow && { target: "_blank"})}
       {...props}
     >
-      {props.children}
+      {value ? value : props.children}
     </a>
   }
 }

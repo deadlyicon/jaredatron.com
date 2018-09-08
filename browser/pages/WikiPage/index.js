@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import stringSimilarity from 'string-similarity'
 import { AppState, takeAction } from 'lib/appState'
 import Page from 'components/Page'
 import Link from 'components/Link'
@@ -13,11 +14,21 @@ import './index.sass'
 export default class WikiPage extends Page {
 
   render(){
-    const { path, edit, sortBy, asc } = this.props.location.params
+    const { path, edit, sortBy, asc, f: filter } = this.props.location.params
     return <div className="WikiPage">
       { path
-        ? <PagePage path={path} editing={!!edit} />
-        : <IndexPage sortBy={sortBy} asc={asc} />
+        ? <PagePage
+          path={path}
+          editing={!!edit}
+        />
+        : <IndexPage
+          sortBy={sortBy}
+          asc={asc}
+          filter={filter}
+          onFilterChange={filter => {
+            takeAction(this, 'replaceParams', { f: filter })
+          }}
+        />
       }
     </div>
   }
@@ -66,22 +77,22 @@ class IndexPage extends PureComponent {
   }
 
   render(){
-    const { sortBy, asc } = this.props
+    const { sortBy, asc, filter = '', onFilterChange } = this.props
 
-    return <AppState keys={['wikiIndex', 'errorLoadingWikiIndex', 'wikiIndexFilter']}>
-      {({ wikiIndex, errorLoadingWikiIndex, wikiIndexFilter = '' }) =>
+    return <AppState keys={['wikiIndex', 'errorLoadingWikiIndex']}>
+      {({ wikiIndex, errorLoadingWikiIndex }) =>
         <div className="WikiIndexPage">
           <input
             autoFocus
-            value={wikiIndexFilter}
-            onInput={event => { takeAction(this, 'replaceParams', { f: event.target.value }) }}
+            value={filter}
+            onInput={event => { onFilterChange(event.target.value) }}
           />
           <ErrorMessage error={errorLoadingWikiIndex} />
           { wikiIndex && <WikiPagesList
               pages={wikiIndex.pages}
               sortBy={sortBy}
               asc={asc}
-              filter={wikiIndexFilter}
+              filter={filter}
             />
           }
         </div>
@@ -106,29 +117,43 @@ const Pathlinks = ({ path }) => {
 
 
 const WikiPagesList = function(props){
-  const asc = props.asc === '1' ? undefined : '1'
-  const filter = props.filter
+  const asc = props.asc === '1'
+  const filter = props.filter ? props.filter.toLowerCase() : null
   const sortBy = props.sortBy || 'last_viewed_at'
+
   let pages = props.pages
-  if (filter) pages = pages.filter(page =>
-    page.path.toLowerCase().includes(filter)
-  )
-  pages = pages
-    .sort((a, b) => {
-      a = a[sortBy]
-      b = b[sortBy]
-      if (typeof a === 'string') a = a.toLowerCase()
-      if (typeof b === 'string') b = b.toLowerCase()
-      return (a < b ? -1 : b < a ? 1 : 0) * ( asc === '1' ? -1 : 1)
+
+  if (filter){
+    pages = pages.sortBy(page => stringSimilarity.compareTwoStrings(page.path, filter))
+  }else{
+    pages = pages.sortBy(page => {
+      let prop = page[sortBy]
+      if (typeof prop === 'string') prop = prop.toLowerCase()
+      return prop
     })
-    .map(page =>
-      <WikiPagesListMember key={page.path} page={page} />
-    )
+  }
+
+  if (!asc) pages = pages.reverse()
+
+  pages = pages.map(page =>
+    <WikiPagesListMember key={page.path} page={page} />
+  )
+  const columnLink = (value, _sortBy) =>
+    <Link
+      type="link"
+      tabIndex="-1"
+      value={value}
+      params={{
+        asc: sortBy === _sortBy && !asc ? 1 : undefined,
+        sortBy: _sortBy,
+      }}
+    />
+
   return <div className="WikiPagesList">
     <div className="WikiPagesListMember">
-      <Link type="link" tabIndex="-1" params={{asc, sortBy:'path'}}>Path</Link>
-      <Link type="link" tabIndex="-1" params={{asc, sortBy:'last_viewed_at'}}>Last Viewed</Link>
-      <Link type="link" tabIndex="-1" params={{asc, sortBy:'updated_at'}}>Last Updated</Link>
+      {columnLink('Path', 'path')}
+      {columnLink('Last Viewed', 'last_viewed_at')}
+      {columnLink('Last Updated', 'updated_at')}
     </div>
     <div className="WikiPagesList-pages">{pages}</div>
   </div>
