@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-// import './index.sass'
 
 export default class TimeAgo extends PureComponent {
 

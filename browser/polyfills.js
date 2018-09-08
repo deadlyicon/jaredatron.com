@@ -219,3 +219,12 @@ if (!Array.prototype.sortBy) {
   }
 };
 
+if (!Object.filter){
+  Object.filter = function(object, filterer) {
+    return Object.entries(object)
+      .reduce(function(newObject, [key, value]) {
+        if (filterer(key, value)) newObject[key] = value
+          return newObject
+      }, {})
+  }
+}

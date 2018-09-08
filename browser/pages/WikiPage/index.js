@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import stringSimilarity from 'string-similarity'
-import { AppState, takeAction } from 'lib/appState'
+import { AppState, takeAction, appAction } from 'lib/appState'
 import Page from 'components/Page'
 import Link from 'components/Link'
 import Markdown from 'components/Markdown'
 import ErrorMessage from 'components/ErrorMessage'
 import TimeAgo from 'components/TimeAgo'
+import WikiPageEditor from 'components/WikiPageEditor'
 import InspectObject from 'components/InspectObject'
 
 import './index.sass'
@@ -17,16 +18,13 @@ export default class WikiPage extends Page {
     const { path, edit, sortBy, asc, f: filter } = this.props.location.params
     return <div className="WikiPage">
       { path
-        ? <PagePage
-          path={path}
-          editing={!!edit}
-        />
+        ? <WikiPageEditor path={path} />
         : <IndexPage
           sortBy={sortBy}
           asc={asc}
-          filter={filter}
+          filter={filter || ''}
           onFilterChange={filter => {
-            takeAction(this, 'replaceParams', { f: filter })
+            takeAction(this, 'replaceParams', {f: filter ? filter : null})
           }}
         />
       }
@@ -34,41 +32,41 @@ export default class WikiPage extends Page {
   }
 }
 
-class PagePage extends PureComponent {
+// class PagePage extends PureComponent {
 
-  loadWikiPage(path){
-    takeAction(this, 'loadWikiPage', { path })
-  }
+//   loadWikiPage(path){
+//     takeAction(this, 'loadWikiPage', { path })
+//   }
 
-  componentDidMount(){
-    this.loadWikiPage(this.props.path)
-  }
+//   componentDidMount(){
+//     this.loadWikiPage(this.props.path)
+//   }
 
-  componentWillReceiveProps(nextProps){
-    if (this.props.path !== nextProps.path)
-      this.loadWikiPage(nextProps.path)
-  }
+//   componentWillReceiveProps(nextProps){
+//     if (this.props.path !== nextProps.path)
+//       this.loadWikiPage(nextProps.path)
+//   }
 
-  render(){
-    const { path } = this.props
-    const keys = {
-      page: `wikiPage:${path}`,
-      loadingPage: `wikiPage:${path}:loading`,
-      errorLoadingPage: `wikiPage:${path}:loadingError`,
-    }
-    return <AppState keys={keys}>
-      {({ page, loadingPage, errorLoadingPage }) =>
-        <div className="WikiPagePage">
-          <div>
-            <Pathlinks path={path} />
-          </div>
-          <ErrorMessage error={errorLoadingPage} />
-          {page && <Markdown source={page.content} />}
-        </div>
-      }
-    </AppState>
-  }
-}
+//   render(){
+//     const { path } = this.props
+//     const keys = {
+//       page: `wikiPage:${path}`,
+//       loadingPage: `wikiPage:${path}:loading`,
+//       errorLoadingPage: `wikiPage:${path}:loadingError`,
+//     }
+//     return <AppState keys={keys}>
+//       {({ page, loadingPage, errorLoadingPage }) =>
+//         <div className="WikiPagePage">
+//           <div>
+//             <Pathlinks path={path} />
+//           </div>
+//           <ErrorMessage error={errorLoadingPage} />
+//           {page && <Markdown source={page.content} />}
+//         </div>
+//       }
+//     </AppState>
+//   }
+// }
 
 class IndexPage extends PureComponent {
 
@@ -85,7 +83,7 @@ class IndexPage extends PureComponent {
           <input
             autoFocus
             value={filter}
-            onInput={event => { onFilterChange(event.target.value) }}
+            onChange={event => { onFilterChange(event.target.value) }}
           />
           <ErrorMessage error={errorLoadingWikiIndex} />
           { wikiIndex && <WikiPagesList
@@ -101,19 +99,19 @@ class IndexPage extends PureComponent {
   }
 }
 
-const Pathlinks = ({ path }) => {
-  const parts = path.split('/')
-  const links = []
-  parts.forEach((part, index) => {
-    if (index !== 0) links.push(<span key={`${index}-break`}>/</span>)
-    links.push(
-      <Link key={`${index}-link`} href={'/wiki/'+parts.slice(0,index+1).join('/')}>
-        {part.replace(/[+-_]+/g, ' ')}
-      </Link>
-    )
-  })
-  return <span className="Pathlinks">{links}</span>
-}
+// const Pathlinks = ({ path }) => {
+//   const parts = path.split('/')
+//   const links = []
+//   parts.forEach((part, index) => {
+//     if (index !== 0) links.push(<span key={`${index}-break`}>/</span>)
+//     links.push(
+//       <Link key={`${index}-link`} href={'/wiki/'+parts.slice(0,index+1).join('/')}>
+//         {part.replace(/[+-_]+/g, ' ')}
+//       </Link>
+//     )
+//   })
+//   return <span className="Pathlinks">{links}</span>
+// }
 
 
 const WikiPagesList = function(props){

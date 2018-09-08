@@ -6,6 +6,11 @@ export const searchToObject = (search) => {
 }
 
 const objectToSearch = (object) => {
+  if (!object) return
+  object = Object.filter(object, (key, value) =>
+    value !== null && value !== undefined
+  )
+  if (Object.keys(object).length === 0) return
   return querystring.stringify(object)
 }
 
@@ -50,13 +55,9 @@ export const setLocation = function(location){
 }
 
 export const replaceLocation = function(location){
-  console.log('$$$ location', location)
+  console.log('replaceLocation', {location})
   const href = locationToHref(location)
-  console.log('$$$ href', href)
   history.replaceState(null, window.document.title, href)
-  this.setState({
-    location: getLocation(),
-  })
 }
 
 export const replaceParams = function(params) {
