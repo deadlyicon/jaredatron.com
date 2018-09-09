@@ -22,26 +22,60 @@ export async function loadIndex(){
 
 
 export async function loadPage({ path }){
-  const key = `wiki:page:${path}`
-  const loadingKey = `wiki:page:${path}:loading`
-  const errorLoadingKey = `wiki:page:${path}:loadingError`
+  const key         = `wiki:page:${path}`
+  const loadingKey  = `wiki:page:${path}:loading`
+  const errorKey    = `wiki:page:${path}:error`
+  const notFoundKey = `wiki:page:${path}:notFound`
 
   const { [key]: wikiPage } = this.getState()
 
   if (wikiPage) return;
 
-  this.setState({ [loadingKey]: true })
+  this.setState({
+    [loadingKey]: true,
+    [errorKey]: undefined,
+    [notFoundKey]: undefined,
+  })
 
   try{
     const { wikiPage } = await executeCommand('getWikiPage', { path })
-    this.setState({ [key]: wikiPage })
+    if (wikiPage){
+      this.setState({ [key]: wikiPage })
+    }else{
+      this.setState({ [notFoundKey]: true })
+    }
   }catch(error){
-    this.setState({ [errorLoadingKey]: error })
+    this.setState({ [errorKey]: error })
   }finally{
     this.setState({ [loadingKey]: undefined })
   }
 }
 
-export async function stagePageChange({ path, content }){
-  this.setState({ [`wiki:page:${path}:stagedContent`]: content })
+export async function editPage({ path, content }){
+  this.setState({ [`wiki:page:${path}:editing`]: true })
+}
+
+export async function cancelEditPage({ path, content }){
+  this.setState({ [`wiki:page:${path}:editing`]: undefined })
+}
+
+export async function updatePageEdits({ path, edits }){
+  this.setState({ [`wiki:page:${path}:edits`]: edits })
+}
+
+export async function deletePageEdits({ path }){
+  this.setState({ [`wiki:page:${path}:edits`]: undefined })
+}
+
+export async function saveChangesToWikiPage({ path }){
+  const {
+    [`wiki:page:${path}:edits`]: edits,
+  } = this.getState()
+  try{
+    const { wikiIndex } = await executeCommand('createWikiIndex')
+    // this.setState({ [key]: wikiIndex })
+    this.setState({ [`wiki:page:${path}:edits`]: undefined })
+  }catch(error){
+    this.setState({ [errorKey]: error })
+  }
 }

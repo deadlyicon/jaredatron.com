@@ -216,10 +216,7 @@ export class AppState extends PureComponent {
 
   render(){
     this.renderCount++
-    // console.log('AppState.render', this.props.keys, this.renderCount)
     const appState = this.getAppState()
-    console.log('???', this, appState)
-    // get keys from subsription
     return this.props.children(appState)
   }
 
