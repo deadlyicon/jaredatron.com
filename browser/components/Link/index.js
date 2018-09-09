@@ -15,24 +15,25 @@ export default class Link extends Component {
     disabled: PropTypes.bool,
     newWindow: PropTypes.bool,
     params: PropTypes.object,
+    replace: PropTypes.bool,
   }
 
   static defaultProps = {
     href: '',
     type: null,
+    replace: false,
   }
 
   onClick = event => {
-    if (this.props.disabled) {
+    const { disabled, onClick, replace } = this.props
+    if (disabled) {
       event.preventDefault()
       return
     }
 
-    const href = this.link.href
+    const { href } = this.link
 
-    if (this.props.onClick){
-      this.props.onClick(event)
-    }
+    if (onClick) onClick(event)
 
     // move to higher level component?
     if (event.defaultPrevented) return
@@ -45,7 +46,7 @@ export default class Link extends Component {
     ){
       event.preventDefault()
       // this.takeAction('setLocation', href)
-      history.pushState(null, window.document.title, href)
+      history[replace ? 'replaceState' : 'pushState'](null, window.document.title, href)
     }
   }
 
@@ -57,6 +58,7 @@ export default class Link extends Component {
       href,
       newWindow,
       params,
+      replace,
       ...props
     } = this.props
     className = `Link ${className}`

@@ -11,11 +11,11 @@ export default class WikiPageEditor extends PureComponent {
 
   static propTypes = {
     path: PropTypes.string.isRequired,
-    edit: PropTypes.bool.isRequired,
+    editing: PropTypes.bool.isRequired,
   }
 
   loadWikiPage(path){
-    takeAction(this, 'loadWikiPage', { path })
+    takeAction(this, 'wiki.loadPage', { path })
   }
 
   componentDidMount(){
@@ -28,27 +28,48 @@ export default class WikiPageEditor extends PureComponent {
   }
 
   render(){
-    const { path, edit } = this.props
+    const { path, editing } = this.props
     const keys = {
-      page: `wikiPage:${path}`,
-      loadingPage: `wikiPage:${path}:loading`,
-      errorLoadingPage: `wikiPage:${path}:loadingError`,
+      page: `wiki:page:${path}`,
+      stagedContent: `wiki:page:${path}:stagedContent`,
+      loadingPage: `wiki:page:${path}:loading`,
+      errorLoadingPage: `wiki:page:${path}:loadingError`,
     }
     return <AppState keys={keys}>
-      {({ page, loadingPage, errorLoadingPage }) =>
-        <div className="WikiPageEditor">
+      {({ page, stagedContent, loadingPage, errorLoadingPage }) => {
+        const edited = !!stagedContent
+        const content = edited ? stagedContent : (page && page.content)
+        return <div className="WikiPageEditor">
           <div className="WikiPageEditor-topbar">
             <Pathlinks path={path} />
-            <Controls editing={edit} />
+            <Controls
+              editing={editing}
+              edited={edited}
+              onCancel={()=>{
+                takeAction(this, 'wiki.cancelEditPage', { path })
+              }}
+              onSave={()=>{
+                takeAction(this, 'wiki.saveChangesToWikiPage', { path, content })
+              }}
+              onDelete={()=>{
+                takeAction(this, 'wiki.deletePage', { path })
+              }}
+              onEdit={()=>{
+                takeAction(this, 'wiki.editPage', { path })
+              }}
+            />
           </div>
           <ErrorMessage error={errorLoadingPage} />
           {page && (
-            edit
-              ? <Editor source={page.content} />
-              : <Markdown source={page.content} />
+            editing
+              ? <Editor
+                  value={content}
+                  onChange={this.onContentChange}
+                />
+              : <Markdown source={content} />
           )}
         </div>
-      }
+      }}
     </AppState>
   }
 }
@@ -72,17 +93,19 @@ const Pathlinks = ({ path }) => {
   return <span className="Pathlinks">{links}</span>
 }
 
-const Controls = ({ editing }) => {
+const Controls = function({ path, editing, onCancel, onSave, onDelete, onEdit }){
   if (editing){
     return <div className="WikiPageEditor-Controls">
       <Link
         type="link"
         value="cancel"
-        params={{edit: null}}
+        replace
+        onClick={onCancel}
       />
       <Link
         type="link"
         value="save"
+        onClick={onSave}
       />
     </div>
   }
@@ -90,26 +113,36 @@ const Controls = ({ editing }) => {
     <Link
       type="link"
       value="history"
+      // onClick={() => {
+      //   takeAction(this, 'stageWikiPageChange', { path, content })
+      // }}
     />
     <Link
       type="link"
       value="delete"
+      onClick={onDelete}
     />
     <Link
       type="link"
-      value="move"
+      // value="move"
+      // onClick={() => {
+      //   takeAction(this, 'stageWikiPageChange', { path, content })
+      // }}
     />
     <Link
       type="link"
       value="edit"
-      params={{edit:1}}
+      onClick={onEdit}
     />
   </div>
 }
 
 class Editor extends PureComponent {
 
-  state = {}
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  }
 
   componentDidMount(){
     console.log('componentDidMount', this.textarea)
@@ -126,17 +159,12 @@ class Editor extends PureComponent {
   }
 
   render(){
-    const value = 'value' in this.state
-      ? this.state.value
-      : this.props.source
-
+    const { value, onChange } = this.props
     return <div className="WikiPageEditor-Editor">
       <textarea
         ref={node => { this.textarea = node }}
         value={value}
-        onChange={event => {
-          this.setState({ value: event.target.value })
-        }}
+        onChange={event => { onChange(event.target.value) }}
       />
     </div>
   }

@@ -20,7 +20,7 @@ export default class WikiPage extends Page {
       { path
         ? <WikiPageEditor
           path={path}
-          edit={!!edit}
+          editing={!!edit}
         />
         : <IndexPage
           sortBy={sortBy}
@@ -74,21 +74,25 @@ export default class WikiPage extends Page {
 class IndexPage extends PureComponent {
 
   componentDidMount(){
-    takeAction(this, 'loadWikiIndex')
+    takeAction(this, 'wiki.loadIndex')
   }
 
   render(){
     const { sortBy, asc, filter = '', onFilterChange } = this.props
 
-    return <AppState keys={['wikiIndex', 'errorLoadingWikiIndex']}>
-      {({ wikiIndex, errorLoadingWikiIndex }) =>
+    const keys = {
+      wikiIndex: 'wiki:index',
+      wikiIndexError: 'wiki:index:error',
+    }
+    return <AppState keys={keys}>
+      {({ wikiIndex, wikiIndexError }) =>
         <div className="WikiIndexPage">
           <input
             autoFocus
             value={filter}
             onChange={event => { onFilterChange(event.target.value) }}
           />
-          <ErrorMessage error={errorLoadingWikiIndex} />
+          <ErrorMessage error={wikiIndexError} />
           { wikiIndex && <WikiPagesList
               pages={wikiIndex.pages}
               sortBy={sortBy}
