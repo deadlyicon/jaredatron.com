@@ -22,11 +22,11 @@ export async function loadIndex(){
 
 
 export async function loadPage({ path }){
-  const key         = `wiki:page:${path}`
+  const pageKey     = `wiki:page:${path}`
   const loadingKey  = `wiki:page:${path}:loading`
   const errorKey    = `wiki:page:${path}:error`
 
-  const { [key]: wikiPage } = this.getState()
+  const { [pageKey]: wikiPage } = this.getState()
 
   if (typeof wikiPage !== 'undefined') return;
 
@@ -37,7 +37,7 @@ export async function loadPage({ path }){
 
   try{
     const { wikiPage } = await executeCommand('getWikiPage', { path })
-    this.setState({ [key]: (wikiPage || null) })
+    this.setState({ [pageKey]: (wikiPage || null) })
   }catch(error){
     this.setState({ [errorKey]: error })
   }finally{
@@ -54,13 +54,13 @@ export async function deletePageEdits({ path }){
 }
 
 export async function savePageEdits({ path }){
-  const key       = `wiki:page:${path}`
+  const pageKey   = `wiki:page:${path}`
   const savingKey = `wiki:page:${path}:saving`
   const editsKey  = `wiki:page:${path}:edits`
   const errorKey  = `wiki:page:${path}:error`
 
   const {
-    [key]: page,
+    [pageKey]: page,
     [editsKey]: content,
   } = this.getState()
 
@@ -75,7 +75,7 @@ export async function savePageEdits({ path }){
       { path, content },
     )
     this.setState({
-      [key]: wikiPage,
+      [pageKey]: wikiPage,
       [editsKey]: undefined,
       [errorKey]: undefined,
     })
@@ -83,5 +83,30 @@ export async function savePageEdits({ path }){
     this.setState({ [errorKey]: error })
   }finally{
     this.setState({ [savingKey]: undefined })
+  }
+}
+
+export async function deletePage({ path }){
+  const pageKey     = `wiki:page:${path}`
+  const deletingKey = `wiki:page:${path}:deleting`
+  const errorKey    = `wiki:page:${path}:error`
+
+  const { [pageKey]: page } = this.getState()
+
+  if (!page) return
+
+  this.setState({
+    [deletingKey]: true,
+  })
+  try{
+    await executeCommand('deleteWikiPage', { path })
+    this.setState({
+      [pageKey]: null,
+      [errorKey]: undefined,
+    })
+  }catch(error){
+    this.setState({ [errorKey]: error })
+  }finally{
+    this.setState({ [deletingKey]: undefined })
   }
 }
