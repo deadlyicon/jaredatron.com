@@ -67,15 +67,26 @@ export async function deletePageEdits({ path }){
   this.setState({ [`wiki:page:${path}:edits`]: undefined })
 }
 
-export async function saveChangesToWikiPage({ path }){
-  const {
-    [`wiki:page:${path}:edits`]: edits,
-  } = this.getState()
+export async function savePageEdits({ path }){
+  const key         = `wiki:page:${path}`
+  const savingKey  = `wiki:page:${path}:saving`
+  const editsKey    = `wiki:page:${path}:edits`
+  const errorKey    = `wiki:page:${path}:error`
+
+  const { [editsKey]: content } = this.getState()
+  if (!content) return
+  this.setState({
+    [savingKey]: true,
+  })
   try{
-    const { wikiIndex } = await executeCommand('createWikiIndex')
-    // this.setState({ [key]: wikiIndex })
-    this.setState({ [`wiki:page:${path}:edits`]: undefined })
+    const { wikiPage } = await executeCommand('updateWikiPage', { path, content })
+    this.setState({
+      [key]: wikiPage,
+      [editsKey]: undefined,
+    })
   }catch(error){
     this.setState({ [errorKey]: error })
+  }finally{
+    this.setState({ [savingKey]: undefined })
   }
 }

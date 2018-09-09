@@ -37,37 +37,43 @@ export default class WikiPageEditor extends PureComponent {
       error:        `wiki:page:${path}:error`,
     }
     return <AppState keys={keys}>
-      {({ page, loading, notFound, edits, editing, error }) => {
-        const edited = !!edits
-        const newPage = !!notFound
-        const content = edited || notFound ? edits || '' : (page && page.content)
+      {({ page, loading, edits, error }) => {
+        const newPage = !loading && !page
+        const editing = newPage || !!edits
+        const content = (
+          loading ? null :
+          newPage ? edits || 'new page' :
+          edits   ? edits : (page && page.content)
+        )
+        const edited = page && edits && edits != page.content
         return <div className="WikiPageEditor">
           <div className="WikiPageEditor-topbar">
             <Pathlinks path={path} />
             <Controls
+              newPage={newPage}
               editing={newPage || editing}
               edited={edited}
               onCancel={()=>{
-                takeAction(this, 'wiki.cancelEditPage', { path })
-              }}
-              onReset={()=>{
                 takeAction(this, 'wiki.deletePageEdits', { path })
               }}
+              onReset={()=>{
+                takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
+              }}
               onSave={()=>{
-                takeAction(this, 'wiki.saveChangesToWikiPage', { path, content })
+                takeAction(this, 'wiki.savePageEdits', { path })
               }}
               onDelete={()=>{
                 takeAction(this, 'wiki.deletePage', { path })
               }}
               onEdit={()=>{
-                takeAction(this, 'wiki.editPage', { path })
+                takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
               }}
             />
           </div>
           <ErrorMessage error={error} />
           { loading
               ? <div>loading…</div>
-              : (notFound || editing)
+              : editing
                 ? <Editor
                     value={content}
                     onChange={edits => {
@@ -101,21 +107,25 @@ const Pathlinks = ({ path }) => {
   return <span className="Pathlinks">{links}</span>
 }
 
-const Controls = function({ path, editing, edited, onCancel, onReset, onSave, onDelete, onEdit }){
+const Controls = function({ newPage, editing, edited, onCancel, onReset, onSave, onDelete, onEdit }){
   if (editing){
     return <div className="WikiPageEditor-Controls">
-      <Link
-        type="link"
-        value="cancel"
-        replace
-        onClick={onCancel}
-      />
-      <Link
-        type="link"
-        value="reset"
-        onClick={onReset}
-        disabled={!edited}
-      />
+      { newPage ||
+        <Link
+          type="link"
+          value="cancel"
+          replace
+          onClick={onCancel}
+        />
+      }
+      { newPage ||
+        <Link
+          type="link"
+          value="reset"
+          onClick={onReset}
+          disabled={!edited}
+        />
+      }
       <Link
         type="link"
         value="save"
