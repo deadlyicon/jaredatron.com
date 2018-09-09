@@ -77,7 +77,6 @@ const getState = function(actor){
 }
 
 const actorToString = actor => {
-  console.log('actorToString', [actor])
   if (typeof actor === 'string') return actor
   if (actor instanceof Component){
     const name = actor.constructor.name ||

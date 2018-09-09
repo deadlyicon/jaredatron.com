@@ -33,7 +33,10 @@ export default class Link extends Component {
 
     const { href } = this.link
 
-    if (onClick) onClick(event)
+    if (onClick) {
+      event.preventDefault()
+      onClick(event)
+    }
 
     // move to higher level component?
     if (event.defaultPrevented) return

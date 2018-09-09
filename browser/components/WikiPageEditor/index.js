@@ -31,13 +31,12 @@ export default class WikiPageEditor extends PureComponent {
     const keys = {
       page:         `wiki:page:${path}`,
       loading:      `wiki:page:${path}:loading`,
-      notFound:     `wiki:page:${path}:notFound`,
       edits:        `wiki:page:${path}:edits`,
-      editing:      `wiki:page:${path}:editing`,
+      saving:       `wiki:page:${path}:saving`,
       error:        `wiki:page:${path}:error`,
     }
     return <AppState keys={keys}>
-      {({ page, loading, edits, error }) => {
+      {({ page, loading, edits, saving, error }) => {
         const newPage = !loading && !page
         const editing = newPage || !!edits
         const content = (
@@ -45,7 +44,7 @@ export default class WikiPageEditor extends PureComponent {
           newPage ? edits || 'new page' :
           edits   ? edits : (page && page.content)
         )
-        const edited = page && edits && edits != page.content
+        const edited = edits && (newPage || edits !== page.content)
         return <div className="WikiPageEditor">
           <div className="WikiPageEditor-topbar">
             <Pathlinks path={path} />
@@ -71,16 +70,16 @@ export default class WikiPageEditor extends PureComponent {
             />
           </div>
           <ErrorMessage error={error} />
-          { loading
-              ? <div>loading…</div>
-              : editing
-                ? <Editor
-                    value={content}
-                    onChange={edits => {
-                      takeAction(this, 'wiki.updatePageEdits', { path, edits })
-                    }}
-                  />
-                : <Markdown source={content} />
+          {
+            loading ? <div>loading…</div> :
+            saving  ? <div>saving…</div> :
+            editing ? <Editor
+              value={content}
+              onChange={edits => {
+                takeAction(this, 'wiki.updatePageEdits', { path, edits })
+              }}
+            /> :
+            <Markdown source={content} />
           }
         </div>
       }}

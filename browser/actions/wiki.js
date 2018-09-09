@@ -25,38 +25,24 @@ export async function loadPage({ path }){
   const key         = `wiki:page:${path}`
   const loadingKey  = `wiki:page:${path}:loading`
   const errorKey    = `wiki:page:${path}:error`
-  const notFoundKey = `wiki:page:${path}:notFound`
 
   const { [key]: wikiPage } = this.getState()
 
-  if (wikiPage) return;
+  if (typeof wikiPage !== 'undefined') return;
 
   this.setState({
     [loadingKey]: true,
     [errorKey]: undefined,
-    [notFoundKey]: undefined,
   })
 
   try{
     const { wikiPage } = await executeCommand('getWikiPage', { path })
-    if (wikiPage){
-      this.setState({ [key]: wikiPage })
-    }else{
-      this.setState({ [notFoundKey]: true })
-    }
+    this.setState({ [key]: (wikiPage || null) })
   }catch(error){
     this.setState({ [errorKey]: error })
   }finally{
     this.setState({ [loadingKey]: undefined })
   }
-}
-
-export async function editPage({ path, content }){
-  this.setState({ [`wiki:page:${path}:editing`]: true })
-}
-
-export async function cancelEditPage({ path, content }){
-  this.setState({ [`wiki:page:${path}:editing`]: undefined })
 }
 
 export async function updatePageEdits({ path, edits }){
@@ -68,21 +54,30 @@ export async function deletePageEdits({ path }){
 }
 
 export async function savePageEdits({ path }){
-  const key         = `wiki:page:${path}`
-  const savingKey  = `wiki:page:${path}:saving`
-  const editsKey    = `wiki:page:${path}:edits`
-  const errorKey    = `wiki:page:${path}:error`
+  const key       = `wiki:page:${path}`
+  const savingKey = `wiki:page:${path}:saving`
+  const editsKey  = `wiki:page:${path}:edits`
+  const errorKey  = `wiki:page:${path}:error`
 
-  const { [editsKey]: content } = this.getState()
+  const {
+    [key]: page,
+    [editsKey]: content,
+  } = this.getState()
+
   if (!content) return
+
   this.setState({
     [savingKey]: true,
   })
   try{
-    const { wikiPage } = await executeCommand('updateWikiPage', { path, content })
+    const { wikiPage } = await executeCommand(
+      page ? 'updateWikiPage' : 'createWikiPage',
+      { path, content },
+    )
     this.setState({
       [key]: wikiPage,
       [editsKey]: undefined,
+      [errorKey]: undefined,
     })
   }catch(error){
     this.setState({ [errorKey]: error })
