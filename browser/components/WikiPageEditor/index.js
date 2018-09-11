@@ -4,6 +4,7 @@ import { AppState, takeAction } from 'lib/appState'
 
 import Link from 'components/Link'
 import Markdown from 'components/Markdown'
+import ConfirmationDialog from 'components/ConfirmationDialog'
 import ErrorMessage from 'components/ErrorMessage'
 import './index.sass'
 
@@ -15,6 +16,7 @@ export default class WikiPageEditor extends PureComponent {
 
   state = {
     previewing: false,
+    confirmingDelete: false,
   }
 
   loadWikiPage(path){
@@ -31,6 +33,7 @@ export default class WikiPageEditor extends PureComponent {
   }
 
   render(){
+    const { previewing, confirmingDelete } = this.state
     const { path } = this.props
     const keys = {
       page:         `wiki:page:${path}`,
@@ -41,7 +44,6 @@ export default class WikiPageEditor extends PureComponent {
     }
     return <AppState keys={keys}>
       {({ page, loading, edits, saving, error }) => {
-        const { previewing } = this.state
         const newPage = !loading && !page
         const editing = newPage || !!edits
         const content = (
@@ -51,6 +53,12 @@ export default class WikiPageEditor extends PureComponent {
         )
         const edited = edits && (newPage || edits !== page.content)
         return <div className="WikiPageEditor">
+          {confirmingDelete && <ConfirmationDialog
+            prompt="Are you sure you want to delete this wiki page?"
+            onConfirmation={() => {
+              takeAction(this, 'wiki.deletePage', { path })
+            }}
+          />}
           <div className="WikiPageEditor-topbar">
             <Pathlinks path={path} />
             <Controls
@@ -69,7 +77,7 @@ export default class WikiPageEditor extends PureComponent {
                 takeAction(this, 'wiki.savePageEdits', { path })
               }}
               onDelete={()=>{
-                takeAction(this, 'wiki.deletePage', { path })
+                this.setState({ confirmingDelete: true })
               }}
               onEdit={()=>{
                 takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
