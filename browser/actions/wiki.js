@@ -37,7 +37,15 @@ export async function loadPage({ path }){
 
   try{
     const { wikiPage } = await executeCommand('getWikiPage', { path })
-    this.setState({ [pageKey]: (wikiPage || null) })
+    if (wikiPage){
+      this.setState({ [pageKey]: wikiPage })
+    }else{
+      this.setState({ [pageKey]: null })
+      if (path.includes(' ')) {
+        const pathname = `/wiki/${encodeURIComponent(path.replace(/\s+/g,'-'))}`
+        this.takeAction('replaceLocation', { pathname })
+      }
+    }
   }catch(error){
     this.setState({ [errorKey]: error })
   }finally{

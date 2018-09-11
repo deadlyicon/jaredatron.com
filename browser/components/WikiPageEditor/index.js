@@ -13,6 +13,10 @@ export default class WikiPageEditor extends PureComponent {
     path: PropTypes.string.isRequired,
   }
 
+  state = {
+    previewing: false,
+  }
+
   loadWikiPage(path){
     takeAction(this, 'wiki.loadPage', { path })
   }
@@ -37,11 +41,12 @@ export default class WikiPageEditor extends PureComponent {
     }
     return <AppState keys={keys}>
       {({ page, loading, edits, saving, error }) => {
+        const { previewing } = this.state
         const newPage = !loading && !page
         const editing = newPage || !!edits
         const content = (
           loading ? null :
-          newPage ? edits || 'new page' :
+          newPage ? edits || `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
           edits   ? edits : (page && page.content)
         )
         const edited = edits && (newPage || edits !== page.content)
@@ -50,9 +55,11 @@ export default class WikiPageEditor extends PureComponent {
             <Pathlinks path={path} />
             <Controls
               newPage={newPage}
+              previewing={previewing}
               editing={newPage || editing}
               edited={edited}
               onCancel={()=>{
+                this.setState({ previewing: false })
                 takeAction(this, 'wiki.deletePageEdits', { path })
               }}
               onReset={()=>{
@@ -67,12 +74,16 @@ export default class WikiPageEditor extends PureComponent {
               onEdit={()=>{
                 takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
               }}
+              togglePreview={()=>{
+                this.setState({ previewing: !previewing })
+              }}
             />
           </div>
           <ErrorMessage error={error} />
           {
             loading ? <div>loading…</div> :
             saving  ? <div>saving…</div> :
+            previewing ? <Markdown source={content} /> :
             editing ? <Editor
               value={content}
               onChange={edits => {
@@ -106,7 +117,18 @@ const Pathlinks = ({ path }) => {
   return <span className="Pathlinks">{links}</span>
 }
 
-const Controls = function({ newPage, editing, edited, onCancel, onReset, onSave, onDelete, onEdit }){
+const Controls = function({
+  newPage,
+  editing,
+  previewing,
+  edited,
+  onCancel,
+  onReset,
+  togglePreview,
+  onSave,
+  onDelete,
+  onEdit,
+}){
   if (editing){
     return <div className="WikiPageEditor-Controls">
       { newPage ||
@@ -127,9 +149,13 @@ const Controls = function({ newPage, editing, edited, onCancel, onReset, onSave,
       }
       <Link
         type="link"
+        value={previewing ? "edit" : "preview"}
+        onClick={togglePreview}
+      />
+      <Link
+        type="link"
         value="save"
-        onClick={onSave}
-        disabled={!edited}
+        onClick={edited ? onSave : onCancel}
       />
     </div>
   }

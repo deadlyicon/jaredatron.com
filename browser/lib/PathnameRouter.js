@@ -14,7 +14,7 @@ class Route {
     if (!matches) return false
     const params = Object.assign({}, this.params)
     this.keys.forEach((key, index) => {
-      params[key.name] = matches[index + 1]
+      params[key.name] = decodeURIComponent(matches[index + 1])
     })
     return {
       Component: this.Component,
