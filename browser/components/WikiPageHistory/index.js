@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import { AppState, takeAction } from 'lib/appState'
 
 import Link from 'components/Link'
+import TimeAgo from 'components/TimeAgo'
 import Markdown from 'components/Markdown'
-import ConfirmationDialog from 'components/ConfirmationDialog'
 import ErrorMessage from 'components/ErrorMessage'
+import InspectObject from 'components/InspectObject'
 import './index.sass'
 
 export default class WikiPageHistory extends PureComponent {
@@ -36,10 +37,28 @@ export default class WikiPageHistory extends PureComponent {
       error:   `wiki:page:${path}:history:loading:error`,
     }
     return <AppState keys={keys}>
-      {({ page, loading, edits, saving, error }) => {
-        return <div>history</div>
+      {({ page, loading, error, history }) => {
+        return <div className="WikiPageHistory">
+          <ErrorMessage error={error} />
+          {loading || !history
+            ? <div>loading…</div>
+            : history.map(version =>
+              <Version key={version.id} {...version} />
+            )
+          }
+        </div>
       }}
     </AppState>
   }
 }
 
+const Version = function({ path, content, updated_at }) {
+  return <div className="WikiPageHistory-Version">
+    <div className="WikiPageHistory-Version-details">
+      <span>Updated <TimeAgo time={updated_at} /></span>
+      &nbsp;/&nbsp;
+      <span>path: /wiki/{path}</span>
+    </div>
+    <Markdown source={content} />
+  </div>
+}

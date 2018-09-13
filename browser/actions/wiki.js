@@ -136,8 +136,11 @@ export async function loadPageHistory({ path }) {
     [errorKey]: undefined,
   })
   try{
-    const history = await executeQuery('getWikiPageHistory', { path })
-    this.setState({ [loadingKey]: history })
+    const { wikiPageHistory } = await executeQuery('getWikiPageHistory', { path })
+    wikiPageHistory.forEach(version => {
+      // version.created_at = moment(version.created_at).toDate()
+    })
+    this.setState({ [historyKey]: wikiPageHistory })
   }catch(error){
     this.setState({ [errorKey]: error })
   }finally{
