@@ -56,6 +56,7 @@ export default class WikiPageEditor extends PureComponent {
           {confirmingDelete && <ConfirmationDialog
             prompt="Are you sure you want to delete this wiki page?"
             onConfirmation={() => {
+              this.setState({ confirmingDelete: false })
               takeAction(this, 'wiki.deletePage', { path })
             }}
             onCancel={() => {
