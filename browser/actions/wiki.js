@@ -4,10 +4,6 @@ import { executeQuery, executeCommand } from 'lib/server'
 export async function loadIndex(){
   const key = `wiki:index`
   const errorKey = `wiki:index:error`
-  const { [key]: wikiIndex } = this.getState()
-
-  if (wikiIndex) return;
-
   try{
     const { wikiIndex } = await executeQuery('getWikiIndex')
     wikiIndex.pages.forEach(page => {
@@ -42,8 +38,10 @@ export async function loadPage({ path }){
     }else{
       this.setState({ [pageKey]: null })
       if (path.includes(' ')) {
-        const pathname = `/wiki/${encodeURIComponent(path.replace(/\s+/g,'-'))}`
-        this.takeAction('replaceLocation', { pathname })
+        this.takeAction(
+          'replaceLocation',
+          `/wiki/${encodeURIComponent(path.replace(/\s+/g,'-'))}`
+        )
       }
     }
   }catch(error){
@@ -59,6 +57,27 @@ export async function updatePageEdits({ path, edits }){
 
 export async function deletePageEdits({ path }){
   this.setState({ [`wiki:page:${path}:edits`]: undefined })
+}
+
+export async function movePage({ path, newPath }){
+  const pageKey   = `wiki:page:${path}`
+  const movingKey = `wiki:page:${path}:moving`
+  const errorKey  = `wiki:page:${path}:moving:error`
+
+  this.setState({ [movingKey]: true })
+  try{
+    const { wikiPage } = await executeCommand('moveWikiPage', { path, newPath })
+    this.setState({
+      [pageKey]: null,
+      [`wiki:page:${wikiPage.path}`]: wikiPage,
+      [errorKey]: undefined,
+    })
+    this.takeAction('replaceLocation', `/wiki/${wikiPage.path}`)
+  }catch(error){
+    this.setState({ [errorKey]: error })
+  }finally{
+    this.setState({ [movingKey]: undefined })
+  }
 }
 
 export async function savePageEdits({ path }){

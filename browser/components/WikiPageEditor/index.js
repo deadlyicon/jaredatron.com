@@ -90,6 +90,12 @@ export default class WikiPageEditor extends PureComponent {
               togglePreview={()=>{
                 this.setState({ previewing: !previewing })
               }}
+              onMove={()=>{
+                const newPath = prompt('Where to?', path)
+                  .trim().toLowerCase().replace(/\s+/g,'-')
+                if (newPath && newPath !== path)
+                  takeAction(this, 'wiki.movePage', { path, newPath })
+              }}
             />
           </div>
           <ErrorMessage error={error} />
@@ -122,6 +128,7 @@ const Controls = function({
   onSave,
   onDelete,
   onEdit,
+  onMove,
 }){
   if (editing){
     return <div className="WikiPageEditor-Controls">
@@ -167,7 +174,7 @@ const Controls = function({
     <Link
       type="link"
       value="move"
-      onClick={()=>{}}
+      onClick={onMove}
     />
     <Link
       type="link"
