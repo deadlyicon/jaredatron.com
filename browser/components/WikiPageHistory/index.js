@@ -54,13 +54,23 @@ export default class WikiPageHistory extends PureComponent {
   }
 }
 
-const Version = function({ path, content, updated_at }) {
-  return <div className="WikiPageHistory-Version">
-    <div className="WikiPageHistory-Version-details">
-      <span>Updated <TimeAgo time={updated_at} /></span>
-      &nbsp;/&nbsp;
-      <span>path: /wiki/{path}</span>
+class Version extends PureComponent {
+  state = { open: false }
+  toggle = () => {
+    this.setState({ open: !this.state.open })
+  }
+  render() {
+    const { path, content, updated_at } = this.props
+    const { open } = this.state
+    return <div className="WikiPageHistory-Version">
+      <div className="WikiPageHistory-Version-details">
+        <button onClick={this.toggle}>{open ? '▼' : '▶'}</button>
+        &nbsp;
+        <span>Updated <TimeAgo time={updated_at} /></span>
+        &nbsp;/&nbsp;
+        <span>path: /wiki/{path}</span>
+      </div>
+      {open && <Markdown source={content} />}
     </div>
-    <Markdown source={content} />
-  </div>
+  }
 }
