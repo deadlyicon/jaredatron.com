@@ -5,6 +5,7 @@ import { AppState, takeAction } from 'lib/appState'
 import Link from 'components/Link'
 import TimeAgo from 'components/TimeAgo'
 import Markdown from 'components/Markdown'
+import Pathlinks from 'components/Pathlinks'
 import ErrorMessage from 'components/ErrorMessage'
 import InspectObject from 'components/InspectObject'
 import './index.sass'
@@ -39,6 +40,7 @@ export default class WikiPageHistory extends PureComponent {
     return <AppState keys={keys}>
       {({ page, loading, error, history }) => {
         return <div className="WikiPageHistory">
+          <Pathlinks prefix="/wiki/" path={path} />
           <ErrorMessage error={error} />
           {loading || !history
             ? <div>loading…</div>

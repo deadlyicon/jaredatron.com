@@ -4,6 +4,7 @@ import { AppState, takeAction } from 'lib/appState'
 
 import Link from 'components/Link'
 import Markdown from 'components/Markdown'
+import Pathlinks from 'components/Pathlinks'
 import ConfirmationDialog from 'components/ConfirmationDialog'
 import ErrorMessage from 'components/ErrorMessage'
 import './index.sass'
@@ -64,7 +65,7 @@ export default class WikiPageEditor extends PureComponent {
             }}
           />}
           <div className="WikiPageEditor-topbar">
-            <Pathlinks path={path} />
+            <Pathlinks prefix="/wiki/" path={path} />
             <Controls
               newPage={newPage}
               previewing={previewing}
@@ -108,25 +109,6 @@ export default class WikiPageEditor extends PureComponent {
       }}
     </AppState>
   }
-}
-
-
-const Pathlinks = ({ path }) => {
-  const parts = path.split('/')
-  const links = []
-  parts.forEach((part, index) => {
-    links.push(<span key={`${index}-break`}>/</span>)
-    links.push(
-      <Link
-        key={`${index}-link`}
-        href={'/wiki/'+parts.slice(0,index+1).join('/')}
-        type="link"
-      >
-        {part.replace(/[+-_]+/g, ' ')}
-      </Link>
-    )
-  })
-  return <span className="Pathlinks">{links}</span>
 }
 
 const Controls = function({
