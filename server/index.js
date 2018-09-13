@@ -33,10 +33,13 @@ if (process.env.NODE_ENV === 'development'){
 server.use(express.static(PUBLIC_PATH))
 
 server.get('/queries', (req, res, next) => {
-  executeQuery()
-  // res.json({
-  //   yousaid: req.query,
-  // })
+  console.log('_$$$$', req.query)
+  const { queryName } = req.query
+  const options = JSON.parse(req.query.options)
+  executeQuery({ logger, queryName, options }).then(
+    result => { res.json(result) },
+    error => { renderErrorAsJson(res, error) },
+  )
 })
 
 server.post('/commands', bodyParser.json(), (req, res, next) => {

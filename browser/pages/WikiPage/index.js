@@ -8,6 +8,7 @@ import Markdown from 'components/Markdown'
 import ErrorMessage from 'components/ErrorMessage'
 import TimeAgo from 'components/TimeAgo'
 import WikiPageEditor from 'components/WikiPageEditor'
+import WikiPageHistory from 'components/WikiPageHistory'
 import InspectObject from 'components/InspectObject'
 
 import './index.sass'
@@ -15,13 +16,12 @@ import './index.sass'
 export default class WikiPage extends Page {
 
   render(){
-    const { path, edit, sortBy, asc, f: filter } = this.props.location.params
+    const { path, sortBy, asc, f: filter, history } = this.props.location.params
     return <div className="WikiPage">
       { path
-        ? <WikiPageEditor
-          path={path}
-          editing={!!edit}
-        />
+        ? history
+          ? <WikiPageHistory path={path} />
+          : <WikiPageEditor path={path} />
         : <IndexPage
           sortBy={sortBy}
           asc={asc}

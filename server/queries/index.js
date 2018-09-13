@@ -2,15 +2,17 @@
 
 const requireAll = require('require-all');
 
-const queries = requireAll({
+const queryFilenames = requireAll({
   dirname: __dirname,
   filter: /(.+Query)\.js$/,
 });
 
-Object.entries(queries).forEach(([key, query]) => {
-  const name = key.replace(/Query$/,'');
-  module.exports[name] = function({ logger, ...args }){
-    logger = logger.prefix(`Query:${name}`);
+const queries = {}
+
+Object.entries(queryFilenames).forEach(([queryFilename, query]) => {
+  const queryName = queryFilename.replace(/Query$/,'');
+  queries[queryName] = function({ logger, ...args }){
+    logger = logger.prefix(`Query:${queryName}`);
     return query({ logger, ...args }).catch(error => {
       logger.error(error);
       throw error;
@@ -18,6 +20,13 @@ Object.entries(queries).forEach(([key, query]) => {
   };
 });
 
-module.exports.executeQuery = async function(type, payload) {
+const executeQuery = async function({ logger, queryName, options }) {
+  if (!(queryName in queries))
+    throw new Error(`query ${queryName} is not found`)
+  return await queries[queryName]({ logger, ...options })
+}
 
+module.exports  = {
+  executeQuery,
+  ...queries,
 }

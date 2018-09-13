@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { executeCommand } from 'lib/server'
+import { executeQuery, executeCommand } from 'lib/server'
 
 export async function loadIndex(){
   const key = `wiki:index`
@@ -9,7 +9,7 @@ export async function loadIndex(){
   if (wikiIndex) return;
 
   try{
-    const { wikiIndex } = await executeCommand('getWikiIndex')
+    const { wikiIndex } = await executeQuery('getWikiIndex')
     wikiIndex.pages.forEach(page => {
       page.last_viewed_at = moment(page.last_viewed_at).toDate()
       page.updated_at = moment(page.updated_at).toDate()
@@ -36,7 +36,7 @@ export async function loadPage({ path }){
   })
 
   try{
-    const { wikiPage } = await executeCommand('getWikiPage', { path })
+    const { wikiPage } = await executeQuery('getWikiPage', { path })
     if (wikiPage){
       this.setState({ [pageKey]: wikiPage })
     }else{
@@ -116,5 +116,31 @@ export async function deletePage({ path }){
     this.setState({ [errorKey]: error })
   }finally{
     this.setState({ [deletingKey]: undefined })
+  }
+}
+
+
+export async function loadPageHistory({ path }) {
+  const pageKey    = `wiki:page:${path}`
+  const historyKey = `wiki:page:${path}:history`
+  const loadingKey = `wiki:page:${path}:history:loading`
+  const errorKey   = `wiki:page:${path}:history:loading:error`
+
+
+  const { [historyKey]: history } = this.getState()
+
+  if (history) return
+
+  this.setState({
+    [loadingKey]: true,
+    [errorKey]: undefined,
+  })
+  try{
+    const history = await executeQuery('getWikiPageHistory', { path })
+    this.setState({ [loadingKey]: history })
+  }catch(error){
+    this.setState({ [errorKey]: error })
+  }finally{
+    this.setState({ [loadingKey]: undefined })
   }
 }

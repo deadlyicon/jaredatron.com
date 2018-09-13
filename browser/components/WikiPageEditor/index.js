@@ -174,7 +174,7 @@ const Controls = function({
     <Link
       type="link"
       value="history"
-      onClick={()=>{}}
+      params={{history: '1'}}
     />
     <Link
       type="link"
