@@ -4,4 +4,22 @@
   left: 0
   bottom: 0
   right: 0
-  background: rgba(0,0,0,0.5)
+  width: 100vw
+  overflow-y: scroll
+  overflow-x: auto
+  display: flex
+  align-items: center
+  justify-content: center
+  background-color: rgba(0,0,0,0.5)
+  padding: 20px
+  z-index: 9999
+  touch-action: auto
+
+  &-window
+    margin: auto
+    background-color: white
+    min-height: 100px
+    min-width: 100px
+    max-width: 960px
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1)
+    // padding: 10px

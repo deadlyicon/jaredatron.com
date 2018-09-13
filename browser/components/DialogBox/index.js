@@ -6,7 +6,8 @@ import './index.sass'
 
 export default class DialogBox extends Component {
   static propTypes = {
-    onClose: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    // onClose: PropTypes.func.isRequired,
   }
   render(){
     const {
@@ -18,7 +19,9 @@ export default class DialogBox extends Component {
       className={`DialogBox ${className}`}
       {...props}
     >
-      {children}
+      <div className="DialogBox-window">
+        {children}
+      </div>
     </div>
   }
 }

@@ -7,7 +7,7 @@ import './index.sass'
 
 export default class ConfirmationDialog extends Component {
   static propTypes = {
-    confirm: PropTypes.string.isRequired,
+    prompt: PropTypes.string.isRequired,
     onConfirmation: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
   }
@@ -17,22 +17,22 @@ export default class ConfirmationDialog extends Component {
   }
   render(){
     const {
-      confirm,
+      prompt,
       confirmationValue,
       cancelValue,
+      onConfirmation,
+      onCancel,
     } = this.props
     return <DialogBox className="ConfirmationDialog">
-      <div>{confirm}</div>
-      <button
-        onClick={}
-      >
-        {cancelValue}
-      </button>
-      <button
-        onClick={}
-      >
-        {confirmationValue}
-      </button>
+      <div className="ConfirmationDialog-prompt">{prompt}</div>
+      <div className="ConfirmationDialog-buttons">
+        <button onClick={onCancel} autoFocus>
+          {cancelValue}
+        </button>
+        <button onClick={onConfirmation}>
+          {confirmationValue}
+        </button>
+      </div>
     </DialogBox>
   }
 }

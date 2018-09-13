@@ -58,6 +58,9 @@ export default class WikiPageEditor extends PureComponent {
             onConfirmation={() => {
               takeAction(this, 'wiki.deletePage', { path })
             }}
+            onCancel={() => {
+              this.setState({ confirmingDelete: false })
+            }}
           />}
           <div className="WikiPageEditor-topbar">
             <Pathlinks path={path} />
