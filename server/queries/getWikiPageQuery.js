@@ -1,6 +1,13 @@
 const { pg } = require('../../database')
 
 module.exports = async function getWikiPageCommand({ logger, path }){
-  const wikiPage = await pg.select('*').from('wiki_pages').where({path}).first()
+  const [ wikiPage ] = await pg
+    .table('wiki_pages')
+    .update({
+      last_viewed_at: new Date,
+    })
+    .where({path})
+    .limit(1)
+    .returning('*')
   return { wikiPage }
 }
