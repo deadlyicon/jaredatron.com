@@ -18,6 +18,7 @@ export default class WikiPageEditor extends PureComponent {
 
   state = {
     previewing: false,
+    confirmingReset: false,
     confirmingDelete: false,
   }
 
@@ -40,16 +41,15 @@ export default class WikiPageEditor extends PureComponent {
   }
 
   render(){
-    const { previewing, confirmingDelete } = this.state
+    const { previewing, confirmingReset, confirmingDelete } = this.state
     const { path } = this.props
     const keys = {
-      page:         `wiki:page:${path}`,
-      loading:      `wiki:page:${path}:loading`,
-      edits:        `wiki:page:${path}:edits`,
-      saving:       `wiki:page:${path}:saving`,
-      error:        `wiki:page:${path}:error`,
+      page:    `wiki:page:${path}`,
+      loading: `wiki:page:${path}:loading`,
+      edits:   `wiki:page:${path}:edits`,
+      saving:  `wiki:page:${path}:saving`,
+      error:   `wiki:page:${path}:error`,
     }
-
     return <AppState keys={keys}>
       {({ page, loading, edits, saving, error }) => {
         const newPage = !loading && !page
@@ -63,6 +63,20 @@ export default class WikiPageEditor extends PureComponent {
         )
         const edited = edits && (newPage || edits !== page.content)
         return <div className="WikiPageEditor">
+
+          {confirmingReset && <ConfirmationDialog
+            prompt="Are you sure you want to reset your unsaved change to this wiki page?"
+            onConfirmation={() => {
+              this.setState({ confirmingReset: false })
+              const edits = newPage ? undefined : page.content
+              takeAction(this, 'wiki.updatePageEdits', { path, edits })
+              this.focusEditor()
+            }}
+            onCancel={() => {
+              this.setState({ confirmingReset: false })
+            }}
+          />}
+
           {confirmingDelete && <ConfirmationDialog
             prompt="Are you sure you want to delete this wiki page?"
             onConfirmation={() => {
@@ -73,6 +87,7 @@ export default class WikiPageEditor extends PureComponent {
               this.setState({ confirmingDelete: false })
             }}
           />}
+
           <div className="WikiPageEditor-topbar">
             <Pathlinks prefix="/wiki/" path={path} />
             <Controls
@@ -85,9 +100,7 @@ export default class WikiPageEditor extends PureComponent {
                 takeAction(this, 'wiki.deletePageEdits', { path })
               }}
               onReset={()=>{
-                const edits = newPage ? undefined : page.content
-                takeAction(this, 'wiki.updatePageEdits', { path, edits })
-                this.focusEditor()
+                this.setState({ confirmingReset: true })
               }}
               onSave={()=>{
                 takeAction(this, 'wiki.savePageEdits', { path })
