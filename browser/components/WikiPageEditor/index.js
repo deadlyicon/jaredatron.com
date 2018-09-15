@@ -8,6 +8,7 @@ import Markdown from 'components/Markdown'
 import Pathlinks from 'components/Pathlinks'
 import ConfirmationDialog from 'components/ConfirmationDialog'
 import ErrorMessage from 'components/ErrorMessage'
+import Editor from 'components/Editor'
 import './index.sass'
 
 export default class WikiPageEditor extends PureComponent {
@@ -136,6 +137,8 @@ export default class WikiPageEditor extends PureComponent {
             saving  ? <div>saving…</div> :
             previewing ? <Markdown source={content} /> :
             newPage || editing ? <Editor
+              autoFocus
+              className="WikiPageEditor-Editor"
               value={content}
               onChange={edits => {
                 takeAction(this, 'wiki.updatePageEdits', { path, edits })
@@ -213,24 +216,4 @@ const Controls = function({
       onClick={onEdit}
     />
   </div>
-}
-
-class Editor extends PureComponent {
-
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-  }
-
-  render(){
-    const { value, onChange } = this.props
-    return <div className="WikiPageEditor-Editor">
-      <textarea
-        ref={node => { this.textarea = node }}
-        value={value}
-        onChange={event => { onChange(event.target.value) }}
-        autoFocus
-      />
-    </div>
-  }
 }
