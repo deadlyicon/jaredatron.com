@@ -60,18 +60,16 @@ export default class WikiPageEditor extends PureComponent {
     return <AppState keys={keys}>
       {({ page, loading, edits, saving, error }) => {
         const newPage = !loading && !page
-        // const editing = newPage || typeof edits === 'string'
         const content = (
           loading ? null :
           newPage ?
             typeof edits === 'string'
               ? edits
               : `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
-          editing
-            ? edits || page.content
-            : page.content
+          editing ? edits || page.content :
+          page.content
         )
-        const edited = edits && (newPage || edits !== page.content)
+        const edited = typeof edits === 'string'
         return <div className="WikiPageEditor">
 
           {confirmingReset && <ConfirmationDialog
@@ -107,7 +105,6 @@ export default class WikiPageEditor extends PureComponent {
               edited={edited}
               onCancel={()=>{
                 this.setState({ editing: false, previewing: false })
-                // takeAction(this, 'wiki.deletePageEdits', { path })
               }}
               onReset={()=>{
                 this.setState({ confirmingReset: true })
@@ -120,7 +117,6 @@ export default class WikiPageEditor extends PureComponent {
                 this.setState({ confirmingDelete: true })
               }}
               onEdit={()=>{
-                // takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
                 this.setState({ editing: true })
               }}
               togglePreview={()=>{
@@ -176,12 +172,13 @@ const Controls = function({
           onClick={onCancel}
         />
       }
-      <Link
-        type="link"
-        value="reset"
-        onClick={onReset}
-        disabled={!edited}
-      />
+      { edited &&
+        <Link
+          type="link"
+          value="reset"
+          onClick={onReset}
+        />
+      }
       <Link
         type="link"
         value={previewing ? "edit" : "preview"}

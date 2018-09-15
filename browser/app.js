@@ -21,17 +21,15 @@ initializeAppState(function(){
   //   this.takeAction('logout', {post: false})
   // })
 
-  // window.addEventListener('beforeunload', (event) => {
-  //   const state = this.getState()
-  //   const hasUnsavedChanges = (
-  //     Object.keys(state).some(key => key.startsWith('organizationAccountDataStagedChanges:')) ||
-  //     'defaultAccountDataStagedChanges' in state
-  //   )
-
-  //   if (hasUnsavedChanges) {
-  //     return event.returnValue = "Are you sure you want to reload? Changes you made will not be saved."
-  //   }
-  // })
+  window.addEventListener('beforeunload', (event) => {
+    const state = this.getState()
+    const hasUnsavedChanges = Object.keys(state).some(key =>
+      key.match(/^wiki:.*:edits$/)
+    )
+    if (hasUnsavedChanges) {
+      return event.returnValue = "Are you sure you want to reload? Changes you've made will not be saved."
+    }
+  })
 
   // window.addEventListener('resize', () => {
   //   this.takeAction('setScreenSize')

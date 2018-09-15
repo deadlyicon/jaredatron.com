@@ -52,6 +52,8 @@ export async function loadPage({ path }){
 }
 
 export async function updatePageEdits({ path, edits }){
+  const page = this.getState()[`wiki:page:${path}`]
+  if (page && page.content === edits) edits = undefined
   this.setState({ [`wiki:page:${path}:edits`]: edits })
 }
 
