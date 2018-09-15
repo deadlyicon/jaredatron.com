@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { AppState, takeAction } from 'lib/appState'
 
@@ -33,6 +34,11 @@ export default class WikiPageEditor extends PureComponent {
       this.loadWikiPage(nextProps.path)
   }
 
+  focusEditor(){
+    const editorTextarea = ReactDOM.findDOMNode(this).querySelector('.WikiPageEditor-Editor textarea')
+    if (editorTextarea) editorTextarea.focus()
+  }
+
   render(){
     const { previewing, confirmingDelete } = this.state
     const { path } = this.props
@@ -43,14 +49,17 @@ export default class WikiPageEditor extends PureComponent {
       saving:       `wiki:page:${path}:saving`,
       error:        `wiki:page:${path}:error`,
     }
+
     return <AppState keys={keys}>
       {({ page, loading, edits, saving, error }) => {
         const newPage = !loading && !page
-        const editing = newPage || !!edits
+        const editing = newPage || typeof edits === 'string'
         const content = (
           loading ? null :
-          newPage ? edits || `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
-          edits   ? edits : (page && page.content)
+          newPage ?
+            typeof edits === 'string' ? edits : `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
+          editing ? edits :
+          (page && page.content)
         )
         const edited = edits && (newPage || edits !== page.content)
         return <div className="WikiPageEditor">
@@ -76,7 +85,9 @@ export default class WikiPageEditor extends PureComponent {
                 takeAction(this, 'wiki.deletePageEdits', { path })
               }}
               onReset={()=>{
-                takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
+                const edits = newPage ? undefined : page.content
+                takeAction(this, 'wiki.updatePageEdits', { path, edits })
+                this.focusEditor()
               }}
               onSave={()=>{
                 takeAction(this, 'wiki.savePageEdits', { path })
@@ -140,14 +151,12 @@ const Controls = function({
           onClick={onCancel}
         />
       }
-      { newPage ||
-        <Link
-          type="link"
-          value="reset"
-          onClick={onReset}
-          disabled={!edited}
-        />
-      }
+      <Link
+        type="link"
+        value="reset"
+        onClick={onReset}
+        disabled={!edited}
+      />
       <Link
         type="link"
         value={previewing ? "edit" : "preview"}
@@ -189,18 +198,6 @@ class Editor extends PureComponent {
   static propTypes = {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-  }
-
-  componentDidMount(){
-    this.resize()
-  }
-
-  componentDidUpdate(){
-    this.resize()
-  }
-
-  resize(){
-    this.textarea.style.height = `${this.textarea.scrollHeight}px`
   }
 
   render(){
