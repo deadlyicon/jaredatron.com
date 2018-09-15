@@ -17,22 +17,29 @@ export default class WikiPageEditor extends PureComponent {
   }
 
   state = {
+    editing: false,
     previewing: false,
     confirmingReset: false,
     confirmingDelete: false,
   }
 
-  loadWikiPage(path){
-    takeAction(this, 'wiki.loadPage', { path })
-  }
-
   componentDidMount(){
-    this.loadWikiPage(this.props.path)
+    this.onPageChange(this.props.path)
   }
 
   componentWillReceiveProps(nextProps){
     if (this.props.path !== nextProps.path)
-      this.loadWikiPage(nextProps.path)
+      this.onPageChange(nextProps.path)
+  }
+
+  onPageChange(path){
+    takeAction(this, 'wiki.loadPage', { path })
+    this.setState({
+      editing: false,
+      previewing: false,
+      confirmingReset: false,
+      confirmingDelete: false,
+    })
   }
 
   focusEditor(){
@@ -41,7 +48,7 @@ export default class WikiPageEditor extends PureComponent {
   }
 
   render(){
-    const { previewing, confirmingReset, confirmingDelete } = this.state
+    const { editing, previewing, confirmingReset, confirmingDelete } = this.state
     const { path } = this.props
     const keys = {
       page:    `wiki:page:${path}`,
@@ -53,13 +60,16 @@ export default class WikiPageEditor extends PureComponent {
     return <AppState keys={keys}>
       {({ page, loading, edits, saving, error }) => {
         const newPage = !loading && !page
-        const editing = newPage || typeof edits === 'string'
+        // const editing = newPage || typeof edits === 'string'
         const content = (
           loading ? null :
           newPage ?
-            typeof edits === 'string' ? edits : `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
-          editing ? edits :
-          (page && page.content)
+            typeof edits === 'string'
+              ? edits
+              : `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
+          editing
+            ? edits || page.content
+            : page.content
         )
         const edited = edits && (newPage || edits !== page.content)
         return <div className="WikiPageEditor">
@@ -96,20 +106,22 @@ export default class WikiPageEditor extends PureComponent {
               editing={newPage || editing}
               edited={edited}
               onCancel={()=>{
-                this.setState({ previewing: false })
-                takeAction(this, 'wiki.deletePageEdits', { path })
+                this.setState({ editing: false, previewing: false })
+                // takeAction(this, 'wiki.deletePageEdits', { path })
               }}
               onReset={()=>{
                 this.setState({ confirmingReset: true })
               }}
               onSave={()=>{
+                this.setState({ editing: false, previewing: false })
                 takeAction(this, 'wiki.savePageEdits', { path })
               }}
               onDelete={()=>{
                 this.setState({ confirmingDelete: true })
               }}
               onEdit={()=>{
-                takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
+                // takeAction(this, 'wiki.updatePageEdits', { path, edits: page.content })
+                this.setState({ editing: true })
               }}
               togglePreview={()=>{
                 this.setState({ previewing: !previewing })
@@ -127,7 +139,7 @@ export default class WikiPageEditor extends PureComponent {
             loading ? <div>loading…</div> :
             saving  ? <div>saving…</div> :
             previewing ? <Markdown source={content} /> :
-            editing ? <Editor
+            newPage || editing ? <Editor
               value={content}
               onChange={edits => {
                 takeAction(this, 'wiki.updatePageEdits', { path, edits })
