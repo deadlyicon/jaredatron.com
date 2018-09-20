@@ -9,11 +9,11 @@ initializeAppState(function(){
 
   // this.takeAction('setScreenSize')
   // this.takeAction('restoreSession')
-  this.takeAction('publishLocation')
+  this.takeAction('location.publish')
 
   // window.addEventListener('popstate', () => {
   history.subscribe(() => {
-    this.takeAction('publishLocation')
+    this.takeAction('location.publish')
   })
 
   // api.on('unauthorized', () => {

@@ -172,7 +172,10 @@ export class AppState extends PureComponent {
       PropTypes.arrayOf(PropTypes.string),
       PropTypes.shape({
       }),
-    ]).isRequired
+    ]).isRequired,
+    Component: PropTypes.func,
+    render: PropTypes.func,
+    children: PropTypes.func,
   }
 
   constructor(props){
@@ -215,8 +218,12 @@ export class AppState extends PureComponent {
 
   render(){
     this.renderCount++
-    const appState = this.getAppState()
-    return this.props.children(appState)
+    const { Component, render, children, props } = this.props
+    const appState = { ...this.getAppState(), ...props }
+    if (Component) return <Component {...appState} />
+    if (render) return render(appState)
+    if (children) return children(appState)
+    throw new Error(`AppState not given Component, render or children`)
   }
 
 }

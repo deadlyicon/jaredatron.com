@@ -1,6 +1,6 @@
 const { pg } = require('../../database')
 
-module.exports = async function getWikiPageCommand({ logger, path }){
+module.exports = async function getWikiPageQuery({ logger, path }){
   const [ wikiPage ] = await pg
     .table('wiki_pages')
     .update({

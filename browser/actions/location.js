@@ -1,5 +1,5 @@
 import querystring from 'querystring'
-import history from './history'
+import history from 'lib/history'
 
 export const searchToObject = (search) => {
   return querystring.parse((search || '').replace(/^\?/, ''))
@@ -32,7 +32,7 @@ const locationToHref = location => {
 }
 
 
-export const publishLocation = function(){
+export const publish = function(){
   const lastLocation = this.getState().location
   const location = getLocation()
   if (
@@ -45,7 +45,7 @@ export const publishLocation = function(){
 
 history.onChange
 
-export const setLocation = function(location){
+export const set = function(location){
   const href = locationToHref(location)
   if (href === window.location.href) return // noop
   history.pushState(null, window.document.title, href)
@@ -54,14 +54,19 @@ export const setLocation = function(location){
   })
 }
 
-export const replaceLocation = function(location){
-  console.log('replaceLocation', {location})
+export const replace = function(location){
   const href = locationToHref(location)
   history.replaceState(null, window.document.title, href)
+}
+
+export const setParams = function(params) {
+  let { location } = this.getState()
+  const query = { ...location.params, ...params }
+  set.call(this, { ...location, query })
 }
 
 export const replaceParams = function(params) {
   let { location } = this.getState()
   const query = { ...location.params, ...params }
-  replaceLocation.call(this, { ...location, query })
+  replace.call(this, { ...location, query })
 }

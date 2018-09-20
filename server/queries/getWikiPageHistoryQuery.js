@@ -1,7 +1,7 @@
 const YAML = require('js-yaml')
 const { pg } = require('../../database')
 
-module.exports = async function getWikiPageCommand({ logger, path }){
+module.exports = async function getWikiPageQuery({ logger, path }){
   const { id } = await pg
     .select('id')
     .from('wiki_pages')

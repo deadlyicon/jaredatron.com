@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import WikiPage from './pages/WikiPage'
 import JournalPage from './pages/JournalPage'
+import JournalEntriesPage from './pages/JournalEntriesPage'
 import RedirectPage from './pages/RedirectPage'
 import NotFoundPage from './pages/NotFoundPage'
 
@@ -26,7 +27,7 @@ const pathnameRouter = new PathnameRouter(map => {
   map('/wiki',            WikiPage)
   map('/wiki/:path*',     WikiPage)
   map('/journal',         JournalPage)
-  // map('/journal/entries', JournalEntriesPage)
+  map('/journal/entries', JournalEntriesPage)
   // map('/tracking',       TrackingPage)
   // map('/tracking/:type', TrackingPage)
   map('/focus',           RedirectPage, { redirectTo: '/wiki/focus' })

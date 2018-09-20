@@ -3,8 +3,11 @@
 .Link
   text-decoration: none
   color: inherit
+  &:focus
+    outline: 1px solid $dark-navy-blue
   &-text
     color: $dark-navy-blue
   &-link
     color: #0088cc
-    // text-decoration: underline
+    &:hover, &:active
+      text-decoration: underline
