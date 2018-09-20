@@ -5,7 +5,8 @@ import Link from 'components/Link'
 import './index.sass'
 
 const renderers = Object.freeze({
-  link: props => <Link type="link" {...props} />,
+  link: props =>
+    <Link type="link" {...props} rel="noopener noreferrer nofollow" />,
 })
 
 const linkTarget = (href) =>

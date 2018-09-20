@@ -53,6 +53,10 @@ module.exports = {
         loader: 'json-loader'
       },
       {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000'
+      },
+      {
         test: /\.(ico|jpg|jpeg|png|gif|otf|webp)(\?.*)?$/,
         loader: 'file-loader',
         query: {
@@ -73,10 +77,6 @@ module.exports = {
           }
         ]
       },
-      {
-        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-        loader: 'url-loader?limit=100000'
-      }
     ]
   },
   // devServer: {
