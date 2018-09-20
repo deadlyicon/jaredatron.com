@@ -124,10 +124,12 @@ export default class WikiPageEditor extends PureComponent {
                 this.setState({ previewing: !previewing })
               }}
               onMove={()=>{
-                const newPath = prompt('Where to?', path)
-                  .trim().toLowerCase().replace(/\s+/g,'-')
-                if (newPath && newPath !== path)
-                  takeAction(this, 'wiki.movePage', { path, newPath })
+                let newPath = prompt('Where to?', path)
+                if (newPath){
+                  newPath = newPath.trim().toLowerCase().replace(/\s+/g,'-')
+                  if (newPath !== path)
+                    takeAction(this, 'wiki.movePage', { path, newPath })
+                }
               }}
             />
           </div>

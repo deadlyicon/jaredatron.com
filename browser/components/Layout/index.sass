@@ -1,3 +1,5 @@
+@import "../../style/variables.sass"
+
 .Layout
   position: relative
   min-height: 100vh
@@ -10,10 +12,14 @@
     padding: 2px 1em
     display: flex
     flex-direction: row
-    .Link:not(:last-child)
-      margin-right: 1em
     &-spacer
       flex: 1 1
+
+    .Link
+      padding: 0 5px
+      &:focus
+        background-color: #74b3ff
+        outline: none
 
   &-main
     min-height: calc(100vh - #{$topnav-height})
