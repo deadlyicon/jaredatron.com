@@ -16,3 +16,19 @@ export async function loadEntries(){
     }
   }
 
+
+// export async function loadEntry({ id }){
+//     const key = `journal:entry:${id}`,
+//     const errorKey = `journal:entry:${id}:loadError`,
+//     try{
+//       const { journalEntry } = await executeQuery('getJournalEntry', { id })
+//       journalEntries.forEach(journalEntry => {
+//         journalEntry.created_at = moment(journalEntry.created_at).toDate()
+//         journalEntry.updated_at = moment(journalEntry.updated_at).toDate()
+//       })
+//       this.setState({ [key]: journalEntries })
+//     }catch(error){
+//       this.setState({ [errorKey]: error })
+//     }
+//   }
+

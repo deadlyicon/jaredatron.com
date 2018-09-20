@@ -218,7 +218,7 @@ export class AppState extends PureComponent {
 
   render(){
     this.renderCount++
-    const { Component, render, children, props } = this.props
+    const { keys, Component, render, children, ...props } = this.props
     const appState = { ...this.getAppState(), ...props }
     if (Component) return <Component {...appState} />
     if (render) return render(appState)
