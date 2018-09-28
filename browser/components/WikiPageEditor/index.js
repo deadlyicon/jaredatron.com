@@ -17,6 +17,30 @@ export default class WikiPageEditor extends PureComponent {
     path: PropTypes.string.isRequired,
   }
 
+  render(){
+    const { path } = this.props
+    const keys = {
+      page:    `wiki:page:${path}`,
+      loading: `wiki:page:${path}:loading`,
+      edits:   `wiki:page:${path}:edits`,
+      saving:  `wiki:page:${path}:saving`,
+      error:   `wiki:page:${path}:error`,
+    }
+    return <AppState keys={keys} path={path} Component={WikiPageEditorContent} />
+  }
+}
+
+class WikiPageEditorContent extends PureComponent {
+
+  static propTypes = {
+    path:    PropTypes.string.isRequired,
+    page:    PropTypes.object,
+    loading: PropTypes.bool,
+    edits:   PropTypes.string,
+    saving:  PropTypes.bool,
+    error:   ErrorMessage.propTypes.error,
+  }
+
   state = {
     editing: false,
     previewing: false,
@@ -24,13 +48,52 @@ export default class WikiPageEditor extends PureComponent {
     confirmingDelete: false,
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.onPageChange(this.props.path)
   }
 
   componentWillReceiveProps(nextProps){
     if (this.props.path !== nextProps.path)
       this.onPageChange(nextProps.path)
+  }
+
+  componentDidMount(){
+    document.addEventListener('keydown', this.onDocumentKeyDown)
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener('keydown', this.onDocumentKeyDown)
+  }
+
+  onDocumentKeyDown = event => {
+    const { metaKey, shiftKey, key } = event
+
+    if (metaKey && !shiftKey){
+      if (key === 'e') {
+        event.preventDefault()
+        this.state.editing ? this.cancel() : this.edit()
+      }
+      if (key === 'p') {
+        event.preventDefault()
+        this.togglePreview()
+      }
+      if (key === 'm') {
+        event.preventDefault()
+        this.move()
+      }
+      if (key === 'r' && this.props.edits) {
+        event.preventDefault()
+        this.reset()
+      }
+      if (key === 's' && this.props.edits) {
+        event.preventDefault()
+        this.save()
+      }
+      if (key === 'Escape') {
+        event.preventDefault()
+        this.cancel()
+      }
+    }
   }
 
   onPageChange(path){
@@ -48,109 +111,120 @@ export default class WikiPageEditor extends PureComponent {
     if (editorTextarea) editorTextarea.focus()
   }
 
+  cancel = () => {
+    this.setState({ editing: false, previewing: false })
+  }
+
+  reset = () => {
+    this.setState({ confirmingReset: true })
+  }
+
+  save = () => {
+    const { path } = this.props
+    this.setState({ editing: false, previewing: false })
+    takeAction(this, 'wiki.savePageEdits', { path })
+  }
+
+  delete = () => {
+    this.setState({ confirmingDelete: true })
+  }
+
+  edit = () => {
+    this.setState({ editing: true })
+  }
+
+  togglePreview = () => {
+    this.setState({ previewing: !this.state.previewing })
+  }
+
+  move = () => {
+    const { path } = this.props
+    let newPath = prompt('Where to?', path)
+    if (newPath){
+      newPath = newPath.trim().toLowerCase().replace(/\s+/g,'-')
+      if (newPath !== path)
+        takeAction(this, 'wiki.movePage', { path, newPath })
+    }
+  }
+
   render(){
     const { editing, previewing, confirmingReset, confirmingDelete } = this.state
-    const { path } = this.props
-    const keys = {
-      page:    `wiki:page:${path}`,
-      loading: `wiki:page:${path}:loading`,
-      edits:   `wiki:page:${path}:edits`,
-      saving:  `wiki:page:${path}:saving`,
-      error:   `wiki:page:${path}:error`,
-    }
-    return <AppState keys={keys}>
-      {({ page, loading, edits, saving, error }) => {
-        const newPage = !loading && !page
-        const content = (
-          loading ? null :
-          newPage ?
-            typeof edits === 'string'
-              ? edits
-              : `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
-          editing ? edits || page.content :
-          page.content
-        )
-        const edited = typeof edits === 'string'
-        return <div className="WikiPageEditor">
+    const { path, page, loading, edits, saving, error } = this.props
 
-          {confirmingReset && <ConfirmationDialog
-            prompt="Are you sure you want to reset your unsaved change to this wiki page?"
-            onConfirmation={() => {
-              this.setState({ confirmingReset: false })
-              const edits = newPage ? undefined : page.content
-              takeAction(this, 'wiki.updatePageEdits', { path, edits })
-              this.focusEditor()
-            }}
-            onCancel={() => {
-              this.setState({ confirmingReset: false })
-            }}
-          />}
+    const newPage = !loading && !page
+    const content = (
+      loading ? null :
+      newPage ?
+        typeof edits === 'string'
+          ? edits
+          : `# ${path.replace(/\-+/g,' ').replace(/\/+/g,' / ')} \n\n` :
+      editing ? edits || page.content :
+      page.content
+    )
+    const edited = typeof edits === 'string'
 
-          {confirmingDelete && <ConfirmationDialog
-            prompt="Are you sure you want to delete this wiki page?"
-            onConfirmation={() => {
-              this.setState({ confirmingDelete: false })
-              takeAction(this, 'wiki.deletePage', { path })
-            }}
-            onCancel={() => {
-              this.setState({ confirmingDelete: false })
-            }}
-          />}
+    let className = `WikiPageEditor`
+    if (editing) className += ` WikiPageEditor-editing`
+    if (previewing) className += ` WikiPageEditor-previewing`
 
-          <div className="WikiPageEditor-topbar">
-            <Pathlinks prefix="/wiki/" path={path} />
-            <Controls
-              newPage={newPage}
-              previewing={previewing}
-              editing={newPage || editing}
-              edited={edited}
-              onCancel={()=>{
-                this.setState({ editing: false, previewing: false })
-              }}
-              onReset={()=>{
-                this.setState({ confirmingReset: true })
-              }}
-              onSave={()=>{
-                this.setState({ editing: false, previewing: false })
-                takeAction(this, 'wiki.savePageEdits', { path })
-              }}
-              onDelete={()=>{
-                this.setState({ confirmingDelete: true })
-              }}
-              onEdit={()=>{
-                this.setState({ editing: true })
-              }}
-              togglePreview={()=>{
-                this.setState({ previewing: !previewing })
-              }}
-              onMove={()=>{
-                let newPath = prompt('Where to?', path)
-                if (newPath){
-                  newPath = newPath.trim().toLowerCase().replace(/\s+/g,'-')
-                  if (newPath !== path)
-                    takeAction(this, 'wiki.movePage', { path, newPath })
-                }
-              }}
-            />
-          </div>
-          <ErrorMessage error={error} />
-          {
-            loading ? <div>loading…</div> :
-            saving  ? <div>saving…</div> :
-            previewing ? <Markdown source={content} /> :
-            newPage || editing ? <Editor
-              autoFocus
-              className="WikiPageEditor-Editor"
-              value={content}
-              onChange={edits => {
-                takeAction(this, 'wiki.updatePageEdits', { path, edits })
-              }}
-            /> :
-            <Markdown source={content} />
-          }
-        </div>
-      }}
-    </AppState>
+    return <div className={className}>
+
+      {confirmingReset && <ConfirmationDialog
+        prompt="Are you sure you want to reset your unsaved change to this wiki page?"
+        onConfirmation={() => {
+          this.setState({ confirmingReset: false })
+          const edits = newPage ? undefined : page.content
+          takeAction(this, 'wiki.updatePageEdits', { path, edits })
+          this.focusEditor()
+        }}
+        onCancel={() => {
+          this.setState({ confirmingReset: false })
+        }}
+      />}
+
+      {confirmingDelete && <ConfirmationDialog
+        prompt="Are you sure you want to delete this wiki page?"
+        onConfirmation={() => {
+          this.setState({ confirmingDelete: false })
+          takeAction(this, 'wiki.deletePage', { path })
+        }}
+        onCancel={() => {
+          this.setState({ confirmingDelete: false })
+        }}
+      />}
+
+      <div className="WikiPageEditor-topbar">
+        <Pathlinks prefix="/wiki/" path={path} />
+        <Controls
+          newPage={newPage}
+          previewing={previewing}
+          editing={newPage || editing}
+          edited={edited}
+          cancel={this.cancel}
+          reset={this.reset}
+          save={this.save}
+          delete={this.delete}
+          edit={this.edit}
+          togglePreview={this.togglePreview}
+          move={this.move}
+        />
+      </div>
+      <ErrorMessage error={error} />
+      {
+        loading ? <div>loading…</div> :
+        saving  ? <div>saving…</div> :
+        <Markdown source={content} />
+      }
+      { newPage || editing && <Editor
+          autoFocus
+          className="WikiPageEditor-Editor"
+          value={content}
+          onChange={edits => {
+            takeAction(this, 'wiki.updatePageEdits', { path, edits })
+          }}
+        />
+      }
+    </div>
   }
 }
 
@@ -159,13 +233,13 @@ const Controls = function({
   editing,
   previewing,
   edited,
-  onCancel,
-  onReset,
+  cancel,
+  reset,
   togglePreview,
-  onSave,
-  onDelete,
-  onEdit,
-  onMove,
+  save,
+  delete: _delete,
+  edit,
+  move,
 }){
   if (editing){
     return <div className="WikiPageEditor-Controls">
@@ -174,14 +248,14 @@ const Controls = function({
           type="link"
           value="cancel"
           replace
-          onClick={onCancel}
+          onClick={cancel}
         />
       }
       { edited &&
         <Link
           type="link"
           value="reset"
-          onClick={onReset}
+          onClick={reset}
         />
       }
       <Link
@@ -192,7 +266,7 @@ const Controls = function({
       <Link
         type="link"
         value="save"
-        onClick={edited ? onSave : onCancel}
+        onClick={edited ? save : cancel}
       />
     </div>
   }
@@ -205,17 +279,17 @@ const Controls = function({
     <Link
       type="link"
       value="delete"
-      onClick={onDelete}
+      onClick={_delete}
     />
     <Link
       type="link"
       value="move"
-      onClick={onMove}
+      onClick={move}
     />
     <Link
       type="link"
       value="edit"
-      onClick={onEdit}
+      onClick={edit}
     />
   </div>
 }

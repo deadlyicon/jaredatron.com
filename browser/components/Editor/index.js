@@ -11,6 +11,11 @@ export default class Editor extends PureComponent {
     className: PropTypes.string,
   }
 
+  componentDidMount(){
+    this.textarea.scrollTop = 0
+    this.textarea.selectionEnd = 0
+  }
+
   render(){
     const { value, onChange, className = '', ...props } = this.props
     return <div className={`Editor ${className}`}>

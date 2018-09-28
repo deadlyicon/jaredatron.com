@@ -9,3 +9,12 @@
 
   &-Editor
     min-height: calc(100vh - 87px)
+    position: fixed
+    top: -999em
+    left: -999em
+
+  &-editing:not(&-previewing)
+    .Markdown
+      display: none
+    .Editor
+      position: static
