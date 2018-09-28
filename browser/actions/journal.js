@@ -40,7 +40,10 @@ export async function updateTodaysEntry({ id, body }){
     return
   }
 
-  this.setState({ [updatingKey]: true })
+  this.setState({
+    [updatingKey]: true,
+    [updateErrorKey]: undefined,
+  })
   try{
     const { todaysJournalEntry } = await executeCommand('updateTodaysJournalEntry', { id, body })
     this.setState({
@@ -57,7 +60,10 @@ export async function updateTodaysEntry({ id, body }){
       })
     }
   }catch(error){
-    this.setState({ [updateErrorKey]: error })
+    this.setState({
+      [updatingKey]: undefined,
+      [updateErrorKey]: error,
+    })
   }
 }
 

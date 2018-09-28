@@ -40,11 +40,18 @@ class JournalPageContent extends PureComponent {
   render(){
     const { journalEntry, changes, loadError, updateError } = this.props
     return <div className="JournalPage">
-      <div>
+      <div className="JournalPage-controls">
         <Link href="/journal/entries">entries</Link>
-        {changes && <span>saving…</span>}
+        <ErrorMessage error={loadError || updateError} />
+        <span className="JournalPage-status">{
+          changes
+            ? 'saving…'
+            : journalEntry && journalEntry.id
+              ? 'saved!'
+              : 'new Entry!'
+        }
+        </span>
       </div>
-      <ErrorMessage error={loadError || updateError} />
       <Editor
         autoFocus
         className="JournalPage-Editor"

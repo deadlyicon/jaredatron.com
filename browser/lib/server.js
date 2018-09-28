@@ -4,23 +4,29 @@ import logger from 'lib/logger'
 async function request({ method, path, query, body }){
   // logger.debug(`[server][request]`, {method, path, body})
   path = `${path}?${querystring.stringify(query)}`
-  const response = await fetch(path, {
-    method,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    body: JSON.stringify(body)
-  })
-  const responseBody = await response.json()
-  if (responseBody.error){
-    const error = new Error(responseBody.error.message)
-    error.stack = responseBody.error.stack + error.stack
-    logger.error(`[server][request]`, error)
+  try{
+    const response = await fetch(path, {
+      method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify(body)
+    })
+    const responseBody = await response.json()
+    if (responseBody.error){
+      const error = new Error(responseBody.error.message)
+      error.stack = responseBody.error.stack + error.stack
+      logger.error(`[server][request]`, error)
+      throw error
+    }
+    // logger.debug(`[server][response]`, responseBody)
+    return responseBody
+  }catch(error){
+    if (error.message === 'Failed to fetch')
+      error.message = 'You appear to be offline!'
     throw error
   }
-  // logger.debug(`[server][response]`, responseBody)
-  return responseBody
 }
 
 
