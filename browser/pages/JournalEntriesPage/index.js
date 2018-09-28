@@ -59,7 +59,7 @@ const JournalEntries = ({ journalEntries }) =>
         <tr key={journalEntry.id}>
           <td>
             <Link type="link" href={`/journal/entry/${journalEntry.id}`}>
-              {journalEntry.body}
+              {journalEntry.body.split("\n")[0]}
             </Link>
           </td>
           <td>
