@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import { AppState, takeAction } from 'lib/appState'
 
 import Page from 'components/Page'
 import Link from 'components/Link'
 import DateTime from 'components/DateTime'
+import Header from 'components/Header'
+import TimeAgo from 'components/TimeAgo'
 import ErrorMessage from 'components/ErrorMessage'
 import InspectObject from 'components/InspectObject'
 import './index.sass'
@@ -34,16 +37,36 @@ class JournalEntriesPageContent extends PureComponent {
     const { journalEntries, loadError } = this.props
     return <div className="JournalEntriesPage">
       <ErrorMessage error={loadError} />
-      <div>
+      <div className="JournalEntriesPage-controls">
         <Link href="/journal">today</Link>
       </div>
       {journalEntries
-        ? <JournalEntries journalEntries={journalEntries} />
+        ? <JournalEntriesByWeek journalEntries={journalEntries} />
         : <div>Loading…</div>
       }
     </div>
   }
 }
+
+const JournalEntriesByWeek = ({ journalEntries }) => {
+  const byWeek = {}
+  journalEntries.forEach(journalEntry => {
+    const week = moment(journalEntry.created_at).format('YYYY-WW')
+    byWeek[week] = byWeek[week] || []
+    byWeek[week].push(journalEntry)
+  })
+  const weeks = Object.keys(byWeek).sort().reverse()
+  return <div className="JournalEntriesPage-byWeek">
+    {weeks.map(weekKey => {
+      const [year, week] = weekKey.split('-')
+      return <div key={weekKey} className="JournalEntriesPage-week">
+        <Header value={`Week ${week} of ${year}`} />
+        <JournalEntries journalEntries={byWeek[weekKey]} />
+      </div>
+    })}
+  </div>
+}
+
 
 const JournalEntries = ({ journalEntries }) =>
   <table>
@@ -63,10 +86,10 @@ const JournalEntries = ({ journalEntries }) =>
             </Link>
           </td>
           <td>
-            <DateTime date={journalEntry.created_at} />
+            <TimeAgo time={journalEntry.created_at} />
           </td>
           <td>
-            <DateTime date={journalEntry.updated_at} />
+            <TimeAgo time={journalEntry.updated_at} />
           </td>
         </tr>
       )}

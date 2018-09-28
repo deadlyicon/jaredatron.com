@@ -4,6 +4,7 @@ import { AppState, takeAction } from 'lib/appState'
 
 import Page from 'components/Page'
 import Link from 'components/Link'
+import Header from 'components/Header'
 import DateTime from 'components/DateTime'
 import TimeAgo from 'components/TimeAgo'
 import ErrorMessage from 'components/ErrorMessage'
@@ -14,7 +15,7 @@ export default class JournalEntryPage extends Page {
 
   componentWillMount(){
     // const id = this.pageId()
-    // takeAction(this, 'journal.loadEntries')
+    takeAction(this, 'journal.loadEntries')
   }
 
   render(){
@@ -44,6 +45,12 @@ class JournalEntryPageContent extends PureComponent {
           <Link href="/journal/entries">entries</Link>&nbsp;
           <span>Created <TimeAgo time={journalEntry.created_at} /></span>
         </div>
+        <Header>
+          <DateTime
+            date={journalEntry.created_at}
+            format="fullDay"
+          />
+        </Header>
         <pre className="JournalEntryPage-body">{journalEntry.body}</pre>
       </div>
       : <div>Loading…</div>
