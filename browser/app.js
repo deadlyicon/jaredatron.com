@@ -21,10 +21,18 @@ initializeAppState(function(){
   //   this.takeAction('logout', {post: false})
   // })
 
+  window.addEventListener('online',  event => {
+    console.log('INTERNET on');
+  });
+  window.addEventListener('offline', event => {
+    console.log('INTERNET off');
+  });
+
   window.addEventListener('beforeunload', (event) => {
     const state = this.getState()
     const hasUnsavedChanges = Object.keys(state).some(key =>
-      key.match(/^wiki:.*:edits$/)
+      key.match(/^wiki:.*:edits$/) ||
+      key === 'journal:today:changes'
     )
     if (hasUnsavedChanges) {
       return event.returnValue = "Are you sure you want to reload? Changes you've made will not be saved."

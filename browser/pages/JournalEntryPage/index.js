@@ -14,7 +14,7 @@ export default class JournalEntryPage extends Page {
 
   componentWillMount(){
     // const id = this.pageId()
-    takeAction(this, 'journal.loadEntries')
+    // takeAction(this, 'journal.loadEntries')
   }
 
   render(){
