@@ -34,7 +34,11 @@ export default class JournalEntriesPage extends Page {
 
 class JournalEntriesPageContent extends PureComponent {
   render(){
-    const { journalEntries, loadError } = this.props
+    let { journalEntries, loadError } = this.props
+    journalEntries = journalEntries && journalEntries.filter(journalEntry =>
+      // ignore todays journal entry
+      moment(journalEntry.created_at).isBefore(moment(new Date).startOf('day'))
+    )
     return <div className="JournalEntriesPage">
       <ErrorMessage error={loadError} />
       <div className="JournalEntriesPage-controls">
