@@ -5,10 +5,10 @@ import Page from 'components/Page'
 
 export default class RedirectPage extends Page {
 
-  static propTypes = {
-    ...Page.propTypes,
-    redirectTo: PropTypes.string.isRequired,
-  }
+  // static propTypes = {
+  //   ...Page.propTypes,
+  //   // redirectTo: PropTypes.string.isRequired,
+  // }
 
   componentDidMount(){
     takeAction(this, 'location.replace', this.props.location.params.redirectTo)

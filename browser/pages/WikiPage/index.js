@@ -147,7 +147,9 @@ const WikiPagesList = function(props){
 
 const WikiPagesListMember = function({ page }){
   return <div className="WikiPagesListMember">
-    <Link type="link" href={`/wiki/${page.path}`}>{page.path}</Link>
+    <div>
+      <Link type="link" href={`/wiki/${page.path}`}>{page.path}</Link>
+    </div>
     <TimeAgo time={page.last_viewed_at} />
     <TimeAgo time={page.updated_at} />
   </div>

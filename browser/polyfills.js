@@ -196,27 +196,37 @@ if (!Element.prototype.matches) {
 }
 
 // written by me :d
-Array.prototype.without = function(i) {
-  return this.filter(function(m){ return i !== m; });
-};
+if (!Array.prototype.without){
+  Object.defineProperty(Array.prototype, "without", {
+    value: function without(i) {
+      return this.filter(function(m){ return i !== m; });
+    },
+    writable: true,
+    configurable: true
+  });
+}
 
 if (!Array.prototype.sortBy) {
-  Array.prototype.sortBy = function(getProp){
-    if (typeof getProp !== 'function'){
-      const prop = getProp
-      getProp = function(member){ return member[prop] }
-    }
-    return this
-      .map(function(member) {
-        return [member, getProp(member)]
-      })
-      .sort(function([,a], [,b]) {
-        return a < b ? -1 : b < a ? 1 : 0
-      })
-      .map(function([member]) {
-        return member
-      })
-  }
+  Object.defineProperty(Array.prototype, "sortBy", {
+    value: function sortBy(getProp){
+      if (typeof getProp !== 'function'){
+        const prop = getProp
+        getProp = function(member){ return member[prop] }
+      }
+      return this
+        .map(function(member) {
+          return [member, getProp(member)]
+        })
+        .sort(function([,a], [,b]) {
+          return a < b ? -1 : b < a ? 1 : 0
+        })
+        .map(function([member]) {
+          return member
+        })
+    },
+    writable: true,
+    configurable: true
+  });
 };
 
 if (!Object.filter){

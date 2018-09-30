@@ -1,19 +1,28 @@
 .WikiPage
   min-height: 100%
-  padding: 1em
+  padding: 1em 0
 
   .Pathlinks
     > span
       margin: 0 0.5em
 
+  .WikiIndexPage > input
+    margin: 0 1em 1em 1em
 
   .WikiPagesListMember
     display: flex
     flex-direction: row
+    &:hover
+      background-color: lightgrey
     > *
       flex: 0 0 130px
       white-space: nowrap
       overflow: hidden
       text-overflow: ellipsis
+      padding: 0 1em
       &:first-child
         flex: 1 1
+
+  .WikiPageEditor,
+  .WikiPageHistory
+    margin: 0 1em

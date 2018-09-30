@@ -31,7 +31,6 @@ const locationToHref = location => {
   return href
 }
 
-
 export const publish = function(){
   const lastLocation = this.getState().location
   const location = getLocation()
@@ -43,20 +42,12 @@ export const publish = function(){
   this.setState({ location })
 }
 
-history.onChange
-
 export const set = function(location){
-  const href = locationToHref(location)
-  if (href === window.location.href) return // noop
-  history.pushState(null, window.document.title, href)
-  this.setState({
-    location: getLocation(),
-  })
+  history.pushState(null, window.document.title, locationToHref(location))
 }
 
 export const replace = function(location){
-  const href = locationToHref(location)
-  history.replaceState(null, window.document.title, href)
+  history.replaceState(null, window.document.title, locationToHref(location))
 }
 
 export const setParams = function(params) {

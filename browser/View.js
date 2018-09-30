@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { AppState } from 'lib/appState'
+import { AppState, takeAction } from 'lib/appState'
 import PathnameRouter from 'lib/PathnameRouter'
 
 import LoginPage from './pages/LoginPage'
@@ -13,13 +13,26 @@ import RedirectPage from './pages/RedirectPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 import Layout from 'components/Layout'
+import KeydownTracker from 'components/KeydownTracker'
 
 export default class View extends Component {
+
+  goTo(path){
+    takeAction(this, 'location.set', path)
+  }
+
   render(){
-    console.warn('View rerender !?!?!')
-    return <AppState keys={['location','loggedIn']}>
-      {Router}
-    </AppState>
+    return <KeydownTracker
+      g-h={() => { this.goTo('/') }}
+      g-w={() => { this.goTo('/wiki') }}
+      g-j={() => { this.goTo('/journal') }}
+      g-f={() => { this.goTo('/focus') }}
+    >
+      <AppState
+        keys={['location','loggedIn']}
+        Component={Router}
+      />
+    </KeydownTracker>
   }
 }
 

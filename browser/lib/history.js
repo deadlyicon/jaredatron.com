@@ -9,12 +9,14 @@ const publish = function() {
 window.addEventListener('popstate', publish)
 
 module.exports = {
-  pushState(...args){
-    window.history.pushState(...args)
+  pushState(stateObject, title, href){
+    if (href === window.location.href) return
+    window.history.pushState(stateObject, title, href)
     publish()
   },
-  replaceState(...args){
-    window.history.replaceState(...args)
+  replaceState(stateObject, title, href){
+    if (href === window.location.href) return
+    window.history.replaceState(stateObject, title, href)
     publish()
   },
   subscribe(handler){
