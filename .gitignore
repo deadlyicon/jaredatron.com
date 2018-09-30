@@ -77,3 +77,6 @@ typings/
 
 # webpack build pack
 public
+
+# Heroku SQL dumps
+*.dump*

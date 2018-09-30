@@ -45,7 +45,7 @@ export default class WikiPage extends Page {
           asc={asc}
           filter={filter || ''}
           onFilterChange={filter => {
-            takeAction(this, 'replaceParams', {f: filter ? filter : null})
+            takeAction(this, 'location.replaceParams', {f: filter ? filter : null})
           }}
         />
       }
@@ -57,6 +57,19 @@ class IndexPage extends PureComponent {
 
   componentDidMount(){
     takeAction(this, 'wiki.loadIndex')
+    document.addEventListener('keydown', this.onDocumentKeyDown)
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener('keydown', this.onDocumentKeyDown)
+  }
+
+  onDocumentKeyDown = event => {
+    const { metaKey, shiftKey, key } = event
+    if (key === '/') {
+      event.preventDefault()
+      this.filterInput.focus()
+    }
   }
 
   render(){
@@ -70,6 +83,7 @@ class IndexPage extends PureComponent {
       {({ wikiIndex, wikiIndexError }) =>
         <div className="WikiIndexPage">
           <input
+            ref={node => { this.filterInput = node }}
             autoFocus
             value={filter}
             onChange={event => { onFilterChange(event.target.value) }}

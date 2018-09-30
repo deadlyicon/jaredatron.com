@@ -60,13 +60,13 @@ class Version extends PureComponent {
     this.setState({ open: !this.state.open })
   }
   render() {
-    const { path, content, updated_at } = this.props
+    const { path, content, created_at } = this.props
     const { open } = this.state
     return <div className="WikiPageHistory-Version">
       <div className="WikiPageHistory-Version-details">
         <button onClick={this.toggle}>{open ? '▼' : '▶'}</button>
         &nbsp;
-        <span>Updated <TimeAgo time={updated_at} /></span>
+        <span>Updated <TimeAgo time={created_at} /></span>
         &nbsp;/&nbsp;
         <span>path: /wiki/{path}</span>
       </div>

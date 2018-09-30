@@ -21,7 +21,10 @@ module.exports = async function updateWikiPageCommand({ logger, path, content })
 
     const [ wikiPage ] = await tx
       .table('wiki_pages')
-      .update({ content })
+      .update({
+        content,
+        updated_at: new Date
+      })
       .where({path})
       .returning('*')
 

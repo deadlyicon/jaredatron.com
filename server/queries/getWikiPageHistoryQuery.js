@@ -20,9 +20,9 @@ module.exports = async function getWikiPageQuery({ logger, path }){
     .limit(100)
 
   const wikiPageHistory = versions
-    .map(({ id, object }) => {
-      const { content, path, updated_at } = YAML.load(object)
-      return { id, updated_at, content, path };
+    .map(({ id, object, created_at }) => {
+      const { content, path } = YAML.load(object)
+      return { id, created_at, content, path };
     })
 
   return { wikiPageHistory }
