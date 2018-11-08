@@ -1,7 +1,12 @@
 import { executeCommand } from 'lib/server'
 
 export async function restoreSession({ }){
-
+  const { sessionId } = sessionStorage
+  if (!sessionId) return
+  this.setState({
+    loggedIn: true,
+    sessionId,
+  })
 }
 
 export async function login({ password }){
@@ -10,8 +15,12 @@ export async function login({ password }){
     loginError: undefined,
   })
   try{
-    const response = await executeCommand('login', { password })
-    console.log({ response })
+    const { sessionId } = await executeCommand('login', { password })
+    this.setState({
+      loggedIn: true,
+      sessionId,
+    })
+    sessionStorage.sessionId = sessionId
   }catch(loginError){
     this.setState({ loginError })
   }finally{
