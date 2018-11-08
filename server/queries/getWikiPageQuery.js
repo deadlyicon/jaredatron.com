@@ -9,5 +9,7 @@ module.exports = async function getWikiPageQuery({ logger, path }){
     .where({path})
     .limit(1)
     .returning('*')
+
+    logger.debug({ wikiPage })
   return { wikiPage }
 }

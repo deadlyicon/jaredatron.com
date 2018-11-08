@@ -11,7 +11,8 @@ const pg = require('knex')({
 })
 
 pg.on('start', sqlQuery => {
-  logger.debug('QUERY:', sqlQuery)
+  logger.debug('QUERY:', JSON.stringify(sqlQuery.toString()))
+  // logger.debug('QUERY:', typeof sqlQuery)
 })
 // pg.on('query', (...args) => {
 //   logger.debug('knex:query', args)

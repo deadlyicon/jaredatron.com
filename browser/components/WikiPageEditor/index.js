@@ -55,6 +55,9 @@ class WikiPageEditorContent extends PureComponent {
   componentWillReceiveProps(nextProps){
     if (this.props.path !== nextProps.path)
       this.onPageChange(nextProps.path)
+
+    if (!nextProps.loading && !nextProps.page)
+      this.edit()
   }
 
   componentDidMount(){
@@ -71,6 +74,7 @@ class WikiPageEditorContent extends PureComponent {
     if (metaKey && !shiftKey){
       if (key === 'e') {
         event.preventDefault()
+        console.warn('e pressed')
         this.state.editing ? this.cancel() : this.edit()
       }
       if (key === 'p') {
@@ -152,6 +156,7 @@ class WikiPageEditorContent extends PureComponent {
     const { path, page, loading, edits, saving, error } = this.props
 
     const newPage = !loading && !page
+
     const content = (
       loading ? null :
       newPage ?
@@ -167,6 +172,7 @@ class WikiPageEditorContent extends PureComponent {
     if (editing) className += ` WikiPageEditor-editing`
     if (previewing) className += ` WikiPageEditor-previewing`
 
+    console.warn({ newPage, editing })
     return <div className={className}>
 
       {confirmingReset && <ConfirmationDialog
@@ -215,7 +221,7 @@ class WikiPageEditorContent extends PureComponent {
         saving  ? <div>saving…</div> :
         <Markdown source={content} />
       }
-      { newPage || editing && <Editor
+      { (newPage || editing) && <Editor
           autoFocus
           className="WikiPageEditor-Editor"
           value={content}

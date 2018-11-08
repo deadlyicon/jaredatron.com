@@ -16,7 +16,6 @@ export async function loadIndex(){
   }
 }
 
-
 export async function loadPage({ path }){
   const pageKey     = `wiki:page:${path}`
   const loadingKey  = `wiki:page:${path}:loading`
@@ -33,6 +32,7 @@ export async function loadPage({ path }){
 
   try{
     const { wikiPage } = await takeAction('getWikiPage', { path })
+    console.warn({ wikiPage })
     if (wikiPage){
       this.setState({ [pageKey]: wikiPage })
     }else{
