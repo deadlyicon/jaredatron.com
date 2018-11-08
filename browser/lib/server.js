@@ -1,6 +1,11 @@
 import querystring from 'querystring'
 import logger from 'lib/logger'
 
+let sessionId = sessionStorage.sessionId
+export async function setSessionId(_sessionId){
+  sessionStorage.sessionId = sessionId = _sessionId
+}
+
 async function request({ method, path, query, body }){
   // logger.debug(`[server][request]`, {method, path, body})
   path = `${path}?${querystring.stringify(query)}`
@@ -10,6 +15,7 @@ async function request({ method, path, query, body }){
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
+        'Session-Id': sessionId,
       },
       body: JSON.stringify(body)
     })

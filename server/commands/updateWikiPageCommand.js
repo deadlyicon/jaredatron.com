@@ -1,7 +1,7 @@
 const YAML = require('js-yaml')
 const { pg } = require('../../database')
 
-module.exports = async function updateWikiPageCommand({ logger, path, content }){
+module.exports = async function updateWikiPage({ logger, path, content }){
   return pg.transaction(async tx => {
     let previousWikiPage = await tx
       .select('*')

@@ -7,9 +7,12 @@ initializeAppState(function(){
 
   this.defineActions(actions)
 
+  this.takeAction('auth.restoreSession')
+
   // this.takeAction('setScreenSize')
   // this.takeAction('restoreSession')
   this.takeAction('location.publish')
+
 
   // window.addEventListener('popstate', () => {
   history.subscribe(() => {
