@@ -178,13 +178,13 @@ export class AppState extends PureComponent {
     children: PropTypes.func,
   }
 
-  constructor(props){
-    super()
+  componentDidMount(){
     this.renderCount = 0
     subscribe(this.onAppStateChange)
   }
 
   componentWillUnmount(){
+    this._mounted = false;
     unsubscribe(this.onAppStateChange)
   }
 
