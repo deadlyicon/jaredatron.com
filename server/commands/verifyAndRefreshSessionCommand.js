@@ -2,13 +2,14 @@ const { pg } = require('../../database')
 
 module.exports = async function verifyAndRefreshSession({ sessionId }){
 
-  const [ qr ] = await pg
+  const qr = await pg
     .table('sessions')
+    .update({ updated_at: new Date })
     .where({ session_id: sessionId })
-    .count()
+    .returning('*')
 
   console.log('verifyAndRefreshSession', { sessionId, qr })
-  if (qr.count === 0) throw new Error('Invalid sessionId')
+  if (qr.length === 0) throw new Error('Invalid sessionId')
 
   return true
 }

@@ -1,11 +1,11 @@
 import moment from 'moment'
-import { executeQuery, executeCommand } from 'lib/server'
+import { takeAction } from 'lib/server'
 
 export async function loadIndex(){
   const key = `wiki:index`
   const errorKey = `wiki:index:error`
   try{
-    const { wikiIndex } = await executeQuery('getWikiIndex')
+    const { wikiIndex } = await takeAction('getWikiIndex')
     wikiIndex.pages.forEach(page => {
       page.last_viewed_at = moment(page.last_viewed_at).toDate()
       page.updated_at = moment(page.updated_at).toDate()
@@ -32,7 +32,7 @@ export async function loadPage({ path }){
   })
 
   try{
-    const { wikiPage } = await executeQuery('getWikiPage', { path })
+    const { wikiPage } = await takeAction('getWikiPage', { path })
     if (wikiPage){
       this.setState({ [pageKey]: wikiPage })
     }else{
@@ -68,7 +68,7 @@ export async function movePage({ path, newPath }){
 
   this.setState({ [movingKey]: true })
   try{
-    const { wikiPage } = await executeCommand('moveWikiPage', { path, newPath })
+    const { wikiPage } = await takeAction('moveWikiPage', { path, newPath })
     this.setState({
       [pageKey]: null,
       [`wiki:page:${wikiPage.path}`]: wikiPage,
@@ -99,7 +99,7 @@ export async function savePageEdits({ path }){
     [savingKey]: true,
   })
   try{
-    const { wikiPage } = await executeCommand(
+    const { wikiPage } = await takeAction(
       page ? 'updateWikiPage' : 'createWikiPage',
       { path, content },
     )
@@ -128,7 +128,7 @@ export async function deletePage({ path }){
     [deletingKey]: true,
   })
   try{
-    await executeCommand('deleteWikiPage', { path })
+    await takeAction('deleteWikiPage', { path })
     this.setState({
       [pageKey]: null,
       [errorKey]: undefined,
@@ -157,7 +157,7 @@ export async function loadPageHistory({ path }) {
     [errorKey]: undefined,
   })
   try{
-    const { wikiPageHistory } = await executeQuery('getWikiPageHistory', { path })
+    const { wikiPageHistory } = await takeAction('getWikiPageHistory', { path })
     wikiPageHistory.forEach(version => {
       // version.created_at = moment(version.created_at).toDate()
     })

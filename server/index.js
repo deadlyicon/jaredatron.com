@@ -9,10 +9,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const logger = require('./logger')('express')
-logger.info('EXPRESS','IS','STARTING!')
-logger._logger.info('?? EXPRESS','IS','STARTING!')
-const { executeCommand } = require('./commands')
-const { executeQuery } = require('./queries')
+const actions = require('./actions')
 
 const server = express()
 
@@ -31,40 +28,17 @@ if (process.env.NODE_ENV === 'development'){
 }
 server.use(express.static(PUBLIC_PATH))
 
-const loadSession = (req, res, next) => {
+server.post('/action/:actionName', bodyParser.json(), (req, res, next) => {
+  const { actionName } = req.params
+  const args = req.body
+  if (!(actionName in actions)){
+    res.status(400)
+    renderErrorAsJson(res, new Error(`unknown action ${actionName}`))
+    return
+  }
   const sessionId = req.header('Session-Id')
-  logger.debug('loadSession', { sessionId })
-  if (!sessionId) return next()
-  executeCommand({
-    logger,
-    commandName: 'verifyAndRefreshSession',
-    options: { sessionId },
-  }).then(
-    () => {
-      req.loggedIn = true
-      next()
-    },
-    next
-  )
-}
-
-server.get('/queries', loadSession, (req, res, next) => {
-  console.log('_$$$$', req.query)
-  const { loggedIn } = req
-  const { queryName } = req.query
-  const options = { loggedIn, ...JSON.parse(req.query.options) }
-  executeQuery({ logger, queryName, options }).then(
-    result => { res.json(result) },
-    error => { renderErrorAsJson(res, error) },
-  )
-})
-
-server.post('/commands', bodyParser.json(), loadSession, (req, res, next) => {
-  const { loggedIn } = req
-  const { commandName } = req.body
-  const options = { loggedIn, ...req.body.options }
-  executeCommand({ logger, commandName, options }).then(
-    result => { res.json(result) },
+  actions[actionName]({ ...args, logger, sessionId, actionName }).then(
+    result => { res.json({ ...result }) },
     error => { renderErrorAsJson(res, error) },
   )
 })

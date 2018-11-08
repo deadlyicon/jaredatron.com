@@ -8,7 +8,7 @@ import './index.sass'
 export default class Layout extends Component {
 
   logout = () => {
-    takeAction(this, 'logout')
+    takeAction(this, 'auth.logout')
   }
 
   render(){
