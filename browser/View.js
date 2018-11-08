@@ -16,23 +16,11 @@ import Layout from 'components/Layout'
 import KeydownTracker from 'components/KeydownTracker'
 
 export default class View extends Component {
-
-  goTo(path){
-    takeAction(this, 'location.set', path)
-  }
-
   render(){
-    return <KeydownTracker
-      g-h={() => { this.goTo('/') }}
-      g-w={() => { this.goTo('/wiki') }}
-      g-j={() => { this.goTo('/journal') }}
-      g-f={() => { this.goTo('/focus') }}
-    >
-      <AppState
-        keys={['location','loggedIn']}
-        Component={Router}
-      />
-    </KeydownTracker>
+    return <AppState
+      keys={['location','loggedIn']}
+      Component={Router}
+    />
   }
 }
 
@@ -49,10 +37,21 @@ const pathnameRouter = new PathnameRouter(map => {
   map('/:path*',            NotFoundPage)
 })
 
+const goTo = function(path){
+  takeAction(this, 'location.set', path)
+}
+
 const Router = function({ location, loggedIn }) {
-  // if (!loggedIn) return <LoginPage location={location} />
+  if (!loggedIn) return <LoginPage location={location} />
   const { Component, params } = pathnameRouter.resolve(location)
-  return <Layout>
-    <Component location={{...location, params}} />
-  </Layout>
+  return <KeydownTracker
+    g-h={() => { goTo('/') }}
+    g-w={() => { goTo('/wiki') }}
+    g-j={() => { goTo('/journal') }}
+    g-f={() => { goTo('/focus') }}
+  >
+    <Layout>
+      <Component location={{...location, params}} />
+    </Layout>
+  </KeydownTracker>
 }

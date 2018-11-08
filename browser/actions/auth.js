@@ -1,9 +1,10 @@
 import { executeCommand } from 'lib/server'
 
+export async function restoreSession({ }){
+
+}
+
 export async function login({ password }){
-  console.log({ password })
-  this.setState({ loggedIn: true })
-  return
   this.setState({
     loggingIn: true,
     loginError: undefined,
