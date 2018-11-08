@@ -1,7 +1,7 @@
 const YAML = require('js-yaml')
 const { pg } = require('../../database')
 
-module.exports = async function updateTodaysJournalEntry({ logger, id, body }){
+module.exports = async function updateTodaysJournalEntryCommand({ logger, id, body }){
   let todaysJournalEntry
   if (id) {
     [ todaysJournalEntry ] = await pg

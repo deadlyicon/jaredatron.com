@@ -39,7 +39,7 @@ export async function loadPage({ path }){
       this.setState({ [pageKey]: null })
       if (path.includes(' ')) {
         this.takeAction(
-          'replaceLocation',
+          'location.replace',
           `/wiki/${encodeURIComponent(path.replace(/\s+/g,'-'))}`
         )
       }
@@ -74,7 +74,7 @@ export async function movePage({ path, newPath }){
       [`wiki:page:${wikiPage.path}`]: wikiPage,
       [errorKey]: undefined,
     })
-    this.takeAction('replaceLocation', `/wiki/${wikiPage.path}`)
+    this.takeAction('location.replace', `/wiki/${wikiPage.path}`)
   }catch(error){
     this.setState({ [errorKey]: error })
   }finally{

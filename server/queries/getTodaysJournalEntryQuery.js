@@ -1,6 +1,6 @@
 const { pg } = require('../../database')
 
-module.exports = async function getTodaysJournalEntry({ logger }){
+module.exports = async function getTodaysJournalEntryQuery({ logger }){
   let todaysJournalEntry = await pg
     .select('*')
     .from('journal_entries')

@@ -29,7 +29,7 @@ export default class WikiPage extends Page {
     if (!path) return
     const normalizedPath = path.toLowerCase().replace(/\s+/g,'-')
     if (path !== normalizedPath){
-      takeAction(this, 'replaceLocation', `/wiki/${normalizedPath}`)
+      takeAction(this, 'location.replace', `/wiki/${normalizedPath}`)
     }
   }
 

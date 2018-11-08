@@ -85,8 +85,12 @@ const JournalEntries = ({ journalEntries }) =>
       {journalEntries.map(journalEntry =>
         <tr key={journalEntry.id}>
           <td>
-            <Link type="link" href={`/journal/entry/${journalEntry.id}`}>
-              {journalEntry.body.split("\n")[0]}
+            <Link
+              type="link"
+              href={`/journal/entry/${journalEntry.id}`}
+              className="JournalEntriesPage-entryLink"
+            >
+              {journalEntry.body.split("\n")[0] || <i>empty</i>}
             </Link>
           </td>
           <td>

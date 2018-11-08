@@ -1,11 +1,11 @@
 import moment from 'moment'
-import { executeQuery, executeCommand } from 'lib/server'
+import { takeAction } from 'lib/server'
 
 export async function loadEntries(){
   const key = `journal:entries`
   const loadErrorKey = `journal:entries:loadError`
   try{
-    const { journalEntries } = await executeQuery('getJournalEntries')
+    const { journalEntries } = await takeAction('getJournalEntries')
     journalEntries.forEach(journalEntry => {
       journalEntry.created_at = moment(journalEntry.created_at).toDate()
       journalEntry.updated_at = moment(journalEntry.updated_at).toDate()
@@ -20,7 +20,7 @@ export async function loadTodaysEntry(){
   const key = `journal:today`
   const loadErrorKey = `journal:today:loadError`
   try{
-    const { todaysJournalEntry } = await executeQuery('getTodaysJournalEntry')
+    const { todaysJournalEntry } = await takeAction('getTodaysJournalEntry')
     this.setState({ [key]: todaysJournalEntry })
   }catch(error){
     this.setState({ [loadErrorKey]: error })
@@ -45,7 +45,7 @@ export async function updateTodaysEntry({ id, body }){
     [updateErrorKey]: undefined,
   })
   try{
-    const { todaysJournalEntry } = await executeCommand('updateTodaysJournalEntry', { id, body })
+    const { todaysJournalEntry } = await takeAction('updateTodaysJournalEntry', { id, body })
     this.setState({
       [updatingKey]: undefined,
       [key]: todaysJournalEntry,
