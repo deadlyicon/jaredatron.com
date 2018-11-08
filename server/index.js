@@ -57,4 +57,10 @@ const renderErrorAsJson = function(res, error){
   })
 }
 
+server.start = function(){
+  server.listen(process.env.PORT, () => {
+    logger.info(`server started at http://localhost:${process.env.PORT}`, { env: process.env.NODE_ENV })
+  })
+}
+
 module.exports = server

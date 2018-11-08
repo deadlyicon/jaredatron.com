@@ -1,6 +1,6 @@
 'use strict'
 
-const util = require('util')
+const objectInspect = require('object-inspect')
 const winston = require('winston')
 
 const {
@@ -11,8 +11,7 @@ const {
 const LOG_LEVEL = process.env.LOG_LEVEL || 'debug';
 const transports = []
 
-const inspect = object =>
-  util.inspect(object, { showHidden: true, depth: null })
+const inspect = object => objectInspect(object, { depth: 9999, indent: 2 })
 
 const formatArgs = args =>
   args.map(arg =>

@@ -1,7 +1,3 @@
 #!/usr/bin/env node
 
-const server = require('../server')
-
-server.listen(process.env.PORT, () => {
-  console.log(`server started at http://localhost:${process.env.PORT}`)
-})
+require('../server').start()
