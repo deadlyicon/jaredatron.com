@@ -23,9 +23,9 @@ server.use(
   })
 );
 
-if (process.env.NODE_ENV === 'development'){
-  require('./development')(server)
-}
+if (process.env.NODE_ENV === 'development') require('./development')(server)
+if (process.env.NODE_ENV === 'production') require('./production')(server)
+
 server.use(express.static(PUBLIC_PATH))
 
 server.post('/action/:actionName', bodyParser.json(), (req, res, next) => {

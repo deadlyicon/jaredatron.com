@@ -8,7 +8,6 @@ module.exports = async function verifyAndRefreshSession({ sessionId }){
     .where({ session_id: sessionId })
     .returning('*')
 
-  console.log('verifyAndRefreshSession', { sessionId, qr })
   if (qr.length === 0) throw new Error('Invalid sessionId')
 
   return true
