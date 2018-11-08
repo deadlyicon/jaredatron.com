@@ -16,6 +16,7 @@ import './index.sass'
 export default class WikiPage extends Page {
 
   componentDidMount(){
+    super.componentDidMount()
     this.normalizePath(this.props.location.params.path)
   }
 

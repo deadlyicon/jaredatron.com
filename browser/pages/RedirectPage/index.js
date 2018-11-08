@@ -11,6 +11,7 @@ export default class RedirectPage extends Page {
   // }
 
   componentDidMount(){
+    super.componentDidMount()
     takeAction(this, 'location.replace', this.props.location.params.redirectTo)
   }
 

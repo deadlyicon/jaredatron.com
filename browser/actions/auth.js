@@ -11,10 +11,11 @@ export async function login({ password }){
   })
   try{
     const { sessionId } = await takeAction('login', { password })
+    setSessionId(sessionId)
     this.setState({
       loggedIn: true,
+      loginError: undefined,
     })
-    setSessionId(sessionId)
   }catch(loginError){
     console.error(loginError)
     this.setState({ loginError })
@@ -29,5 +30,6 @@ export async function logout(){
   setSessionId(undefined)
   this.setState({
     loggedIn: false,
+    loginError: undefined,
   })
 }

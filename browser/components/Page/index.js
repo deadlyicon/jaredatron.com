@@ -6,6 +6,10 @@ import './index.sass'
 
 export default class Page extends Component {
 
+  componentDidMount(){
+    window.scrollTo(0,0)
+  }
+
   static propTypes = {
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
