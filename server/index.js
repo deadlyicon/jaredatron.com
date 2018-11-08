@@ -48,6 +48,7 @@ server.get('*', (req, res, next) => {
 })
 
 const renderErrorAsJson = function(res, error){
+  logger.error(error)
   res.json({
     error: {
       message: error.message,
