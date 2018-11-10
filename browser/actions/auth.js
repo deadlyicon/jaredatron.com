@@ -1,7 +1,7 @@
 import { setSessionId, takeAction } from 'lib/server'
 
 export async function restoreSession(){
-  this.setState({ loggedIn: !!sessionStorage.sessionId })
+  this.setState({ loggedIn: !!localStorage.sessionId })
 }
 
 export async function login({ password }){

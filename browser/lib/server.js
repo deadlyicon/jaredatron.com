@@ -1,13 +1,13 @@
 import querystring from 'querystring'
 import logger from 'lib/logger'
 
-let sessionId = sessionStorage.sessionId
+let sessionId = localStorage.sessionId
 export async function setSessionId(_sessionId){
   if (typeof _sessionId === 'undefined'){
-    delete sessionStorage.sessionId
+    delete localStorage.sessionId
     sessionId = undefined
   }else{
-    sessionStorage.sessionId = sessionId = _sessionId
+    localStorage.sessionId = sessionId = _sessionId
   }
 }
 
