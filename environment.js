@@ -1,7 +1,7 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
 const path = require('path')
-require('dotenv').config()
+if (process.env.NODE_ENV === 'development') require('dotenv').config()
 
 const ROOT_PATH = path.resolve(__dirname)
 const BROWSER_PATH = path.resolve(ROOT_PATH, 'browser')
