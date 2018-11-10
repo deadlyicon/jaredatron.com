@@ -20,7 +20,6 @@ export default class JournalEntriesPage extends Page {
 
   render(){
     const { } = this.props.location.params
-    // const keys =
     return <AppState
       keys={{
         journalEntries: 'journal:entries',
