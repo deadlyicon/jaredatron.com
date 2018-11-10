@@ -5,10 +5,9 @@
   "description": "my personal and private website",
   "scripts": {
     "start": "./scripts/start",
-    "start:dev": "./scripts/start-dev",
-    "build": "webpack --mode production",
-    "XXX_start:webpack": "webpack-dev-server --mode development --devtool inline-source-map --hot",
-    "XXX_dev": "concurrently \"npm run start:dev\" \"npm run start:webpack\"",
+  "start:dev": "./scripts/start-dev",
+    "build": "webpack --mode production --config ./webpack.config.js --progress --colors",
+    "heroku-postbuild": "npm run build",
     "test": "./scripts/test"
   },
   "repository": {
