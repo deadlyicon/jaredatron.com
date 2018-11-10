@@ -5,7 +5,7 @@
   "description": "my personal and private website",
   "scripts": {
     "start": "./scripts/start",
-  "start:dev": "./scripts/start-dev",
+    "start:dev": "./scripts/start-dev",
     "build": "webpack --mode production --config ./webpack.config.js --progress --colors",
     "heroku-postbuild": "npm run build",
     "test": "./scripts/test"
