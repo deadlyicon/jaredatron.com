@@ -11,7 +11,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
 
-
 const outputPath = PUBLIC_PATH
 
 module.exports = {
@@ -101,6 +100,18 @@ module.exports = {
         minifyURLs: true
       }
     }),
-    new ManifestPlugin(),
+    new ManifestPlugin({
+      seed: {
+        name: 'jaredatron',
+        version: '1.0',
+        permissions: [
+          'storage',
+          'unlimitedStorage',
+          'privacy',
+          'clipboardRead',
+          'clipboardWrite',
+        ]
+      },
+    }),
   ],
 }
