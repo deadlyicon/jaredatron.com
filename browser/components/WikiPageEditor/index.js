@@ -74,7 +74,6 @@ class WikiPageEditorContent extends PureComponent {
     if (metaKey && !shiftKey){
       if (key === 'e') {
         event.preventDefault()
-        console.warn('e pressed')
         this.state.editing ? this.cancel() : this.edit()
       }
       if (key === 'p') {
@@ -172,7 +171,6 @@ class WikiPageEditorContent extends PureComponent {
     if (editing) className += ` WikiPageEditor-editing`
     if (previewing) className += ` WikiPageEditor-previewing`
 
-    console.warn({ newPage, editing })
     return <div className={className}>
 
       {confirmingReset && <ConfirmationDialog

@@ -32,7 +32,6 @@ export async function loadPage({ path }){
 
   try{
     const { wikiPage } = await takeAction('getWikiPage', { path })
-    console.warn({ wikiPage })
     if (wikiPage){
       this.setState({ [pageKey]: wikiPage })
     }else{

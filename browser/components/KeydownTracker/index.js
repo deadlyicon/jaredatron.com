@@ -30,7 +30,6 @@ export default class KeydownTracker extends PureComponent {
     const { target, metaKey, shiftKey, key } = event
     if (['INPUT', 'TEXTAREA'].includes(target.nodeName)) return
     if (!key.match(/[a-z0-9]/i)) return
-    console.log({ metaKey, shiftKey, key }, event)
 
     const combos = Object.entries(this.props)
 
