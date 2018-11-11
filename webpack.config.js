@@ -13,6 +13,8 @@ const ManifestPlugin = require('webpack-manifest-plugin')
 
 const outputPath = PUBLIC_PATH
 
+const development = NODE_ENV === 'development'
+
 module.exports = {
   mode: NODE_ENV,
   context: BROWSER_PATH,
@@ -33,7 +35,7 @@ module.exports = {
       // actions: `${srcPath}/${packageName}/actions`,
     }
   },
-  devtool: NODE_ENV === 'development' ? 'sourcemap' : undefined,
+  devtool: development ? 'sourcemap' : undefined,
   module: {
     rules: [
       {
@@ -88,16 +90,16 @@ module.exports = {
       template: `${BROWSER_PATH}/index.html`,
       favicon: `${BROWSER_PATH}/favicon.ico`,
       minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true
+        removeComments: !development,
+        collapseWhitespace: !development,
+        removeRedundantAttributes: !development,
+        useShortDoctype: !development,
+        removeEmptyAttributes: !development,
+        removeStyleLinkTypeAttributes: !development,
+        keepClosingSlash: !development,
+        minifyJS: !development,
+        minifyCSS: !development,
+        minifyURLs: !development,
       }
     }),
     new ManifestPlugin({
