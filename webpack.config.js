@@ -9,6 +9,8 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
+
 
 const outputPath = PUBLIC_PATH
 
@@ -98,6 +100,7 @@ module.exports = {
         minifyCSS: true,
         minifyURLs: true
       }
-    })
-  ]
+    }),
+    new ManifestPlugin(),
+  ],
 }
