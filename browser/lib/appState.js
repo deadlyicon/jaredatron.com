@@ -98,8 +98,8 @@ const setState = function(actor, changes){
     }
   })
   // publishOnNextAnimationFrame()
-  // publishOnNextTick()
-  publish()
+  publishOnNextTick()
+  // publish()
 }
 
 const resetState = function(actor) {
