@@ -218,10 +218,10 @@ class WikiPageEditorContent extends PureComponent {
         saving  ? <div>saving…</div> :
         <Markdown source={content} />
       }
-      { (newPage || editing) && <Editor
+      { (newPage || editing) && !loading && <Editor
           autoFocus
           className="WikiPageEditor-Editor"
-          value={content}
+          value={content || ''}
           onChange={edits => {
             takeAction(this, 'wiki.updatePageEdits', { path, edits })
           }}
