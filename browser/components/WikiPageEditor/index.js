@@ -53,11 +53,10 @@ class WikiPageEditorContent extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps){
-    if (this.props.path !== nextProps.path)
+    if (this.props.path !== nextProps.path){
       this.onPageChange(nextProps.path)
-
-    if (!nextProps.loading && !nextProps.page)
-      this.edit()
+      if (!nextProps.loading && !nextProps.page) this.edit()
+    }
   }
 
   componentDidMount(){
