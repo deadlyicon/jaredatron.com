@@ -9,7 +9,8 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ManifestPlugin = require('webpack-manifest-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+
 
 const outputPath = PUBLIC_PATH
 
@@ -103,18 +104,26 @@ module.exports = {
         minifyURLs: !development,
       }
     }),
-    new ManifestPlugin({
-      seed: {
-        name: 'jaredatron',
-        version: '1.0',
-        permissions: [
-          'storage',
-          'unlimitedStorage',
-          'privacy',
-          'clipboardRead',
-          'clipboardWrite',
-        ]
-      },
+    new WebpackPwaManifest({
+      name: 'jaredatron',
+      short_name: 'jaredatron',
+      version: '1.0',
+      description: 'jaredatron.com',
+      background_color: '#c50900',
+      crossorigin: 'use-credentials',
+      icons: [
+        {
+          src: `${BROWSER_PATH}/ios-icon.png`,
+          sizes: [96, 128, 144, 192, 256, 384, 512]
+        }
+      ],
+      permissions: [
+        'storage',
+        'unlimitedStorage',
+        'privacy',
+        'clipboardRead',
+        'clipboardWrite',
+      ],
     }),
   ],
 }
