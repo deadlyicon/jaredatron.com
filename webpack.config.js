@@ -10,6 +10,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 
 
 const outputPath = PUBLIC_PATH
@@ -19,10 +20,10 @@ const development = NODE_ENV === 'development'
 module.exports = {
   mode: NODE_ENV,
   context: BROWSER_PATH,
-  entry: [
-    './polyfills.js',
-    './index.js',
-  ],
+  entry: {
+    index: './index.js',
+    serviceworker: './serviceworker.js'
+  },
   output: {
     path: outputPath,
     filename: 'assets/[name].[hash].js',
@@ -87,7 +88,11 @@ module.exports = {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new CleanWebpackPlugin([outputPath]),
+    new ServiceWorkerWebpackPlugin({
+      entry: `${BROWSER_PATH}/serviceworker.js`,
+    }),
     new HtmlWebpackPlugin({
+      excludeChunks: [ 'serviceworker' ],
       inject: true,
       template: `${BROWSER_PATH}/index.html`,
       favicon: `${BROWSER_PATH}/favicon.ico`,
@@ -111,6 +116,7 @@ module.exports = {
       description: 'jaredatron.com',
       background_color: '#c50900',
       crossorigin: 'use-credentials',
+      display: 'standalone',
       icons: [
         {
           src: `${BROWSER_PATH}/ios-icon.png`,
