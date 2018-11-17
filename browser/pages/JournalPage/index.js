@@ -52,12 +52,14 @@ class JournalPageContent extends PureComponent {
         }
         </span>
       </div>
-      <Editor
-        autoFocus
-        className="JournalPage-Editor"
-        value={changes || (journalEntry && journalEntry.body) || ''}
-        onChange={this.onChange}
-      />
+      { journalEntry &&
+        <Editor
+          autoFocus
+          className="JournalPage-Editor"
+          defaultValue={journalEntry.body}
+          onChange={this.onChange}
+        />
+      }
     </div>
   }
 }

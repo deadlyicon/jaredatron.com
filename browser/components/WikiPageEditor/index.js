@@ -180,7 +180,7 @@ class WikiPageEditorContent extends PureComponent {
           this.setState({ confirmingReset: false })
           const edits = newPage ? undefined : page.content
           takeAction(this, 'wiki.updatePageEdits', { path, edits })
-          this.focusEditor()
+          this.cancel()
         }}
         onCancel={() => {
           this.setState({ confirmingReset: false })
@@ -223,7 +223,7 @@ class WikiPageEditorContent extends PureComponent {
       { (newPage || editing) && !loading && <Editor
           autoFocus
           className="WikiPageEditor-Editor"
-          value={content || ''}
+          defaultValue={content}
           onChange={edits => {
             takeAction(this, 'wiki.updatePageEdits', { path, edits })
           }}

@@ -6,7 +6,8 @@ import './index.sass'
 export default class Editor extends PureComponent {
 
   static propTypes = {
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    defaultValue: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     className: PropTypes.string,
   }
@@ -16,14 +17,17 @@ export default class Editor extends PureComponent {
     this.textarea.selectionEnd = 0
   }
 
+  onChange = (event) => {
+    if (this.props.onChange) this.props.onChange(event.target.value)
+  }
+
   render(){
-    const { value, onChange, className = '', ...props } = this.props
+    const { className = '', ...props } = this.props
     return <div className={`Editor ${className}`}>
       <textarea
         {...props}
         ref={node => { this.textarea = node }}
-        value={value}
-        onChange={event => { onChange(event.target.value) }}
+        onChange={this.onChange}
       />
     </div>
   }
