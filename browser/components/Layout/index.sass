@@ -8,10 +8,11 @@
   &-topnav
     height: $topnav-height
     background: black
-    color: white
+    color: $darkred
     padding: 2px 1em
     display: flex
     flex-direction: row
+    line-height: 23px
     &-spacer
       flex: 1 1
 
@@ -23,4 +24,4 @@
 
   &-main
     min-height: calc(100vh - #{$topnav-height})
-    height: 1px
+    // height: 1px // why was this here? some hack?

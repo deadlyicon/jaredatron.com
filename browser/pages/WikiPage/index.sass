@@ -1,3 +1,5 @@
+@import "../../style/variables"
+
 .WikiPage
   min-height: 100%
   padding: 1em 0
@@ -8,20 +10,35 @@
 
   .WikiIndexPage > input
     margin: 0 1em 1em 1em
+    padding: 2px 5px
+    background-color: black
+    color: white
+    border-color: $darkred
+    outline-color: $darkred
 
   .WikiPagesListMember
     display: flex
     flex-direction: row
     &:hover
-      background-color: lightgrey
+      background-color: $darkred
+      color: $white
+
     > *
       flex: 0 0 130px
       white-space: nowrap
       overflow: hidden
       text-overflow: ellipsis
-      padding: 0 1em
-      &:first-child
+      // padding: 0 1em
+      &:first-child // first column
         flex: 1 1
+        .Link
+          display: block
+          padding: 0 1em
+    .TimeAgo
+      color: #966b6b
+    // &:first-child // first row
+    //   > *:first-child
+    //     padding: 0 1em
 
   .WikiPageEditor,
   .WikiPageHistory
