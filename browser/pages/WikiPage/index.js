@@ -106,7 +106,7 @@ class IndexPage extends PureComponent {
 const WikiPagesList = function(props){
   const asc = props.asc === '1'
   const filter = props.filter ? props.filter.toLowerCase() : null
-  const sortBy = props.sortBy || 'last_viewed_at'
+  const sortBy = props.sortBy || 'updated_at'
 
   let pages = props.pages
 
