@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+DUMP_FILE=./tmp/latest.dump
+DATABASE_URL=`./scripts/database-url`
+
+heroku pg:backups:capture
+heroku pg:backups:download --output $DUMP_FILE
+pg_restore --verbose --clean --no-acl --no-owner -d "$DATABASE_URL" $DUMP_FILE
+
