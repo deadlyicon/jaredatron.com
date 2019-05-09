@@ -1,35 +1,4 @@
-import querystring from 'querystring'
-import history from 'lib/history'
-
-export const searchToObject = (search) => {
-  return querystring.parse((search || '').replace(/^\?/, ''))
-}
-
-const objectToSearch = (object) => {
-  if (!object) return
-  object = Object.filter(object, (key, value) =>
-    value !== null && value !== undefined
-  )
-  if (Object.keys(object).length === 0) return
-  return querystring.stringify(object)
-}
-
-const getLocation = () => {
-  const pathname = window.location.pathname
-  const params = searchToObject(window.location.search)
-  return {
-    pathname,
-    params,
-  }
-}
-
-const locationToHref = location => {
-  if (typeof location === 'string') return location
-  let href = location.pathname
-  let query = objectToSearch(location.query)
-  if (query) href += '?' + query
-  return href
-}
+import { getLocation, setLocation, replaceLocation } from 'lib/location'
 
 export const publish = function(){
   const lastLocation = this.getState().location
@@ -43,21 +12,9 @@ export const publish = function(){
 }
 
 export const set = function(location){
-  history.pushState(null, window.document.title, locationToHref(location))
+  setLocation(location)
 }
 
-export const replace = function(location){
-  history.replaceState(null, window.document.title, locationToHref(location))
-}
-
-export const setParams = function(params) {
-  let { location } = this.getState()
-  const query = { ...location.params, ...params }
-  set.call(this, { ...location, query })
-}
-
-export const replaceParams = function(params) {
-  let { location } = this.getState()
-  const query = { ...location.params, ...params }
-  replace.call(this, { ...location, query })
+export function replace(location){
+  replaceLocation(location)
 }
