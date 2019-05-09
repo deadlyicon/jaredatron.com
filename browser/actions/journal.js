@@ -19,8 +19,9 @@ export async function loadEntries(){
 export async function loadTodaysEntry(){
   const key = `journal:today`
   const loadErrorKey = `journal:today:loadError`
+  const timezoneOffset = ((new Date()).getTimezoneOffset() / 60);
   try{
-    const { todaysJournalEntry } = await takeAction('getTodaysJournalEntry')
+    const { todaysJournalEntry } = await takeAction('getTodaysJournalEntry', { timezoneOffset })
     this.setState({ [key]: todaysJournalEntry })
   }catch(error){
     this.setState({ [loadErrorKey]: error })

@@ -8,6 +8,13 @@ const config = parseDatabaseUrl(process.env.DATABASE_URL);
 const pg = require('knex')({
   client: 'pg',
   connection: process.env.DATABASE_URL,
+  pool: {
+    afterCreate: function (client, done) {
+      client.query('SET timezone="UTC";', function (error) {
+        done(error, client);
+      });
+    }
+  }
 })
 
 pg.on('start', sqlQuery => {

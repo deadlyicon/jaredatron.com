@@ -9,4 +9,5 @@ DATABASE_URL=`./scripts/database-url`
 heroku pg:backups:capture
 heroku pg:backups:download --output $DUMP_FILE
 pg_restore --verbose --clean --no-acl --no-owner -d "$DATABASE_URL" $DUMP_FILE
+psql "$DATABASE_URL" -c "SET timezone = 'UTC'"
 
