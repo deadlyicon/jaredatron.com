@@ -20,16 +20,6 @@ export function update(){
   const currentLocation = currentRoute && currentRoute.location
   const newLocation = getLocation()
 
-  const currentLocationHref = currentLocation && locationToHref(currentLocation)
-  const newLocationHref = locationToHref(newLocation)
-
-  console.warn(`[router.update]`, [currentLocationHref, newLocationHref])
-
-  if (currentLocation && locationToHref(currentLocation) === locationToHref(newLocation)){
-    console.warn('[router.update] locations are the same. skipping…')
-    return
-  }
-
   const setRoute = ({ page, layout, props }) => {
     this.setState({
       route: {location: newLocation, page, layout, props}
