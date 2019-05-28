@@ -5,6 +5,11 @@ const HISTORY_SIZE = 10
 
 export default class KeydownTracker extends PureComponent {
 
+  static propTypes = {
+    combos: PropTypes.objectOf(
+      PropTypes.func.isRequired,
+    ).isRequired,
+  }
   componentDidMount(){
     this.clear()
     document.addEventListener('keydown', this.onDocumentKeyDown)
@@ -31,7 +36,7 @@ export default class KeydownTracker extends PureComponent {
     if (['INPUT', 'TEXTAREA'].includes(target.nodeName)) return
     if (!key.match(/[a-z0-9]/i)) return
 
-    const combos = Object.entries(this.props)
+    const combos = Object.entries(this.props.combos)
 
     for(const [combo, callback] of combos){
       if (combo === 'children') continue

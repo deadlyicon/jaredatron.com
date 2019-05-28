@@ -16,12 +16,7 @@ import KeydownTracker from 'components/KeydownTracker'
 export default class View extends Component {
   render(){
     const goTo = path => { takeAction(this, 'location.set', path) }
-    return <KeydownTracker
-      g-h={() => { goTo('/') }}
-      g-w={() => { goTo('/wiki') }}
-      g-j={() => { goTo('/journal') }}
-      g-f={() => { goTo('/focus') }}
-    >
+    return <KeydownTracker combos={keydownSequences}>
       <AppState
         keys={['route']}
         Component={Page}
@@ -45,4 +40,12 @@ const Page = ({ route }) => {
   const Page = PAGES[route.page] || NotFoundPage
   const page = <Page location={route.location} {...route.props} />
   return route.layout ? <Layout>{page}</Layout> : page
+}
+
+const goTo = path => { takeAction('View', 'location.set', path) }
+const keydownSequences = {
+  'g-h': () => { goTo('/') },
+  'g-w': () => { goTo('/wiki') },
+  'g-j': () => { goTo('/journal') },
+  'g-f': () => { goTo('/focus') },
 }
