@@ -65,7 +65,7 @@ const createContext = actor => {
 }
 
 export const initializeAppState = function(initializer){
-  const context = createContext('initializeAppState')
+  const context = createContext('App')
   delete context.setState
   context.defineActions = defineActions
   initializer.call(context)

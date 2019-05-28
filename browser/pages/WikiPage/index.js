@@ -14,27 +14,8 @@ import InspectObject from 'components/InspectObject'
 import './index.sass'
 
 export default class WikiPage extends Page {
-
-  componentDidMount(){
-    super.componentDidMount()
-    this.normalizePath(this.props.location.params.path)
-  }
-
-  componentWillReceiveProps(nextProps){
-    if (this.props.location.params.path !== nextProps.location.params.path)
-      this.normalizePath(nextProps.location.params.path)
-  }
-
-  normalizePath(path){
-    if (!path) return
-    const normalizedPath = path.toLowerCase().replace(/\s+/g,'-')
-    if (path !== normalizedPath){
-      takeAction(this, 'location.replace', `/wiki/${normalizedPath}`)
-    }
-  }
-
   render(){
-    const { path, sortBy, asc, f: filter, history } = this.props.location.params
+    const { path, sortBy, asc, f: filter, history } = this.props
 
     return <div className="WikiPage">
       { path

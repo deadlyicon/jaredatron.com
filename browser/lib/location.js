@@ -30,12 +30,16 @@ export const locationToHref = location => {
   return href
 }
 
-export const setLocation = function(location){
-  history.pushState(null, window.document.title, locationToHref(location))
+export const setLocation = function(location, replace = false){
+  history[replace ? 'replaceState' : 'pushState'](
+    null,
+    window.document.title,
+    locationToHref(location)
+  )
 }
 
 export const replaceLocation = function(location){
-  history.replaceState(null, window.document.title, locationToHref(location))
+  setLocation(location, true)
 }
 
 export const setParams = function(params, location = getLocation(), replace = false) {
@@ -44,10 +48,9 @@ export const setParams = function(params, location = getLocation(), replace = fa
 }
 
 export const replaceParams = function(params, location) {
-  replaceParams(params, location, true)
+  setParams(params, location, true)
 }
 
-export const setPathname = function(pathname){
-  const { params } = getLocation()
-  setLocation({ pathname, params })
+export const setPathname = function(pathname, location = getLocation()){
+  setLocation({ ...location, params })
 }

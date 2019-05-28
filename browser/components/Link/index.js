@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import querystring from 'querystring'
 import history from 'lib/history'
-// import { StatefulComponent } from 'lib/appState'
 import './index.sass'
 
-export default class Link extends Component {
+export default class Link extends PureComponent {
 
   static propTypes = {
     children: PropTypes.node,

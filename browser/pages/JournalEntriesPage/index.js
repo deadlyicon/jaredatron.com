@@ -14,10 +14,6 @@ import './index.sass'
 
 export default class JournalEntriesPage extends Page {
 
-  componentWillMount(){
-    takeAction(this, 'journal.loadEntries')
-  }
-
   render(){
     const { } = this.props.location.params
     return <AppState

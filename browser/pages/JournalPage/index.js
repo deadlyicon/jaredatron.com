@@ -10,9 +10,6 @@ import './index.sass'
 
 export default class JournalPage extends Page {
 
-  componentWillMount(){
-    takeAction(this, 'journal.loadTodaysEntry')
-  }
 
   render(){
     const { } = this.props.location.params

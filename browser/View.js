@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
 import { AppState, takeAction } from 'lib/appState'
-import PathnameRouter from 'lib/PathnameRouter'
 
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
@@ -17,41 +15,34 @@ import KeydownTracker from 'components/KeydownTracker'
 
 export default class View extends Component {
   render(){
-    return <AppState
-      keys={['location','loggedIn']}
-      Component={Router}
-    />
+    const goTo = path => { takeAction(this, 'location.set', path) }
+    return <KeydownTracker
+      g-h={() => { goTo('/') }}
+      g-w={() => { goTo('/wiki') }}
+      g-j={() => { goTo('/journal') }}
+      g-f={() => { goTo('/focus') }}
+    >
+      <AppState
+        keys={['route']}
+        Component={Page}
+      />
+    </KeydownTracker>
   }
 }
 
-const pathnameRouter = new PathnameRouter(map => {
-  map('/',                  HomePage)
-  map('/wiki',              WikiPage)
-  map('/wiki/:path*',       WikiPage)
-  map('/journal',           JournalPage)
-  map('/journal/entries',   JournalEntriesPage)
-  map('/journal/entry/:id', JournalEntryPage)
-  // map('/tracking',         TrackingPage)
-  // map('/tracking/:type',   TrackingPage)
-  map('/focus',             RedirectPage, { redirectTo: '/wiki/focus' })
-  map('/:path*',            NotFoundPage)
-})
-
-const goTo = function(path){
-  takeAction(this, 'location.set', path)
+const PAGES = {
+  LoginPage,
+  HomePage,
+  WikiPage,
+  JournalPage,
+  JournalEntriesPage,
+  JournalEntryPage,
+  RedirectPage,
+  NotFoundPage,
 }
-
-const Router = function({ location, loggedIn }) {
-  if (!loggedIn) return <LoginPage location={location} />
-  const { Component, params } = pathnameRouter.resolve(location)
-  return <KeydownTracker
-    g-h={() => { goTo('/') }}
-    g-w={() => { goTo('/wiki') }}
-    g-j={() => { goTo('/journal') }}
-    g-f={() => { goTo('/focus') }}
-  >
-    <Layout>
-      <Component location={{...location, params}} />
-    </Layout>
-  </KeydownTracker>
+const Page = ({ route }) => {
+  if (!route || !route.page) return <div>loading…</div>
+  const Page = PAGES[route.page] || NotFoundPage
+  const page = <Page location={route.location} {...route.props} />
+  return route.layout ? <Layout>{page}</Layout> : page
 }

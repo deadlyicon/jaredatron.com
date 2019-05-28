@@ -13,13 +13,8 @@ import './index.sass'
 
 export default class JournalEntryPage extends Page {
 
-  componentWillMount(){
-    // const id = this.pageId()
-    takeAction(this, 'journal.loadEntries')
-  }
-
   render(){
-    const { id } = this.props.location.params
+    const { id } = this.props
     // const keys =
     return <AppState
       keys={{

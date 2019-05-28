@@ -1,4 +1,3 @@
-// import App from 'lib/App'
 import history from 'lib/history'
 import { initializeAppState } from 'lib/appState'
 import * as actions from './actions'
@@ -9,20 +8,10 @@ initializeAppState(function(){
 
   this.takeAction('auth.restoreSession')
 
-  // this.takeAction('setScreenSize')
-  // this.takeAction('restoreSession')
-  this.takeAction('location.publish')
-
-
-  // window.addEventListener('popstate', () => {
   history.subscribe(() => {
-    this.takeAction('location.publish')
+    this.takeAction('router.update')
   })
-
-  // api.on('unauthorized', () => {
-  //   console.warn('logging out because of unauthorized error')
-  //   this.takeAction('logout', {post: false})
-  // })
+  this.takeAction('router.update')
 
   window.addEventListener('online',  event => {
     console.log('INTERNET on');
@@ -42,15 +31,4 @@ initializeAppState(function(){
     }
   })
 
-  // window.addEventListener('resize', () => {
-  //   this.takeAction('setScreenSize')
-  // })
-
 })
-
-// const app = new App(function() {
-//   this.defineActions(actions)
-//   this.takeAction('publishLocation')
-// })
-
-// export default app
