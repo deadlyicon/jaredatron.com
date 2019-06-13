@@ -5,7 +5,6 @@ import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import WikiPage from './pages/WikiPage'
 import JournalPage from './pages/JournalPage'
-import JournalEntriesPage from './pages/JournalEntriesPage'
 import JournalEntryPage from './pages/JournalEntryPage'
 import RedirectPage from './pages/RedirectPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -30,7 +29,6 @@ const PAGES = {
   HomePage,
   WikiPage,
   JournalPage,
-  JournalEntriesPage,
   JournalEntryPage,
   RedirectPage,
   NotFoundPage,
