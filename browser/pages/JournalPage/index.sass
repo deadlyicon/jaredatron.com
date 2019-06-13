@@ -1,11 +1,40 @@
 .JournalPage
-  padding: 1em 1em 1em 1em
-  overflow: hidden
+  padding: 0 1em 1em 1em
+
   &-controls
     display: flex
-    justify-content: space-between
-    margin-bottom: 1em
-  &-status
-    color: red
+    flex-direction: row
+    justify-content: flex-end
+
   &-Editor
-    min-height: calc(100vh - 120px)
+    height: calc(100vh - 140px)
+
+  &-week
+    margin-bottom: 10px
+    > .Header
+      margin-top: 1em
+      text-align: center
+
+  table
+    table-layout: fixed
+    width: 100%
+    border-collapse: collapse
+    border-spacing: 0
+    tr
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+    th
+      text-align: left
+      opacity: 0.7
+      font-size: 80%
+    th, td
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      padding: 5px 0
+      &:nth-child(1)
+        width: 150px
+      &:nth-child(2)
+        width: auto
+
+  &-entryLink
+    display: block

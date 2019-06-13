@@ -12,7 +12,11 @@ const FORMATS = Object.freeze({
 export default class DateTime extends PureComponent {
 
   static propTypes = {
-    date: PropTypes.instanceOf(Date),
+    date: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+      PropTypes.instanceOf(moment),
+    ]).isRequired,
     format: PropTypes.oneOf(Object.keys(FORMATS)).isRequired,
   }
 

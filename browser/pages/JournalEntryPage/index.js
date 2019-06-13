@@ -12,7 +12,6 @@ import InspectObject from 'components/InspectObject'
 import './index.sass'
 
 export default class JournalEntryPage extends Page {
-
   render(){
     const { id } = this.props
     // const keys =
@@ -27,17 +26,16 @@ export default class JournalEntryPage extends Page {
   }
 }
 
-
 class JournalEntryPageContent extends PureComponent {
   render(){
     const { id, journalEntries, loadError } = this.props
-    const journalEntry = journalEntries &&
-      journalEntries.find(j => j.id === id)
+    const journalEntry = journalEntries && journalEntries[id]
 
-    const content = journalEntry
-      ? <div>
+    const content = (
+      !journalEntries ? <div>Loading…</div> :
+      !journalEntry ? <div><ErrorMessage error="Entry not found" /></div> :
+      <div>
         <div className="JournalEntryPage-controls">
-          <Link href="/journal/entries">entries</Link>&nbsp;
           <span>Created <TimeAgo time={journalEntry.created_at} /></span>
         </div>
         <Header>
@@ -48,7 +46,7 @@ class JournalEntryPageContent extends PureComponent {
         </Header>
         <pre className="JournalEntryPage-body">{journalEntry.body}</pre>
       </div>
-      : <div>Loading…</div>
+    )
 
     return <div className="JournalEntryPage">
       {content}

@@ -11,5 +11,8 @@ export default function ErrorMessage({error}){
 
 
 ErrorMessage.propTypes = {
-  error: PropTypes.instanceOf(Error),
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Error),
+  ]),
 }

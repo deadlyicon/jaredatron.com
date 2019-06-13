@@ -1,69 +1,47 @@
 import moment from 'moment'
 import { takeAction } from 'lib/server'
 
+function indexById(journalEntries){
+  const journalEntriesById = {}
+  journalEntries.forEach(entry => {
+    journalEntriesById[entry.id] = entry
+  })
+  return journalEntriesById
+}
+
 export async function loadEntries(){
-  const key = `journal:entries`
+  const journalEntriesKey = `journal:entries`
   const loadErrorKey = `journal:entries:loadError`
   try{
     const { journalEntries } = await takeAction('getJournalEntries')
-    journalEntries.forEach(journalEntry => {
-      journalEntry.created_at = moment(journalEntry.created_at).toDate()
-      journalEntry.updated_at = moment(journalEntry.updated_at).toDate()
-    })
-    this.setState({ [key]: journalEntries })
+    this.setState({ [journalEntriesKey]: indexById(journalEntries) })
   }catch(error){
+    console.error(error)
     this.setState({ [loadErrorKey]: error })
   }
 }
 
-export async function loadTodaysEntry(){
-  const key = `journal:today`
-  const loadErrorKey = `journal:today:loadError`
+export async function createEntry({ body }){
+  const entriesKey = `journal:entries`
+  const creatingKey = `journal:creatingEntry`
+  const errorKey = `journal:creatingEntry:loadError`
+  if (this.getState()[creatingKey]) return
+  this.setState({ [creatingKey]: true, [errorKey]: undefined })
   try{
-    const { todaysJournalEntry } = await takeAction('getTodaysJournalEntry')
-    this.setState({ [key]: todaysJournalEntry })
-  }catch(error){
-    this.setState({ [loadErrorKey]: error })
-  }
-}
-
-export async function updateTodaysEntry({ id, body }){
-  const key = `journal:today`
-  const changesKey = `journal:today:changes`
-  const updateErrorKey = `journal:today:updateError`
-  const updatingKey = `journal:today:updating`
-
-  this.setState({ [changesKey]: body })
-
-  if (this.getState()[updatingKey]) {
-    // scheduleNextUpdate()
-    return
-  }
-
-  this.setState({
-    [updatingKey]: true,
-    [updateErrorKey]: undefined,
-  })
-  try{
-    const { todaysJournalEntry } = await takeAction('updateTodaysJournalEntry', { id, body })
-    this.setState({
-      [updatingKey]: undefined,
-      [key]: todaysJournalEntry,
-    })
-    const changes = this.getState()[changesKey]
-    if (changes === todaysJournalEntry.body){
-      this.setState({ [changesKey]: undefined })
-    }else{
-      this.takeAction('journal.updateTodaysEntry', {
-        id: todaysJournalEntry.id,
-        body: changes,
-      })
+    const entry = await takeAction('createJournalEntry', { body })
+    let journalEntries = this.getState()[entriesKey] || {}
+    journalEntries = {
+      ...journalEntries,
+      [entry.id]: entry,
     }
-  }catch(error){
     this.setState({
-      [updatingKey]: undefined,
-      [updateErrorKey]: error,
+      [entriesKey]: journalEntries,
     })
+  }catch(error){
+    console.error(error)
+    this.setState({ [errorKey]: error })
+  }finally{
+    this.setState({ [creatingKey]: undefined })
   }
 }
 

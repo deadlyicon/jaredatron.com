@@ -52,17 +52,11 @@ export function update(){
 
   if (props = match('/journal')){
     setTitle('Journal')
-    this.takeAction('journal.loadTodaysEntry')
+    this.takeAction('journal.loadEntries')
     return setRoute({ page: 'JournalPage', layout: true, props })
   }
 
-  if (props = match('/journal/entries')){
-    setTitle('Journal Entries')
-    this.takeAction('journal.loadEntries')
-    return setRoute({ page: 'JournalEntriesPage', layout: true, props })
-  }
-
-  if (props = match('/journal/entry/:id')){
+  if (props = match('/journal/:id')){
     setTitle(`Journal Entry ${props.id}`)
     this.takeAction('journal.loadEntries')
     return setRoute({ page: 'JournalEntryPage', layout: true, props })

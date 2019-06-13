@@ -23,8 +23,7 @@ initializeAppState(function(){
   window.addEventListener('beforeunload', (event) => {
     const state = this.getState()
     const hasUnsavedChanges = Object.keys(state).some(key =>
-      key.match(/^wiki:.*:edits$/) ||
-      key === 'journal:today:changes'
+      key.match(/^wiki:.*:edits$/)
     )
     if (hasUnsavedChanges) {
       return event.returnValue = "Are you sure you want to reload? Changes you've made will not be saved."

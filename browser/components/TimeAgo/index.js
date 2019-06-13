@@ -9,6 +9,7 @@ export default class TimeAgo extends PureComponent {
     time: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.instanceOf(Date),
+      PropTypes.instanceOf(moment),
     ]).isRequired,
     interval: PropTypes.number.isRequired,
   }
