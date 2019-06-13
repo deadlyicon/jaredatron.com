@@ -4,6 +4,7 @@ const {
 } = require('../environment')
 
 const INDEX_HTML_PATH = `${PUBLIC_PATH}/index.html`
+const HOMEPAGE_HTML_PATH = `${PUBLIC_PATH}/homepage.html`
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -22,6 +23,11 @@ server.use(
     }
   })
 );
+
+
+server.get('/', (req, res, next) => {
+  res.sendFile(HOMEPAGE_HTML_PATH)
+})
 
 if (process.env.NODE_ENV === 'development') require('./development')(server)
 if (process.env.NODE_ENV === 'production') require('./production')(server)
