@@ -65,13 +65,12 @@ class JournalEditor extends PureComponent {
   }
 
   render(){
-    return <div>
+    return <div className="JournalPage-Editor">
       <div className="JournalPage-controls">
         <Link value="save" onClick={this.save}/>
       </div>
       <Editor
-        autoFocus
-        className="JournalPage-Editor"
+        autoFocus={false}
         value={this.state.value}
         onChange={this.setValue}
         onSave={this.save}

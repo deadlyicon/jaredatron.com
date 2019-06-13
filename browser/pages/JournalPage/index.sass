@@ -7,7 +7,17 @@
     justify-content: flex-end
 
   &-Editor
-    height: calc(100vh - 140px)
+    .Editor
+      height: calc(100vh - 140px)
+    .touchevents &
+      .Editor
+        height: calc(100vh - 200px)
+        transition: height 200ms
+      &:focus-within
+        .Editor
+          height: calc(100vh - 500px)
+          textarea
+
 
   &-week
     margin-bottom: 10px
