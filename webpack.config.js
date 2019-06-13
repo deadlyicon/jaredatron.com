@@ -140,6 +140,7 @@ module.exports = [
         name: 'jaredatron',
         short_name: 'jaredatron',
         version: '1.0',
+        start_url: '/focus?pwa=1',
         description: 'jaredatron.com',
         background_color: '#c50900',
         crossorigin: 'use-credentials',
