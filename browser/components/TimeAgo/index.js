@@ -42,7 +42,7 @@ export default class TimeAgo extends PureComponent {
       className={`TimeAgo ${className}`}
       title={timeAsMoment.format('MMM Do YYYY h:mmA')}
     >
-      {timeAsMoment.fromNow()}
+      {timeAsMoment.fromNow().replace(/ ago$/,'')}
     </span>
   }
 }

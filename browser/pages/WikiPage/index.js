@@ -120,8 +120,8 @@ const WikiPagesList = function(props){
   return <div className="WikiPagesList">
     <div className="WikiPagesListMember">
       {columnLink('Path', 'path')}
-      {columnLink('Last Viewed', 'last_viewed_at')}
-      {columnLink('Last Updated', 'updated_at')}
+      {columnLink('Viewed', 'last_viewed_at')}
+      {columnLink('Updated', 'updated_at')}
     </div>
     <div className="WikiPagesList-pages">{pages}</div>
   </div>

@@ -19,21 +19,29 @@
   .WikiPagesListMember
     display: flex
     flex-direction: row
-    &:hover
-      background-color: $darkred
-      color: $white
+    &:not(:first-child) // not-header rows
+      &:hover
+        background-color: $darkred
+        color: $white
 
     > *
-      flex: 0 0 130px
       white-space: nowrap
       overflow: hidden
       text-overflow: ellipsis
       // padding: 0 1em
       &:first-child // first column
-        flex: 1 1
+        flex: 6 6
         .Link
           display: block
           padding: 0 1em
+          overflow: hidden
+          text-overflow: ellipsis
+      &:not(:first-child) // other columns
+        flex: 1 1
+        @media only screen and (max-width: 812px)
+          flex: 0 0 70px
+
+
     .TimeAgo
       color: #966b6b
     // &:first-child // first row
