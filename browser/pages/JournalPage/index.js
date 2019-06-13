@@ -50,30 +50,36 @@ class JournalEditor extends PureComponent {
   constructor(){
     super()
     this.state = {
-      value: window.sessionStorage['journal:draft'] || '',
+      value: window.sessionStorage['journal:draft'] || DEFAULT_JOURNAL_VALUE,
     }
   }
 
   setValue = value => {
-    value = window.sessionStorage['journal:draft'] = `${value}`
+    if (value){
+      value = window.sessionStorage['journal:draft'] = `${value}`
+    }else{
+      delete window.sessionStorage['journal:draft']
+    }
     this.setState({ value })
   }
 
   save = () => {
-    takeAction(this, 'journal.createEntry', { body: this.state.value })
-    this.setValue('')
+    takeAction(this, 'journal.createEntry', { body: `${this.state.value}` })
+    this.setValue(DEFAULT_JOURNAL_VALUE)
   }
 
   render(){
+    const { value } = this.state
     return <div className="JournalPage-Editor">
       <div className="JournalPage-controls">
         <Link value="save" onClick={this.save}/>
       </div>
       <Editor
         autoFocus={false}
-        value={this.state.value}
+        value={value}
         onChange={this.setValue}
         onSave={this.save}
+        defaultValue={value ? undefined : DEFAULT_JOURNAL_VALUE}
       />
     </div>
   }
@@ -127,7 +133,7 @@ const JournalEntries = ({ journalEntries }) =>
               href={`/journal/${journalEntry.id}`}
               className="JournalPage-entryLink"
             >
-              {journalEntry.body.split("\n")[0] || <span>&nbsp;</span>}
+              <span>{journalEntry.body}</span>
             </Link>
           </td>
         </tr>
@@ -141,3 +147,21 @@ const sortBySortKe = (a, b) => {
     a.sortKey > b.sortKey ? -1 : 0
   )
 }
+
+
+const DEFAULT_JOURNAL_VALUE =
+`### I just…
+
+
+### I feel…
+
+Fear Anger Sadness Joy Disgust Surprise Trust Anticipation
+
+
+### I appreciate…
+
+
+### I want…
+
+
+`;
