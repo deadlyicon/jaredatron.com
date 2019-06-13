@@ -24,6 +24,7 @@ export async function login({ password }){
       loggingIn: undefined,
     })
   }
+  this.takeAction('router.update')
 }
 
 export async function logout(){
@@ -32,4 +33,5 @@ export async function logout(){
     loggedIn: false,
     loginError: undefined,
   })
+  this.takeAction('router.update')
 }
