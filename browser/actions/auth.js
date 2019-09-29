@@ -28,6 +28,9 @@ export async function login({ password }){
 }
 
 export async function logout(){
+  if (!confirm('Are you sure you want to logout?')) return
+  localStorage.clear()
+  sessionStorage.clear()
   setSessionId(undefined)
   this.setState({
     loggedIn: false,
